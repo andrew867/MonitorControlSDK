@@ -1,0 +1,18 @@
+bin/
+obj/
+.vs/
+*.user
+*.suo
+TestResults/
+*.DotSettings.user
+.idea/
+*.rsuser
+launchSettings.json
+# IDA / reverse-engineering artifacts (large, lock-prone)
+*.id0
+*.id1
+*.id2
+*.nam
+*.til
+# OneDrive
+~$*
