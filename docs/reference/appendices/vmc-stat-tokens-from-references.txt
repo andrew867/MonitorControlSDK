@@ -1,4 +1,4 @@
-# VMC STAT tokens mined from references/ (C# tooling)
+# VMC STAT tokens collected from references/ (C# corpus)
 #
 # Regenerated: 2026-04-13T16:15Z — bash scripts/regen-appendices.sh
 # Scanned: references/**/*.cs
@@ -52,4 +52,4 @@ SHOWIPADDRESS
 
 # --- Notes ---
 # STATret appears as VMC_CMM_RET constant in several ControlVmcCommand files; no sendCommand("STATret"...) literal found in references/**/*.cs scan.
-# sendCommand("STATset", "", ...) appears in VerUpTool (empty tail).
+# sendCommand("STATset", "", ...) appears in historical firmware-updater sources (empty tail).

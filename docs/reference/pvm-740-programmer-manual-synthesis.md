@@ -166,7 +166,7 @@ On error: response **NG**, **Item number** repeats the **request’s** item, and
 
 ### Full PVM-740 command spellings
 
-See **[appendices/pvm-740-vmc-catalog-from-manual.txt](appendices/pvm-740-vmc-catalog-from-manual.txt)** (pages 9–12). For tokens also found in decompiled PC tools, cross-check [appendices/vmc-stat-tokens-from-references.txt](appendices/vmc-stat-tokens-from-references.txt).
+See **[appendices/pvm-740-vmc-catalog-from-manual.txt](appendices/pvm-740-vmc-catalog-from-manual.txt)** (pages 9–12). For tokens also listed in the broader reference corpus, cross-check [appendices/vmc-stat-tokens-from-references.txt](appendices/vmc-stat-tokens-from-references.txt).
 
 ---
 
@@ -192,4 +192,4 @@ See **[appendices/pvm-740-vmc-catalog-from-manual.txt](appendices/pvm-740-vmc-ca
 - [sdcp-framing-and-items.md](sdcp-framing-and-items.md) — V4 / VMS, buffer sizes, item list.  
 - [sdcp-error-codes.md](sdcp-error-codes.md) — numeric error catalog.  
 - [external-sources.md](external-sources.md) — ManualsLib URL + community libraries.  
-- [references-parity.md](references-parity.md) — decompiled C# tooling vs SDK.
+- [references-parity.md](references-parity.md) — reference trees vs shipped SDK.

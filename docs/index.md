@@ -12,13 +12,13 @@ Single source of truth for **Sony.MonitorControl** — SDAP discovery and SDCP c
    - **Structured factory / setup:** [**VMS overview**](reference/vms-overview.md) + [`VmsCommandEngine`](../src/MonitorControlSDK/Protocol/VmsCommandEngine.cs).
    - **Service / firmware (dangerous):** [**VMA wire reference**](reference/vma-wire-reference.md) + [**Firmware updates**](guide/firmware-updates.md) + [`VmaClient`](../src/MonitorControlSDK/Clients/VmaClient.cs).
    - **MCU / physical UI:** [examples/arduino-knobs-brightness-contrast](../examples/arduino-knobs-brightness-contrast/) (HTTP to the web API).
-   - **Replacing decompiled `references/` tools:** [**references parity**](reference/references-parity.md) + [**VMC literal appendix**](reference/appendices/vmc-stat-tokens-from-references.txt).
+   - **Mapping `references/` to the shipped SDK:** [**references parity**](reference/references-parity.md) + [**VMC literal appendix**](reference/appendices/vmc-stat-tokens-from-references.txt).
 
 ## Reference (exhaustive opcode data)
 
 | Topic | Document |
 |--------|-----------|
-| **`references/` ↔ SDK parity (nothing “hidden” in the old trees)** | [reference/references-parity.md](reference/references-parity.md) |
+| **`references/` ↔ shipped SDK (full parity map)** | [reference/references-parity.md](reference/references-parity.md) |
 | **PVM-740 programmer manual (ManualsLib excerpt) — synthesized in repo** | [reference/pvm-740-programmer-manual-synthesis.md](reference/pvm-740-programmer-manual-synthesis.md) + [appendices/pvm-740-vmc-catalog-from-manual.txt](reference/appendices/pvm-740-vmc-catalog-from-manual.txt) |
 | SDCP negative acknowledgements (numeric codes) | [reference/sdcp-error-codes.md](reference/sdcp-error-codes.md) |
 | SDAP advertisement field map | [spec/sdap-overview.md](spec/sdap-overview.md) + [`SdapAdvertisementPacket`](../src/MonitorControlSDK/Protocol/SdapAdvertisementPacket.cs) |

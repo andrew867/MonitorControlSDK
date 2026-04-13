@@ -10,7 +10,7 @@
 
 Full tutorial + opcode reference + firmware guide: **[docs/index.md](docs/index.md)**  
 **10-minute path:** [docs/quickstart.md](docs/quickstart.md)  
-**Legacy `references/` parity (every subtree mapped):** [docs/reference/references-parity.md](docs/reference/references-parity.md)
+**`references/` ↔ shipped SDK map:** [docs/reference/references-parity.md](docs/reference/references-parity.md)
 
 ## Quick commands
 
@@ -43,7 +43,7 @@ Then open `http://127.0.0.1:5080/` (UI) and `http://127.0.0.1:5080/swagger` (Ope
 | [scripts/](scripts/) | `fetch-openapi.sh` / `generate-c-client.sh` for OpenAPI → C |
 | [samples/](samples/) | Runnable examples (TCP broadcast REPL, SDAP discovery, **UDP VMC broadcast** sample) |
 | [docs/](docs/) | **Authoritative** protocol and API documentation |
-| [references/](references/) | Decompiled legacy Sony tooling (read-only); parity in [docs/reference/references-parity.md](docs/reference/references-parity.md) |
+| [references/](references/) | Historical reference snapshots (read-only, not required to use the SDK); parity in [docs/reference/references-parity.md](docs/reference/references-parity.md) |
 | [tests/](tests/) | Unit tests |
 | [docs/plan/00-inventory.md](docs/plan/00-inventory.md) | Source file → concern map |
 

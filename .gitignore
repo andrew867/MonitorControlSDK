@@ -20,7 +20,7 @@ references/
 **/*.rbf
 **/*.mcs
 
-# IDA / reverse-engineering lock files
+# Optional analysis-tool lock files (ignore if present)
 *.id0
 *.id1
 *.id2

@@ -2,7 +2,7 @@
 
 Use these to sanity-check headers and ports. **This repository’s C# remains authoritative** for behavior we ship; public PDFs may describe **projectors** or **older monitors** with small differences.
 
-For the **in-repo** decompiled Sony tooling under [`references/`](../../references/), see [**references-parity.md**](references-parity.md) (maps every subtree to `src/` or marks UI-only / forensic scope).
+For **in-repo** supplementary reference code under [`references/`](../../references/), see [**references-parity.md**](references-parity.md) (maps every subtree to `src/` or marks UI-only / out-of-scope items).
 
 | Resource | URL | Relevance |
 |----------|-----|-----------|

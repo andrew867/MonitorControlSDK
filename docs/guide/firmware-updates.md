@@ -2,7 +2,7 @@
 
 This document describes **what this SDK can place on the wire** and the **minimum conceptual sequence** for monitor control software. It is **not** a substitute for Sony service documentation or bench validation.
 
-See also [**references parity**](../reference/references-parity.md) — what the decompiled **VerUpTool** / `references/` trees do beyond wire helpers (UI, chunk files, **not** reproduced here).
+See also [**references parity**](../reference/references-parity.md) — what historical `references/` firmware-updater trees cover beyond wire helpers (UI, chunk files, **not** reproduced here).
 
 ## Source of truth in code
 

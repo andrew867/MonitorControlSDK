@@ -8,7 +8,7 @@ VMC uses SDCP **V3**, item **0xB000**, with an ASCII payload: `CATEGORY arg1 arg
 |-----------|-----------|---------|
 | `STATget` | Host → monitor → ASCII answer | `STATget MODEL` |
 | `STATset` | Host → monitor → status in response container | `STATset BRIGHTNESS 512` |
-| `STATret` | Declared in legacy `ControlVmcCommand` as `VMC_CMM_RET` | No `sendCommand("STATret", …)` literal found under `references/**/*.cs`; treat as **reserved** until validated on hardware. |
+| `STATret` | Declared in legacy `ControlVmcCommand` as `VMC_CMM_RET` | No `sendCommand("STATret", …)` literal found in the reference C# corpus scan; treat as **reserved** until validated on hardware. |
 
 ## PVM-740 public manual (model-specific VMC)
 
@@ -18,9 +18,9 @@ The **Sony PVM-740 Interface Manual for Programmers** excerpt (ManualsLib) lists
 
 Narrative + timing + SDAP/SDCP tables: [pvm-740-programmer-manual-synthesis.md](pvm-740-programmer-manual-synthesis.md).
 
-## Exhaustive literal catalog (from `references/`)
+## Exhaustive literal catalog (reference corpus)
 
-All **string literals** mined from the C# reference tree are kept in one machine-regenerated file (no manual `rg` needed in the field):
+All **string literals** collected from the C# trees under `references/` are kept in one machine-regenerated file (no manual `rg` needed in the field):
 
 **[appendices/vmc-stat-tokens-from-references.txt](appendices/vmc-stat-tokens-from-references.txt)** — sections:
 

@@ -18,7 +18,7 @@ rg "^\tpublic int send" "$SDK/Protocol/VmsCommandEngine.cs" >"$APP/vms-engine-se
 
 echo "== VMC STAT tokens from references/ (C# only) =="
 {
-	echo "# VMC STAT tokens mined from references/ (C# tooling)"
+	echo "# VMC STAT tokens collected from references/ (C# corpus)"
 	echo "#"
 	echo "# Regenerated: $(date -u +%Y-%m-%dT%H:%MZ) — bash scripts/regen-appendices.sh"
 	echo "# Scanned: references/**/*.cs"
@@ -43,7 +43,7 @@ echo "== VMC STAT tokens from references/ (C# only) =="
 	echo ""
 	echo "# --- Notes ---"
 	echo "# STATret appears as VMC_CMM_RET constant in several ControlVmcCommand files; no sendCommand(\"STATret\"...) literal found in references/**/*.cs scan."
-	echo "# sendCommand(\"STATset\", \"\", ...) appears in VerUpTool (empty tail)."
+	echo "# sendCommand(\"STATset\", \"\", ...) appears in historical firmware-updater sources (empty tail)."
 } >"$APP/vmc-stat-tokens-from-references.txt"
 
 echo "Wrote:"

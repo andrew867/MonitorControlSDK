@@ -23,6 +23,6 @@ Human-facing documentation is entirely under [`docs/`](index.md); generated opco
 
 Mermaid overviews of SDAP/SDCP, VMC sequences, HTTP bridging, and physical control paths: [`docs/diagrams/monitor-control-flows.md`](diagrams/monitor-control-flows.md).
 
-## Legacy `references/` tree
+## Reference `references/` tree
 
-Every significant subtree under [`references/`](../references/) is mapped to shipped types (or explicitly marked out-of-scope) in [**reference/references-parity.md**](reference/references-parity.md). VMC string literals from those C# sources are listed in [**reference/appendices/vmc-stat-tokens-from-references.txt**](reference/appendices/vmc-stat-tokens-from-references.txt) (regenerate with `bash scripts/regen-appendices.sh`).
+Every significant subtree under [`references/`](../references/) is mapped to shipped types (or explicitly marked out-of-scope) in [**reference/references-parity.md**](reference/references-parity.md). VMC string literals from that C# corpus are listed in [**reference/appendices/vmc-stat-tokens-from-references.txt**](reference/appendices/vmc-stat-tokens-from-references.txt) (regenerate with `bash scripts/regen-appendices.sh`).
