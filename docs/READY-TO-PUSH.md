@@ -28,9 +28,9 @@ git push github master
 For a **tagged release** (after bumping `<Version>` in `src/MonitorControlSDK/MonitorControlSDK.csproj` and updating [CHANGELOG.md](../CHANGELOG.md)):
 
 ```bash
-git tag -a v0.3.0 -m "Release v0.3.0"
-git push origin v0.3.0
-git push github v0.3.0
+git tag -a v0.4.0 -m "Release v0.4.0"
+git push origin v0.4.0
+git push github v0.4.0
 ```
 
 ## HTTPS-only GitHub remote (alternative)

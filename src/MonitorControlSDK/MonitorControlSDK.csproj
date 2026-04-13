@@ -6,7 +6,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>
     <PackageId>MonitorControl.Sdk</PackageId>
-    <Version>0.3.0</Version>
+    <Version>0.4.0</Version>
     <Authors>Andrew Green</Authors>
     <Description>SDAP/SDCP client library for professional monitors that expose compatible control: TCP SDCP, SDAP listen, and optional UDP SDCP VMC broadcast (Group/All).</Description>
     <PackageProjectUrl>https://github.com/andrew867/MonitorControlSDK</PackageProjectUrl>

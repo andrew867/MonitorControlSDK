@@ -4,10 +4,18 @@ All notable changes to this project are documented here. The format is inspired 
 
 ## [Unreleased]
 
+## [0.4.0] — 2026-04-13
+
 ### Documentation
 
 - Rewrote [docs/diagrams/monitor-control-flows.md](docs/diagrams/monitor-control-flows.md): integration matrix, ESP32 **native TCP** sequence, Python gateway **SSE vs WebSocket**, dual physical UI paths, `Sample.BroadcastControl` REPL, corrected MCU topology (ESP32 on-wire does not go through HTTP).
-- Expanded [docs/handbook.md](docs/handbook.md), [examples/README.md](examples/README.md), [samples/README.md](samples/README.md), [samples/Sample.BroadcastControl/README.md](samples/Sample.BroadcastControl/README.md), [docs/testing/broadcast-realtime-control-tests.md](docs/testing/broadcast-realtime-control-tests.md) (fixed test class names; CI note), [docs/plan/broadcast-realtime-control.md](docs/plan/broadcast-realtime-control.md), [examples/python-service/README.md](examples/python-service/README.md), [examples/arduino-knobs-brightness-contrast/README.md](examples/arduino-knobs-brightness-contrast/README.md), [docs/guide/web-api-and-python-gateway.md](docs/guide/web-api-and-python-gateway.md), [docs/quickstart.md](docs/quickstart.md), [docs/index.md](docs/index.md), [docs/spec/vmc-string-catalog.md](docs/spec/vmc-string-catalog.md), [README.md](README.md) ESP32 row, [docs/guide/network-and-debug.md](docs/guide/network-and-debug.md), [docs/guide/firmware-updates.md](docs/guide/firmware-updates.md), [docs/testing/strategy.md](docs/testing/strategy.md) (`nuget.config` path).
+- Expanded [docs/handbook.md](docs/handbook.md), [examples/README.md](examples/README.md), [samples/README.md](samples/README.md), [samples/Sample.BroadcastControl/README.md](samples/Sample.BroadcastControl/README.md), [docs/testing/broadcast-realtime-control-tests.md](docs/testing/broadcast-realtime-control-tests.md) (fixed test class names; CI note), [docs/plan/broadcast-realtime-control.md](docs/plan/broadcast-realtime-control.md), [examples/python-service/README.md](examples/python-service/README.md), [examples/arduino-knobs-brightness-contrast/README.md](examples/arduino-knobs-brightness-contrast/README.md), [docs/guide/web-api-and-python-gateway.md](docs/guide/web-api-and-python-gateway.md), [docs/quickstart.md](docs/quickstart.md), [docs/index.md](docs/index.md), [docs/spec/vmc-string-catalog.md](docs/spec/vmc-string-catalog.md), [README.md](README.md) ESP32 row, [docs/guide/network-and-debug.md](docs/guide/network-and-debug.md), [docs/guide/firmware-updates.md](docs/guide/firmware-updates.md), [docs/testing/strategy.md](docs/testing/strategy.md) (`nuget.config` path), [docs/reference/vmc-command-surface.md](docs/reference/vmc-command-surface.md), [docs/spec/sdcp-overview.md](docs/spec/sdcp-overview.md), [docs/spec/broadcast-realtime-control.md](docs/spec/broadcast-realtime-control.md), [docs/architecture.md](docs/architecture.md), [openapi/README.md](openapi/README.md).
+
+### Notes
+
+- No intentional wire-protocol or public API breaking changes from **0.3.0**; this minor release is documentation accuracy and diagram depth.
+
+[0.4.0]: https://github.com/andrew867/MonitorControlSDK/releases/tag/v0.4.0
 
 ## [0.3.0] — 2026-04-13
 

@@ -16,9 +16,9 @@ The repository ships:
 
 ---
 
-## Recent release (v0.3.0, 2026-04-13)
+## Recent release (v0.4.0, 2026-04-13)
 
-Patch-style documentation release **0.3.0** follows [Semantic Versioning](https://semver.org/). It adds an [**engineering handbook**](docs/handbook.md), expands Mermaid diagrams (CLI, full HTTP surface, SDK layering), indexes [`samples/README.md`](samples/README.md) and [`examples/README.md`](examples/README.md), and **commits** the OpenAPI 3 snapshot at [`openapi/monitorcontrol.openapi.json`](openapi/monitorcontrol.openapi.json) for offline codegen and review. No intentional wire-protocol or public API breaking changes from **0.2.0**. Earlier: [v0.2.0](https://github.com/andrew867/MonitorControlSDK/releases/tag/v0.2.0), [v0.1.2](https://github.com/andrew867/MonitorControlSDK/releases/tag/v0.1.2), [v0.1.1](https://github.com/andrew867/MonitorControlSDK/releases/tag/v0.1.1).
+Minor release **0.4.0** follows [Semantic Versioning](https://semver.org/). Documentation and diagrams now fully reflect **ESP32 native TCP SDCP** ([`examples/esp32-sdcp-vmc`](examples/esp32-sdcp-vmc/)), the **Python gateway** SSE vs WebSocket split, corrected **`Sample.BroadcastControl`** (TCP REPL only, no UDP), fixed **test plan** class names, and expanded cross-links across guides and specs. No intentional wire-protocol or public API breaking changes from **0.3.0**. Earlier: [v0.3.0](https://github.com/andrew867/MonitorControlSDK/releases/tag/v0.3.0), [v0.2.0](https://github.com/andrew867/MonitorControlSDK/releases/tag/v0.2.0), [v0.1.2](https://github.com/andrew867/MonitorControlSDK/releases/tag/v0.1.2), [v0.1.1](https://github.com/andrew867/MonitorControlSDK/releases/tag/v0.1.1).
 
 ---
 
