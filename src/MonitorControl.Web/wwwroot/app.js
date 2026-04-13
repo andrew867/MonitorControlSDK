@@ -73,6 +73,46 @@ $("btnVmcSet").onclick = async () => {
   }
 };
 
+/** @type {EventSource | null} */
+let sseMonitor = null;
+
+function stopSse() {
+  if (sseMonitor) {
+    sseMonitor.close();
+    sseMonitor = null;
+  }
+}
+
+$("btnSseStart").onclick = () => {
+  const host = $("host").value.trim();
+  if (!host) {
+    show($("outSse"), "Enter monitor host IP in Connection.");
+    return;
+  }
+  stopSse();
+  const intervalMs = Number.parseInt($("sseMs").value, 10);
+  const fields = $("sseFields").value.trim();
+  const q = new URLSearchParams({ host });
+  if (Number.isFinite(intervalMs)) q.set("intervalMs", String(intervalMs));
+  if (fields) q.set("fields", fields);
+  sseMonitor = new EventSource(`/api/events/monitor?${q}`);
+  sseMonitor.onmessage = (ev) => {
+    try {
+      show($("outSse"), JSON.parse(ev.data));
+    } catch {
+      show($("outSse"), ev.data);
+    }
+  };
+  sseMonitor.addEventListener("fault", (ev) => {
+    show($("outSse"), `fault: ${ev.data}`);
+  });
+};
+
+$("btnSseStop").onclick = () => {
+  stopSse();
+  show($("outSse"), "(stopped)");
+};
+
 $("btnVms").onclick = async () => {
   try {
     const data = await api("POST", "/api/vms/product-info", hostBody());

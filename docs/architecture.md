@@ -18,3 +18,11 @@ Types such as `LegacyVmcContainer`, `LegacyVmsContainer`, `LegacyVmaContainer`, 
 ## Documentation
 
 Human-facing documentation is entirely under [`docs/`](index.md); generated opcode appendices live under [`docs/reference/appendices/`](reference/appendices/README.md).
+
+## Control flows (diagrams)
+
+Mermaid overviews of SDAP/SDCP, VMC sequences, HTTP bridging, and physical control paths: [`docs/diagrams/monitor-control-flows.md`](diagrams/monitor-control-flows.md).
+
+## Legacy `references/` tree
+
+Every significant subtree under [`references/`](../references/) is mapped to shipped types (or explicitly marked out-of-scope) in [**reference/references-parity.md**](reference/references-parity.md). VMC string literals from those C# sources are listed in [**reference/appendices/vmc-stat-tokens-from-references.txt**](reference/appendices/vmc-stat-tokens-from-references.txt) (regenerate with `bash scripts/regen-appendices.sh`).

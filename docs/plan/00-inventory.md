@@ -24,10 +24,14 @@ This file maps **concerns** to **source files** in **MonitorControlSDK** only. T
 
 | Surface | Path |
 |---------|------|
-| HTTP / JSON / Swagger / browser UI | [`src/MonitorControl.Web/`](../../src/MonitorControl.Web/) |
+| HTTP / JSON / Swagger / browser UI / SSE / WebSocket | [`src/MonitorControl.Web/`](../../src/MonitorControl.Web/) (`MonitorApiExtensions`, `MonitorPushEndpoints`) |
 | CLI | [`src/MonitorControl.Cli/`](../../src/MonitorControl.Cli/) |
 | Samples | [`samples/`](../../samples/) |
 | Python gateway (optional) | [`examples/python-service/`](../../examples/python-service/) |
+| MCU → HTTP bridge (optional) | [`examples/arduino-knobs-brightness-contrast/`](../../examples/arduino-knobs-brightness-contrast/) |
+| Control-flow diagrams | [`docs/diagrams/monitor-control-flows.md`](../diagrams/monitor-control-flows.md) |
+| References ↔ shipped SDK (parity) | [`docs/reference/references-parity.md`](../reference/references-parity.md) |
+| Appendix regeneration | [`scripts/regen-appendices.sh`](../../scripts/regen-appendices.sh) |
 
 ## Documentation entry
 

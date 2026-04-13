@@ -4,6 +4,7 @@ using System.Text;
 namespace Sony.MonitorControl.Protocol;
 
 /// <summary>Decoded SDAP v4/v5 advertisement (legacy <c>SdapPacket</c> fields).</summary>
+/// <remarks>Field meanings and SDAP v4 header rules (<c>DA</c>, version <c>04h</c>, category <c>0Bh</c>/<c>0Ch</c>) are summarized alongside the PVM-740 programmer manual excerpt in <c>docs/reference/pvm-740-programmer-manual-synthesis.md</c>.</remarks>
 public sealed class SdapAdvertisementPacket
 {
 	public const int MaxPacketSize = 144;

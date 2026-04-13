@@ -36,6 +36,18 @@
   </section>
 
   <section>
+    <h2>Live snapshots (SSE)</h2>
+    <p class="sub">The server polls <code>STATget</code> on an interval and streams JSON. Handy for dashboards; not true monitor-initiated push.</p>
+    <label>Fields (comma-separated) <input id="sseFields" type="text" value="MODEL,BRIGHTNESS,CONTRAST" /></label>
+    <label>Poll interval (ms) <input id="sseMs" type="number" value="3000" min="250" max="60000" /></label>
+    <div class="row">
+      <button type="button" id="btnSseStart">Start EventSource</button>
+      <button type="button" id="btnSseStop">Stop</button>
+    </div>
+    <pre id="outSse"></pre>
+  </section>
+
+  <section>
     <h2>VMS</h2>
     <button type="button" id="btnVms">Product information</button>
     <pre id="outVms"></pre>
@@ -73,7 +85,7 @@
   </section>
 
   <footer>
-    <a href="/swagger">OpenAPI (Swagger)</a> · API base <code>/api</code>
+    <a href="/swagger">OpenAPI (Swagger)</a> · API base <code>/api</code> · WebSocket watch <code>/ws/monitor-watch?host=…</code> (use .NET port for WS)
   </footer>
   <script src="app.js"></script>
 </body>

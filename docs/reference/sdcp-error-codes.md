@@ -2,6 +2,8 @@
 
 These **ushort** values appear in legacy tooling and in device negative acknowledgements. The canonical definitions live in [`SdcpMessageBuffer`](../../src/MonitorControlSDK/Protocol/SdcpMessageBuffer.cs) (`SDCP_ERR_*` constants). A smaller curated set is duplicated in [`SdcpErrorCodes`](../../src/MonitorControlSDK/Protocol/SdcpErrorCodes.cs).
 
+The **PVM-740 Interface Manual for Programmers** excerpt (ManualsLib) states that on an **NG** response the payload carries the **original item number** plus a **1-byte category** and **1-byte error code**, and mentions a **communication** family (e.g. checksum / `F0**h`-style encodings in the excerpt). Map captured bytes to the `SDCP_ERR_*` / `0xF010` checksum constant and neighbors in `SdcpMessageBuffer` — see also [pvm-740-programmer-manual-synthesis.md](pvm-740-programmer-manual-synthesis.md) § SDCP error response.
+
 | Decimal | Hex | Name in source |
 |--------:|-----|------------------|
 | 257 | 0x0101 | `SDCP_ERR_INVALID_ITEM` |

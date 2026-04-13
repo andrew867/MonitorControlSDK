@@ -27,9 +27,11 @@ public sealed class SdcpMessageBuffer
 
 	public const byte SDCP_COMMAND_RESPONSE_NG = 0;
 
-	private const ushort SDCP_COMMAND_ITEM_MONITOR = 45056;
+	/// <summary>SDCP version 3 item number for VMC: ASCII commands in the Data field (<c>B000h</c> per Sony PVM-740 Interface Manual for Programmers excerpt).</summary>
+	public const ushort SdcpV3ItemVideoMonitorControl = 0xB000;
 
-	private const ushort SDCP_COMMAND_ITEM_BUILTIN = 45057;
+	/// <summary>SDCP v3 item number for VMC on monitors with built-in controllers (<c>B001h</c> per same excerpt). <see cref="Clients.VmcClient"/> uses <see cref="SdcpV3ItemVideoMonitorControl"/> by default.</summary>
+	public const ushort SdcpV3ItemVideoMonitorControlBuiltIn = 0xB001;
 
 	private const ushort SDCP_COMMAND_ITEM_SYSTEM_SETTING = 47104;
 
@@ -445,8 +447,8 @@ public sealed class SdcpMessageBuffer
 		packetHeader[5] = 89;
 		setIDsByConnectType();
 		packetHeader[8] = 0;
-		packetHeader[9] = 176;
-		packetHeader[10] = 0;
+		packetHeader[9] = (byte)(SdcpV3ItemVideoMonitorControl >> 8);
+		packetHeader[10] = (byte)(SdcpV3ItemVideoMonitorControl & 0xFF);
 	}
 
 	public void setupVmsPacketHeader()

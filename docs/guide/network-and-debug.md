@@ -7,6 +7,8 @@
 | SDCP control | TCP | 53484 | [`SdcpConnection`](../../src/MonitorControlSDK/Transport/SdcpConnection.cs) |
 | SDAP advertisement | UDP | 53862 | [`SdapDiscovery`](../../src/MonitorControlSDK/Transport/SdapDiscovery.cs) |
 
+The **PVM-740 programmer manual** excerpt also lists **FTP TCP 21** on the monitor; this SDK does **not** implement FTP — see [reference/pvm-740-programmer-manual-synthesis.md](../reference/pvm-740-programmer-manual-synthesis.md).
+
 There is **no** Telnet client, **no** SSH client, and **no** serial port layer in this repository.
 
 ## Telnet / SSH

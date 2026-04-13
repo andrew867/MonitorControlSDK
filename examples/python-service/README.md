@@ -29,7 +29,7 @@ set MONITOR_CONTROL_API_URL=http://127.0.0.1:5080
 uvicorn main:app --host 127.0.0.1 --port 8000
 ```
 
-Browse `http://127.0.0.1:8000` — static assets are served locally; `/api/*` is proxied to the .NET process.
+Browse `http://127.0.0.1:8000` — static assets are served locally; `/api/*` is proxied to the .NET process. **SSE** (`GET /api/events/…`) is streamed end-to-end. **WebSocket** (`/ws/monitor-watch`) is not proxied yet — use the .NET port directly for WS, or extend `main.py`.
 
 ## Environment
 

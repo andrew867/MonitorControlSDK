@@ -27,12 +27,14 @@ builder.Services.AddCors(o => o.AddDefaultPolicy(static p =>
 var app = builder.Build();
 
 app.UseCors();
+app.UseWebSockets();
 app.UseSwagger();
 app.UseSwaggerUI(static o => o.SwaggerEndpoint("/swagger/v1/swagger.json", "MonitorControl v1"));
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
 app.MapMonitorControlApi();
+app.MapMonitorPushEndpoints();
 app.MapFallbackToFile("index.html");
 
 app.Run();

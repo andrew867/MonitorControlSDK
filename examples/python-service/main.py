@@ -17,7 +17,7 @@ from pathlib import Path
 
 import httpx
 from fastapi import FastAPI, Request
-from fastapi.responses import Response
+from fastapi.responses import Response, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 
 BASE = os.environ.get("MONITOR_CONTROL_API_URL", "http://127.0.0.1:5080").rstrip("/")
@@ -53,6 +53,27 @@ async def proxy(full_path: str, request: Request) -> Response:
     for key in ("content-type", "x-firmware-ack"):
         if key in request.headers:
             forward_headers[key] = request.headers[key]
+
+    if request.method == "GET" and full_path.startswith("events/"):
+        async with client.stream(
+            "GET",
+            url,
+            headers=forward_headers,
+        ) as upstream:
+            media = upstream.headers.get("content-type", "text/event-stream")
+
+            async def chunks():
+                try:
+                    async for block in upstream.aiter_bytes():
+                        yield block
+                finally:
+                    await upstream.aclose()
+
+            return StreamingResponse(
+                chunks(),
+                status_code=upstream.status_code,
+                media_type=media,
+            )
 
     upstream = await client.request(
         request.method,

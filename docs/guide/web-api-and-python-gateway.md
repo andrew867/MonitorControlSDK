@@ -2,6 +2,8 @@
 
 This repository ships a **production-style HTTP API** on top of the same SDAP/SDCP stack used by the CLI and samples. Any frontend (React, Vue, mobile) or backend language can integrate via JSON over HTTP.
 
+**Diagrams:** [Control flow charts (Mermaid)](../diagrams/monitor-control-flows.md) — clients, gateway, SDAP/SDCP, and ADC knob path. **MCU samples:** [arduino-knobs (HTTP)](../../examples/arduino-knobs-brightness-contrast/), [esp32-sdcp-vmc (native SDCP)](../../examples/esp32-sdcp-vmc/). **OpenAPI → C:** [openapi-codegen.md](openapi-codegen.md).
+
 ## Components
 
 | Piece | Path | Role |
@@ -29,6 +31,8 @@ All JSON bodies use **camelCase** by default (`host`, `timeoutMs`, …).
 | GET | `/api/sdap/discover` | query `durationMs`, optional `bind` | UDP 53862 listen window; returns unique devices |
 | POST | `/api/vmc/get` | `{ "host", "field", "timeoutMs"? }` | `STATget` |
 | POST | `/api/vmc/set` | `{ "host", "args": ["TOKEN","…"], "timeoutMs"? }` | `STATset` tail |
+| GET | `/api/events/monitor` | query `host`, optional `fields` (comma `STATget` names), `intervalMs` | **SSE** (`text/event-stream`): server polls `STATget` and pushes JSON lines. Custom event `fault` carries SDCP/TCP errors. |
+| GET | `/ws/monitor-watch` | query `host`, optional `fields`, `intervalMs` | **WebSocket** (binary/text UTF‑8 JSON objects): same poll model as SSE. |
 | POST | `/api/vms/product-info` | `{ "host", "timeoutMs"? }` | VMS product info + hex payload |
 | POST | `/api/vma/control-software-version` | `{ "host", "timeoutMs"? }` | VMA read |
 | POST | `/api/vma/kernel-version` | same | |
@@ -58,16 +62,24 @@ Only one process can bind UDP **53862** on a given interface. If discover fails 
 
 See [`examples/python-service/README.md`](../../examples/python-service/README.md). It proxies `/api/*` to the .NET base URL and serves the same static UI from port **8000** by default.
 
+## Push-style updates (SSE / WebSocket)
+
+Sony SDCP in this stack is **request/response** on TCP; the monitor does not open an outbound HTTP channel. The **SSE** and **WebSocket** routes synthesize “live” updates by **polling `STATget`** on the server at `intervalMs` (default 2000 ms). Tune `fields` to tokens your chassis supports (defaults: `MODEL`, `BRIGHTNESS`, `CONTRAST`).
+
+- **Browser:** bundled UI → “Live snapshots (SSE)” uses `EventSource`.
+- **WebSocket URL:** `ws://<host>:<port>/ws/monitor-watch?host=<monitor-ip>&intervalMs=3000` (use `wss://` behind TLS).
+
 ## Integration checklist for third-party web apps
 
 1. Run `MonitorControl.Web` (or proxy through the Python gateway).
 2. Call `GET /api/sdap/discover` to learn monitor IPs (or use fixed inventory).
 3. Use `POST /api/vmc/get` / `vmc/set` for shading and UI automation.
-4. Use `POST /api/vms/product-info` for structured factory reads.
-5. Restrict firmware routes to authenticated operators; keep firmware disabled in production unless you fully control the OTA sequence.
+4. Use `GET /api/events/monitor` or `/ws/monitor-watch` when you want push-shaped updates without client-side polling loops.
+5. Use `POST /api/vms/product-info` for structured factory reads.
+6. Restrict firmware routes to authenticated operators; keep firmware disabled in production unless you fully control the OTA sequence.
 
 ## Source files
 
-- Route registration: [`MonitorApiExtensions.cs`](../../src/MonitorControl.Web/MonitorApiExtensions.cs)
+- Route registration: [`MonitorApiExtensions.cs`](../../src/MonitorControl.Web/MonitorApiExtensions.cs), [`MonitorPushEndpoints.cs`](../../src/MonitorControl.Web/MonitorPushEndpoints.cs)
 - Firmware gate: [`WireFormat.cs`](../../src/MonitorControl.Web/WireFormat.cs)
 - UI: [`wwwroot/`](../../src/MonitorControl.Web/wwwroot/)
