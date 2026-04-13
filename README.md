@@ -1,31 +1,40 @@
-# Sony monitor control (SDAP / SDCP)
+# MonitorControlSDK — Sony monitor SDAP / SDCP
 
-This repository contains legacy reference applications (`MonitorNetwork`, Auto White Balance tools, firmware updater) and a new **.NET 8** library plus CLI for SDAP discovery and SDCP control.
+.NET 8 client library (**Sony.MonitorControl**), operator CLI (**monitorctl**), and samples for SDAP discovery and SDCP control of compatible Sony professional monitors.
 
-## Quick start
+**Upstream (HTTPS):** [https://github.com/andrew867/MonitorControlSDK](https://github.com/andrew867/MonitorControlSDK)
+
+**License:** [LICENSE](LICENSE) (MIT, Copyright 2026 Andrew Green).
+
+## Documentation (start here)
+
+Full tutorial + opcode reference + firmware guide: **[docs/index.md](docs/index.md)**  
+**10-minute path:** [docs/quickstart.md](docs/quickstart.md)
+
+## Quick commands
 
 ```bash
 dotnet build Sony.MonitorControl.sln -c Release
-dotnet test tests/MonitorControlSDK.Tests/MonitorControlSDK.Tests.csproj -c Release
+dotnet test Sony.MonitorControl.sln -c Release
 dotnet run --project src/MonitorControl.Cli -- discover
-dotnet run --project src/MonitorControl.Cli -- vms-info --host 192.168.0.10
+dotnet run --project src/MonitorControl.Cli -- vmc --host 192.168.0.10 MODEL
 ```
 
 ## Layout
 
 | Path | Purpose |
 |------|---------|
-| [src/MonitorControlSDK/](src/MonitorControlSDK/) | NuGet package `Sony.MonitorControl` — protocol buffers, TCP/UDP transport, `VmsCommandEngine`, clients. |
-| [src/MonitorControl.Cli/](src/MonitorControl.Cli/) | `monitorctl` operator CLI. |
-| [samples/](samples/) | Minimal examples: SDAP, VMC, VMS, VMA. |
-| [docs/spec/](docs/spec/) | Wire format and command catalogs. |
-| [docs/plan/00-inventory.md](docs/plan/00-inventory.md) | Legacy source map and canonical baseline. |
-| [MonitorNetwork/](MonitorNetwork/) | Original `net48` reference port (kept for diffing). |
+| [src/MonitorControlSDK/](src/MonitorControlSDK/) | NuGet package `Sony.MonitorControl` |
+| [src/MonitorControl.Cli/](src/MonitorControl.Cli/) | `monitorctl` |
+| [samples/](samples/) | Runnable examples (including broadcast REPL) |
+| [docs/](docs/) | **Authoritative** protocol and API documentation |
+| [tests/](tests/) | Unit tests |
+| [docs/plan/00-inventory.md](docs/plan/00-inventory.md) | Source file → concern map |
 
-## Documentation
+## Publish checklist
 
-See [docs/spec/sdcp-overview.md](docs/spec/sdcp-overview.md) and [docs/testing/strategy.md](docs/testing/strategy.md).
+[docs/READY-TO-PUSH.md](docs/READY-TO-PUSH.md) — HTTPS remote and pre-push review.
 
 ## Legal
 
-Protocol behavior is derived from interoperability research in this repo. Distribution of a control SDK may require your own legal review for trademark and IP.
+Protocol documentation is for interoperability. Distribution and field use may require your own legal review for trademark and IP.

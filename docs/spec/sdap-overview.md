@@ -1,19 +1,7 @@
-# SDAP overview
+# SDAP overview (short)
 
-**SDAP** is UDP-based monitor advertisement and discovery on port **53862** (`SdapDiscovery.DefaultPort`).
+**SDAP** — UDP **53862**, advertisement layout decoded by [`SdapAdvertisementPacket`](../../src/MonitorControlSDK/Protocol/SdapAdvertisementPacket.cs). Listening helper: [`SdapDiscovery`](../../src/MonitorControlSDK/Transport/SdapDiscovery.cs).
 
-## Packet layout
+Field offsets (product name, serial, IP octets 50–53, group/unit 120–121, `SONY` community at 4–7) are documented inline on the type.
 
-Legacy constants live on `SdapPacket` in `MonitorNetwork`; the SDK exposes a read model `SdapAdvertisementPacket` with the same offsets for product name, serial, IP octets, group/unit IDs, and community check (`SONY` at bytes 4–7).
-
-## Listening
-
-`SdapDiscovery.TryRead` mirrors legacy `SdapUdp.read`: optional product-name prefix filter list; returns when header and community are valid.
-
-## Correct IP string
-
-The legacy `SdapPacket.connectionIP` property concatenation was incorrect in reference code; `SdapAdvertisementPacket.ConnectionIp` uses proper `"a.b.c.d"` formatting from bytes 50–53.
-
-## Reference
-
-[MonitorNetwork/MonitorNetwork/SdapUdp.cs](../../MonitorNetwork/MonitorNetwork/SdapUdp.cs), [SdapPacket.cs](../../MonitorNetwork/MonitorNetwork/SdapPacket.cs).
+Cross-checks with public materials: [reference/external-sources.md](../reference/external-sources.md).

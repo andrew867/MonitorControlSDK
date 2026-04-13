@@ -1,11 +1,14 @@
 # Testing strategy
 
+Documentation hub: [docs/index.md](../index.md).
+
 ## Unit tests (default CI)
 
 Located in [tests/MonitorControlSDK.Tests](../../tests/MonitorControlSDK.Tests).
 
 - **Framing**: V3/V4 header constants and item numbers (`SdcpMessageBufferTests`).
 - **Codec math**: VMS float encode/decode round-trip (`VmsFloatCodecTests`).
+- **Broadcast REPL**: line parsing (`BroadcastControlLineParserTests`); `StreamSdcpTransport` send/receive sizing (`StreamSdcpTransportTests`). See [broadcast-realtime-control-tests.md](broadcast-realtime-control-tests.md).
 
 These use **real buffers** (no socket mocks) to match on-wire layout.
 

@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.Vms", "samples\Sampl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.Vma", "samples\Sample.Vma\Sample.Vma.csproj", "{A7B8C9D0-E1F2-3456-0123-567890123456}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.BroadcastControl", "samples\Sample.BroadcastControl\Sample.BroadcastControl.csproj", "{C0FFEE10-AB12-4CD3-9EF0-123456789ABC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,5 +51,9 @@ Global
 		{A7B8C9D0-E1F2-3456-0123-567890123456}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A7B8C9D0-E1F2-3456-0123-567890123456}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A7B8C9D0-E1F2-3456-0123-567890123456}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0FFEE10-AB12-4CD3-9EF0-123456789ABC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0FFEE10-AB12-4CD3-9EF0-123456789ABC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0FFEE10-AB12-4CD3-9EF0-123456789ABC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0FFEE10-AB12-4CD3-9EF0-123456789ABC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

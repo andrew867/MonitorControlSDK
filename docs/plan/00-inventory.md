@@ -1,64 +1,32 @@
-# Legacy code inventory and canonical baseline
+# Implementation map (this repository)
 
-## Canonical baseline
+This file maps **concerns** to **source files** in **MonitorControlSDK** only. There is no out-of-tree dependency for building, testing, or documenting the shipped SDK.
 
-**Primary source:** [MonitorNetwork/MonitorNetwork/](MonitorNetwork/MonitorNetwork/) (SDK-style `net48` project).
+## Protocol and buffers
 
-**Rationale:** This tree is complete (includes `VmsCommand.cs`). [Monitor_Update/MonitorNetwork/MonitorNetwork/](Monitor_Update/MonitorNetwork/MonitorNetwork/) differs only cosmetically in several files (field order, minor edits). [LMD_AutoWhiteBalance/DaiginjoSdcp/](LMD_AutoWhiteBalance/DaiginjoSdcp/) is an older embedded subset: it **does not** contain `VmsCommand.cs` (LMD Auto WB uses VMC-only paths for most SDCP control in that app).
+| Concern | Primary types |
+|---------|----------------|
+| SDCP v3/v4 framing, errors | [`SdcpMessageBuffer`](../../src/MonitorControlSDK/Protocol/SdcpMessageBuffer.cs), [`SdcpErrorCodes`](../../src/MonitorControlSDK/Protocol/SdcpErrorCodes.cs) |
+| SDAP advertisement parse | [`SdapAdvertisementPacket`](../../src/MonitorControlSDK/Protocol/SdapAdvertisementPacket.cs) |
+| VMS payload tree | [`LegacyVmsContainer`](../../src/MonitorControlSDK/Internal/LegacyVmsContainer.cs), [`VmsCommandEngine`](../../src/MonitorControlSDK/Protocol/VmsCommandEngine.cs) |
+| VMC ASCII payloads | [`LegacyVmcContainer`](../../src/MonitorControlSDK/Internal/LegacyVmcContainer.cs) |
+| VMA binary payloads | [`LegacyVmaContainer`](../../src/MonitorControlSDK/Internal/LegacyVmaContainer.cs) |
 
-## File-by-file diff summary
+## Transport and clients
 
-### MonitorNetwork vs Monitor_Update/MonitorNetwork
+| Concern | Primary types |
+|---------|----------------|
+| TCP SDCP | [`SdcpConnection`](../../src/MonitorControlSDK/Transport/SdcpConnection.cs), [`StreamSdcpTransport`](../../src/MonitorControlSDK/Transport/StreamSdcpTransport.cs), [`ISdcpTransport`](../../src/MonitorControlSDK/Transport/ISdcpTransport.cs) |
+| UDP SDAP listen | [`SdapDiscovery`](../../src/MonitorControlSDK/Transport/SdapDiscovery.cs) |
+| Operator clients | [`VmcClient`](../../src/MonitorControlSDK/Clients/VmcClient.cs), [`VmsClient`](../../src/MonitorControlSDK/Clients/VmsClient.cs), [`VmaClient`](../../src/MonitorControlSDK/Clients/VmaClient.cs) |
 
-Files reported different by `diff -rq` (substantive review: mostly trivial):
+## Operator surfaces
 
-| File | Notes |
-|------|--------|
-| `SdapPacket.cs` | Compare line-by-line during port; likely whitespace or constant ordering. |
-| `SdapUdp.cs` | Same. |
-| `SdcpTcp.cs` | Const field placement only in sampled diff. |
-| `VmaContainer.cs` | Merge any behavioral delta if found. |
-| `VmcCommand.cs` | Merge if any. |
-| `VmsCommand.cs` | Merge if any. |
-| `VmsContainer.cs` | Merge if any. |
+| Surface | Path |
+|---------|------|
+| CLI | [`src/MonitorControl.Cli/`](../../src/MonitorControl.Cli/) |
+| Samples | [`samples/`](../samples/) |
 
-### MonitorNetwork vs LMD_AutoWhiteBalance/DaiginjoSdcp
+## Documentation entry
 
-| File | Notes |
-|------|--------|
-| `VmsCommand.cs` | **Missing** in DaiginjoSdcp — not used by that tool. |
-| Others | Differ; port from root `MonitorNetwork` and spot-check Daiginjo for LMD-specific quirks. |
-
-## Application map (who uses what)
-
-| Application | Path | SDCP usage |
-|-------------|------|------------|
-| LMD Auto White Balance | [LMD_AutoWhiteBalance/](LMD_AutoWhiteBalance/) | `DaiginjoSdcp`: VMC (`VmcCommand`), VMA adjustment helpers; probe hardware separate. |
-| Monitor firmware updater | [Monitor_Update/VerUpTool/](Monitor_Update/VerUpTool/) | `MonitorNetwork`: VMC strings in `ControlVmcCommand.cs`, VMA upgrade (`VmaServiceCommand`), VMS where used. |
-| BVM Auto White Adjustment | [Monitor_AutoWhiteAdjustment/](Monitor_AutoWhiteAdjustment/) | Uses `MonitorNetwork` patterns (verify call sites when mining VMC catalog). |
-
-## MSSONY decompilation
-
-Under [MSSONY/](MSSONY/): Hex-Rays C output (e.g. `controler_sdcp.vxe.c`). Use as **secondary** reference for timing/socket behavior; symbols are renamed. Do not treat as primary API contract.
-
-## SDK mapping (target)
-
-| Legacy | New (MonitorControlSDK) |
-|--------|-------------------------|
-| `SdcpPacket` | `Sony.MonitorControl.Protocol.SdcpMessageBuffer` |
-| `SdapPacket` | `Sony.MonitorControl.Protocol.SdapMessage` / buffer helpers |
-| `SdcpTcp` | `Sony.MonitorControl.Transport.SdcpConnection` |
-| `SdapUdp` | `Sony.MonitorControl.Transport.SdapDiscovery` |
-| `VmcCommand` / `VmcContainer` | `Sony.MonitorControl.Clients.VmcClient` + `VmcTokenizer` |
-| `VmsCommand` / `VmsContainer` | `Sony.MonitorControl.Clients.VmsClient` + payload builders |
-| `Vma*` | `Sony.MonitorControl.Clients.VmaClient` |
-
-## VMC string catalog source list
-
-Mine `sendCommand(` and VMC-related literals from:
-
-- `Monitor_Update/VerUpTool/*.cs`
-- `LMD_AutoWhiteBalance/SMAutoWB/*.cs`
-- `Monitor_AutoWhiteAdjustment/BvmAutoWhiteBalanceTool/*.cs`
-
-Output: [docs/spec/vmc-string-catalog.md](../spec/vmc-string-catalog.md).
+Start at [**docs/index.md**](../index.md).

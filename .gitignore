@@ -8,11 +8,27 @@ TestResults/
 .idea/
 *.rsuser
 launchSettings.json
-# IDA / reverse-engineering artifacts (large, lock-prone)
+
+references/
+
+# Firmware / device update payloads (anywhere in repo)
+**/UPDATES/**/bin/
+**/UPDATE/**/*.bin
+**/*.fpga
+**/*.bit
+**/*.rbf
+**/*.mcs
+
+# IDA / reverse-engineering lock files
 *.id0
 *.id1
 *.id2
 *.nam
 *.til
+
+# Publish / CI output
+artifacts/
+publish/
+
 # OneDrive
 ~$*

@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Text;
 
 namespace Sony.MonitorControl.Internal;
@@ -40,33 +39,16 @@ public sealed class LegacyVmcContainer : ILegacySdcpContainer
 		return Encoding.ASCII.GetString(data);
 	}
 
-	public void setCommand(string category, string cmd)
+	/// <summary>Builds ASCII payload: <c>category</c> plus optional space-separated segments (e.g. <c>STATget MODEL</c>, <c>STATset BRIGHTNESS 512</c>).</summary>
+	public void setCommand(string category, params string[] segments)
 	{
-		string text = category;
-		text += " ";
-		text += cmd;
-		stringToData(text);
-	}
+		if (segments is null || segments.Length == 0)
+		{
+			stringToData(category);
+			return;
+		}
 
-	public void setCommand(string category, string cmd, string cmd2)
-	{
-		string text = category;
-		text += " ";
-		text += cmd;
-		text += " ";
-		text += cmd2;
-		stringToData(text);
-	}
-
-	public void setCommand(string category, string cmd, string cmd2, string cmd3)
-	{
-		string text = category;
-		text += " ";
-		text += cmd;
-		text += " ";
-		text += cmd2;
-		text += " ";
-		text += cmd3;
+		string text = category + " " + string.Join(" ", segments);
 		stringToData(text);
 	}
 
