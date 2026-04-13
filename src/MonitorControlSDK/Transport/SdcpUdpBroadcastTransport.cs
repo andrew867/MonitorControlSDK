@@ -1,12 +1,12 @@
 using System.Net;
 using System.Net.Sockets;
-using Sony.MonitorControl.Protocol;
+using MonitorControl.Protocol;
 
-namespace Sony.MonitorControl.Transport;
+namespace MonitorControl.Transport;
 
 /// <summary>
 /// Sends SDCP v3 frames over UDP to a broadcast or directed datagram endpoint (default monitor SDCP port <see cref="SdcpConnection.DefaultPort"/>).
-/// Intended for Sony manual <strong>Group</strong> / <strong>All</strong> modes where VMC is issued via UDP broadcast; monitors do not return a datagram response in those modes.
+/// Intended for <strong>Group</strong> / <strong>All</strong> broadcast modes where VMC is issued via UDP datagram; monitors do not return a datagram response in those modes.
 /// </summary>
 public sealed class SdcpUdpBroadcastTransport : ISdcpTransport, IDisposable
 {

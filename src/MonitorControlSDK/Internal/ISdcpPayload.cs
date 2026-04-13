@@ -1,4 +1,4 @@
-namespace Sony.MonitorControl.Internal;
+namespace MonitorControl.Internal;
 
 /// <summary>VMC/VMS/VMA payload views share this length contract with the SDCP message buffer.</summary>
 public interface ILegacySdcpContainer

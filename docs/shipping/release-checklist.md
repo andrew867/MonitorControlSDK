@@ -9,7 +9,7 @@
 
 ## Package metadata
 
-- `PackageId`: `Sony.MonitorControl`
+- `PackageId`: `MonitorControl.Sdk`
 - `PackageReadmeFile`: embedded README from SDK project
 - License: MIT placeholder — **replace** if your organization requires a different license.
 

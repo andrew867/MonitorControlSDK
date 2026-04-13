@@ -65,7 +65,7 @@ See [`examples/python-service/README.md`](../../examples/python-service/README.m
 
 ## Push-style updates (SSE / WebSocket)
 
-Sony SDCP in this stack is **request/response** on TCP; the monitor does not open an outbound HTTP channel. The **SSE** and **WebSocket** routes synthesize “live” updates by **polling `STATget`** on the server at `intervalMs` (default 2000 ms). Tune `fields` to tokens your chassis supports (defaults: `MODEL`, `BRIGHTNESS`, `CONTRAST`).
+SDCP in this stack is **request/response** on TCP; the monitor does not open an outbound HTTP channel. The **SSE** and **WebSocket** routes synthesize “live” updates by **polling `STATget`** on the server at `intervalMs` (default 2000 ms). Tune `fields` to tokens your chassis supports (defaults: `MODEL`, `BRIGHTNESS`, `CONTRAST`).
 
 - **Browser:** bundled UI → “Live snapshots (SSE)” uses `EventSource`.
 - **WebSocket URL:** `ws://<host>:<port>/ws/monitor-watch?host=<monitor-ip>&intervalMs=3000` (use `wss://` behind TLS).

@@ -14,7 +14,7 @@ There is **no** Telnet client, **no** SSH client, and **no** serial port layer i
 
 ## Telnet / SSH
 
-Across the **C# sources in this repo**, there are **no** Telnet or SSH client implementations for the monitor. Public Sony **BRAVIA** “Simple IP Control” uses **TCP 20060** with a **24-byte** fixed message format — that is a **different** product line and protocol from SDCP on 53484 ([BRAVIA Professional Displays — Simple IP control](https://pro-bravia.sony.net/remote-display-control/simple-ip-control/)).
+Across the **C# sources in this repo**, there are **no** Telnet or SSH client implementations for the monitor. Public **BRAVIA** “Simple IP Control” documentation describes **TCP 20060** with a **24-byte** fixed message format — that is a **different** product line and protocol from SDCP on 53484 ([BRAVIA Professional Displays — Simple IP control](https://pro-bravia.sony.net/remote-display-control/simple-ip-control/)).
 
 **Conclusion for integrators:** assume remote access is **SDCP + SDAP** unless your specific model’s **hardware manual** documents another maintenance channel.
 

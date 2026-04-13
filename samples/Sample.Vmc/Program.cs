@@ -1,5 +1,5 @@
-using Sony.MonitorControl.Clients;
-using Sony.MonitorControl.Transport;
+using MonitorControl.Clients;
+using MonitorControl.Transport;
 
 if (args.Length < 2)
 {

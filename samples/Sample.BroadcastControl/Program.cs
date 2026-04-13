@@ -1,7 +1,7 @@
-using Sony.MonitorControl.Clients;
-using Sony.MonitorControl.Internal;
-using Sony.MonitorControl.Repl;
-using Sony.MonitorControl.Transport;
+using MonitorControl.Clients;
+using MonitorControl.Internal;
+using MonitorControl.Repl;
+using MonitorControl.Transport;
 
 if (!TryParseHost(args, out string? host, out string? usageError))
 {

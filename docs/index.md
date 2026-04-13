@@ -1,6 +1,6 @@
 # MonitorControlSDK documentation
 
-Single source of truth for **Sony.MonitorControl** — SDAP discovery and SDCP control for compatible Sony professional monitors. Everything below is grounded in this repository’s C# sources or cited public materials.
+Single source of truth for **MonitorControl.Sdk** — SDAP discovery and SDCP control for compatible professional monitors. Everything below is grounded in this repository’s C# sources or cited public materials.
 
 ## New here? (~10 minutes)
 

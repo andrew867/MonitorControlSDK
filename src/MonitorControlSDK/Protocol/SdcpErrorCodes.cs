@@ -1,4 +1,4 @@
-namespace Sony.MonitorControl.Protocol;
+namespace MonitorControl.Protocol;
 
 /// <summary>SDCP error codes from legacy <c>SdcpPacket</c> (subset; see full list in source).</summary>
 public static class SdcpErrorCodes

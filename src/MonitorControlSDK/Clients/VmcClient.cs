@@ -1,9 +1,9 @@
 using System.Text;
-using Sony.MonitorControl.Internal;
-using Sony.MonitorControl.Protocol;
-using Sony.MonitorControl.Transport;
+using MonitorControl.Internal;
+using MonitorControl.Protocol;
+using MonitorControl.Transport;
 
-namespace Sony.MonitorControl.Clients;
+namespace MonitorControl.Clients;
 
 /// <summary>VMC (ASCII STATget / STATset) client over SDCP v3 item 0xB000.</summary>
 public sealed class VmcClient

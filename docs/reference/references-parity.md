@@ -1,15 +1,15 @@
 # References tree ↔ shipped implementation (parity)
 
-The [`references/`](../../references/) directory holds **historical snapshots and supplementary materials** from various sources (C# monitor-control samples, firmware-update UIs, and related C notes) used to **cross-check wire behavior** while **reimplementing** **Sony.MonitorControl**. This page is the **single checklist** mapping every significant reference subtree to:
+The [`references/`](../../references/) directory holds **historical snapshots and supplementary materials** from various sources (C# monitor-control samples, firmware-update UIs, and related C notes) used to **cross-check wire behavior** while **reimplementing** **MonitorControl**. This page is the **single checklist** mapping every significant reference subtree to:
 
 - what the **new stack** implements (`src/`, `samples/`, `src/MonitorControl.Web/`), and  
 - what remains **out of scope** (WinForms UI, measurement hardware DLLs, or undocumented firmware-only paths).
 
 Operators and programmers should **not** need to browse raw `references/` trees once they have this document plus the generated appendices.
 
-## Public Sony programmer manual (PVM-740 excerpt)
+## Public programmer manual (PVM-740 excerpt)
 
-The **ManualsLib** HTML excerpt of *Sony PVM-740 Interface Manual for Programmers* is **re-stated in full** (protocol tables, timing, SDAP/SDCP header, VMC categories, and a verbatim VMC command list) so operators are not dependent on that third-party host: [pvm-740-programmer-manual-synthesis.md](pvm-740-programmer-manual-synthesis.md).
+The **ManualsLib** HTML excerpt of *PVM-740 Interface Manual for Programmers* is **re-stated in full** (protocol tables, timing, SDAP/SDCP header, VMC categories, and a verbatim VMC command list) so operators are not dependent on that third-party host: [pvm-740-programmer-manual-synthesis.md](pvm-740-programmer-manual-synthesis.md).
 
 ## Machine-generated inventories (always use these first)
 
@@ -34,7 +34,7 @@ Human-oriented summaries: [vms-overview.md](vms-overview.md), [vmc-command-surfa
 
 ## VMC gaps vs legacy helpers (documented, not hidden)
 
-| Legacy API (references) | Status in Sony.MonitorControl |
+| Legacy API (references) | Status in MonitorControl |
 |---------------------------|-------------------------------|
 | `VmcCommand.sendCommandBroadCast("STATset", …)` | **UDP path:** use [`VmcUdpBroadcastClient`](../../src/MonitorControlSDK/Clients/VmcUdpBroadcastClient.cs) with `setGroupConnection` / `setAllConnection` semantics (same wire as TCP). **Unicast** when the chassis accepts the same tokens on TCP: `VmcClient` + [`SdcpConnection`](../../src/MonitorControlSDK/Transport/SdcpConnection.cs). **SDAP neighbor discovery** remains UDP **53862** ([`SdapDiscovery`](../../src/MonitorControlSDK/Transport/SdapDiscovery.cs)), not SDCP. |
 | `STATset` with empty string tail (`""`) | Observed in historical firmware-updater sources; **no dedicated helper**. You can `Send("STATset")` with no further segments only if you intentionally need that vendor quirk. |
@@ -50,7 +50,7 @@ Human-oriented summaries: [vms-overview.md](vms-overview.md), [vmc-command-surfa
 
 Files such as `controler_sdcp.vxe.c`, `product_*.so.c`, are **low-level C listings** bundled for study alongside controller/firmware materials. They may contain **additional** protocol hints or string tables not present in the C# samples.
 
-- **Not required** to use Sony.MonitorControl.
+- **Not required** to use MonitorControl.
 - **Not auto-mined** into appendices (different language, noisy). If you discover a **new** ASCII token there and confirm it on hardware, add it to the next regeneration notes or open a PR updating the VMC docs.
 
 ## Keeping this page honest after edits
@@ -61,4 +61,4 @@ Files such as `controler_sdcp.vxe.c`, `product_*.so.c`, are **low-level C listin
 
 ## Legal
 
-`references/` material is for interoperability cross-checks inside this repository. Third-party snapshots may carry their own license terms; the **supported public surface** is **Sony.MonitorControl** under `src/` plus the documentation under `docs/`.
+`references/` material is for interoperability cross-checks inside this repository. Third-party snapshots may carry their own license terms; the **supported public surface** is **MonitorControl** under `src/` plus the documentation under `docs/`.

@@ -1,7 +1,7 @@
-using Sony.MonitorControl.Repl;
+using MonitorControl.Repl;
 using Xunit;
 
-namespace Sony.MonitorControl.Tests;
+namespace MonitorControl.Tests;
 
 public sealed class BroadcastControlLineParserTests
 {

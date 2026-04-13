@@ -1,10 +1,10 @@
 using System.Net.WebSockets;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
-using Sony.MonitorControl.Clients;
-using Sony.MonitorControl.Transport;
+using MonitorControl.Clients;
+using MonitorControl.Transport;
 
-namespace Sony.MonitorControl.Web;
+namespace MonitorControl.Web;
 
 /// <summary>
 /// Server-initiated push built on top of periodic SDCP/VMC polls. The monitor does not open an outbound push channel;

@@ -1,7 +1,7 @@
-using Sony.MonitorControl.Protocol;
+using MonitorControl.Protocol;
 using Xunit;
 
-namespace Sony.MonitorControl.Tests;
+namespace MonitorControl.Tests;
 
 /// <summary>Header + payload layout for UDP group/all VMC (no I/O).</summary>
 public sealed class VmcUdpBroadcastWireTests

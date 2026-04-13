@@ -6,7 +6,7 @@ Field offsets (product name, serial, IP octets 50–53, group/unit 120–121, `S
 
 ## PVM-740 programmer manual (excerpt) alignment
 
-The **ManualsLib** excerpt of *Sony PVM-740 Interface Manual for Programmers* describes **SDAP v4**: header ASCII **`"DA"`** (`44h 41h`), version **`04h`**, category **`0Bh`** (monitor) or **`0Ch`** (monitor controller), community **`"SONY"`**, plus product name (12 chars), serial, connection IP, acceptable IPs, power status, optional error/region/name fields, and **Group ID / Unit ID** (see [reference/pvm-740-programmer-manual-synthesis.md](../reference/pvm-740-programmer-manual-synthesis.md)).
+The **ManualsLib** excerpt of *PVM-740 Interface Manual for Programmers* describes **SDAP v4**: header ASCII **`"DA"`** (`44h 41h`), version **`04h`**, category **`0Bh`** (monitor) or **`0Ch`** (monitor controller), community **`"SONY"`**, plus product name (12 chars), serial, connection IP, acceptable IPs, power status, optional error/region/name fields, and **Group ID / Unit ID** (see [reference/pvm-740-programmer-manual-synthesis.md](../reference/pvm-740-programmer-manual-synthesis.md)).
 
 Operational notes from that excerpt:
 

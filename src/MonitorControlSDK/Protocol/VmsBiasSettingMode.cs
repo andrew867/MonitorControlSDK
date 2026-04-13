@@ -1,4 +1,4 @@
-namespace Sony.MonitorControl;
+namespace MonitorControl;
 
 /// <summary>Bias matrix mode for certain VMS user white-balance bias commands (legacy <c>VmsCommand.Bias_Setting_mode</c>).</summary>
 public enum VmsBiasSettingMode

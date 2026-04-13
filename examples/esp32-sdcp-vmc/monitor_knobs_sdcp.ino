@@ -4,7 +4,7 @@
  * ESP32: native SDCP/TCP VMC (no HTTP gateway). Multi-mode calibration / control panel:
  *
  *   MODE_PICTURE  — ADC: brightness + contrast (2 pots; third ADC ignored)
- *   MODE_RGB_GAIN — ADC: RGAIN, GGAIN, BGAIN (Sony VMC strings; model-dependent range)
+ *   MODE_RGB_GAIN — ADC: RGAIN, GGAIN, BGAIN (VMC command strings; model-dependent range)
  *   MODE_GRADE    — ADC: APERTURE (0–6), CHROMA + PHASE (0–100) per PVM-740-style VMC table
  *
  * Buttons (active LOW, INPUT_PULLUP):

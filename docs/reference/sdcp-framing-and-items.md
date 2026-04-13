@@ -51,4 +51,4 @@ Bytes **6–7** (V3) encode single / group / all / P2P targeting. Writers: `setS
 
 ## Public documentation (similar protocol)
 
-Sony’s **PVM-740** programmer manual excerpt (ManualsLib) and community SDCP libraries match the header above. The repository now **hosts a full synthesis** so you do not need the live ManualsLib page for core rules: [pvm-740-programmer-manual-synthesis.md](pvm-740-programmer-manual-synthesis.md). Additional URLs: [external-sources.md](external-sources.md). **Always validate** on your chassis.
+The **PVM-740** programmer manual excerpt (ManualsLib) and community SDCP libraries match the header above. The repository now **hosts a full synthesis** so you do not need the live ManualsLib page for core rules: [pvm-740-programmer-manual-synthesis.md](pvm-740-programmer-manual-synthesis.md). Additional URLs: [external-sources.md](external-sources.md). **Always validate** on your chassis.

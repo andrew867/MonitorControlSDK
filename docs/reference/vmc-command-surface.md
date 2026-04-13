@@ -12,7 +12,7 @@ VMC uses SDCP **V3**, item **0xB000**, with an ASCII payload: `CATEGORY arg1 arg
 
 ## PVM-740 public manual (model-specific VMC)
 
-The **Sony PVM-740 Interface Manual for Programmers** excerpt (ManualsLib) lists many additional **`STATset` / `INFObutton`** lines (input select, markers, scan, languages, …). Those spellings are copied verbatim (plus examples for numeric parameters) in:
+The **PVM-740 Interface Manual for Programmers** excerpt (ManualsLib) lists many additional **`STATset` / `INFObutton`** lines (input select, markers, scan, languages, …). Those spellings are copied verbatim (plus examples for numeric parameters) in:
 
 **[appendices/pvm-740-vmc-catalog-from-manual.txt](appendices/pvm-740-vmc-catalog-from-manual.txt)**
 

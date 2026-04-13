@@ -1,4 +1,4 @@
-namespace Sony.MonitorControl.Internal;
+namespace MonitorControl.Internal;
 
 public sealed class LegacyVmaContainer : ILegacySdcpContainer
 {

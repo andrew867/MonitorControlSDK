@@ -1,7 +1,7 @@
 # PVM-740 Interface Manual for Programmers — VMC / INFObutton lines (ManualsLib HTML excerpt)
 #
 # Source: http://www.manualslib.com/manual/1270703/Sony-Pvm-740.html (pages 9–12 of 13 as rendered 2026-04-13).
-# Sony Corporation is the original publisher; ManualsLib is a third-party host. This file preserves command
+# Original publisher per the manual imprint; ManualsLib is a third-party host. This file preserves command
 # spellings for interoperability; validate on your chassis.
 #
 # Wire form: each line is the ASCII payload placed in the SDCP Data field for item B000h VMC (space-separated

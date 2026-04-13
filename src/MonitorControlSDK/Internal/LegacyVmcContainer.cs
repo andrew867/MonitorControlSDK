@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace Sony.MonitorControl.Internal;
+namespace MonitorControl.Internal;
 
 public sealed class LegacyVmcContainer : ILegacySdcpContainer
 {

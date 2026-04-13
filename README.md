@@ -1,12 +1,12 @@
-# MonitorControlSDK — Sony monitor SDAP / SDCP
+# MonitorControlSDK — SDAP / SDCP monitor control
 
 [![build-and-pack](https://github.com/andrew867/MonitorControlSDK/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/andrew867/MonitorControlSDK/actions/workflows/build.yml)
 
-**MonitorControlSDK** is a **.NET 8** toolkit for discovering and controlling compatible **Sony professional monitors** over the network. It implements **SDAP** (UDP discovery) and **SDCP** (TCP control), with optional **UDP SDCP** paths for VMC-style broadcast where supported.
+**MonitorControlSDK** is a **.NET 8** toolkit for discovering and controlling compatible **professional monitors** that advertise **SDAP** and accept **SDCP** on the documented ports. It implements **SDAP** (UDP discovery) and **SDCP** (TCP control), with optional **UDP SDCP** paths for VMC-style broadcast where supported.
 
 The repository ships:
 
-- **`Sony.MonitorControl`** — NuGet class library (framing, transport, VMC / VMS / VMA-oriented clients).
+- **`MonitorControl.Sdk`** (NuGet) — class library: framing, transport, VMC / VMS / VMA-oriented clients.
 - **`monitorctl`** — command-line tool for discovery, queries, and scripted control.
 - **`MonitorControl.Web`** — optional HTTP JSON API, OpenAPI, and small browser UI for integration with other languages and frontends.
 - **Samples and firmware-style examples** — runnable .NET samples plus Arduino / ESP32 sketches that use the HTTP API or raw SDCP.
@@ -16,9 +16,9 @@ The repository ships:
 
 ---
 
-## Recent release (v0.1.2, 2026-04-13)
+## Recent release (v0.2.0, 2026-04-13)
 
-Patch release **0.1.2** follows [Semantic Versioning](https://semver.org/) for the NuGet package and tagged releases. It updates the GitHub Actions workflow to current major versions (`actions/checkout`, `actions/setup-dotnet`, `actions/upload-artifact`, `actions/download-artifact`) and keeps the package version in sync with the tag. For earlier fixes (endian helpers and CI), see [v0.1.1](https://github.com/andrew867/MonitorControlSDK/releases/tag/v0.1.1).
+Minor release **0.2.0** follows [Semantic Versioning](https://semver.org/). The public NuGet package id is **`MonitorControl.Sdk`**, .NET namespaces are **`MonitorControl.*`**, and the solution file is **`MonitorControl.sln`** (replacing the previous vendor-prefixed package id, namespaces, and solution name). Upgrade by changing the package reference and `using` directives; protocol behavior is unchanged. Patch history: [v0.1.2](https://github.com/andrew867/MonitorControlSDK/releases/tag/v0.1.2), [v0.1.1](https://github.com/andrew867/MonitorControlSDK/releases/tag/v0.1.1).
 
 ---
 
@@ -36,8 +36,8 @@ Patch release **0.1.2** follows [Semantic Versioning](https://semver.org/) for t
 ## Build and run
 
 ```bash
-dotnet build Sony.MonitorControl.sln -c Release
-dotnet test Sony.MonitorControl.sln -c Release
+dotnet build MonitorControl.sln -c Release
+dotnet test MonitorControl.sln -c Release
 dotnet run --project src/MonitorControl.Cli -- discover
 dotnet run --project src/MonitorControl.Cli -- vmc --host 192.168.0.10 MODEL
 dotnet run --project src/MonitorControl.Cli -- vmc-broadcast --scope all -- STATset BRIGHTNESS 512
@@ -63,7 +63,7 @@ Full guide: [docs/guide/web-api-and-python-gateway.md](docs/guide/web-api-and-py
 
 | Path | Contents |
 |------|----------|
-| [src/MonitorControlSDK/](src/MonitorControlSDK/) | Library packaged as **`Sony.MonitorControl`** on NuGet |
+| [src/MonitorControlSDK/](src/MonitorControlSDK/) | Library packaged as **`MonitorControl.Sdk`** on NuGet |
 | [src/MonitorControl.Web/](src/MonitorControl.Web/) | HTTP JSON API, Swagger, browser UI |
 | [src/MonitorControl.Cli/](src/MonitorControl.Cli/) | **`monitorctl`** CLI |
 | [examples/python-service/](examples/python-service/) | Optional Python service in front of the HTTP API |
@@ -81,7 +81,7 @@ Full guide: [docs/guide/web-api-and-python-gateway.md](docs/guide/web-api-and-py
 ## Releases, NuGet, and CI/CD
 
 - **Versioning:** Git tags of the form `vMAJOR.MINOR.PATCH`; package version is set in [`src/MonitorControlSDK/MonitorControlSDK.csproj`](src/MonitorControlSDK/MonitorControlSDK.csproj).
-- **NuGet:** [Sony.MonitorControl](https://www.nuget.org/packages/Sony.MonitorControl) (when published for a given tag).
+- **NuGet:** [MonitorControl.Sdk](https://www.nuget.org/packages/MonitorControl.Sdk) (when published for a given tag).
 - **Automation:** [docs/ci-cd.md](docs/ci-cd.md) describes GitHub Actions (build matrix, releases, GitHub Packages, optional NuGet.org) and GitLab CI for self-hosted runners.
 
 ---

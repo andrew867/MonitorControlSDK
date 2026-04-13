@@ -1,6 +1,6 @@
-using Sony.MonitorControl.Protocol;
+using MonitorControl.Protocol;
 
-namespace Sony.MonitorControl.Transport;
+namespace MonitorControl.Transport;
 
 /// <summary>SDCP send/receive surface (legacy-compatible method names for parity with reference implementation).</summary>
 public interface ISdcpTransport

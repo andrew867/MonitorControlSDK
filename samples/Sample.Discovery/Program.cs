@@ -1,4 +1,4 @@
-using Sony.MonitorControl.Transport;
+using MonitorControl.Transport;
 
 Console.WriteLine("SDAP discovery sample — listening 5s on UDP " + SdapDiscovery.DefaultPort);
 using var d = new SdapDiscovery();

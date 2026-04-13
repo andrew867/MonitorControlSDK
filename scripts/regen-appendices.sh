@@ -37,7 +37,7 @@ echo "== VMC STAT tokens from references/ (C# only) =="
 	rg -o 'STATset", "[^"]+' "$REF" --glob '*.cs' 2>/dev/null | sed 's/.*STATset", "//' | sort -u
 
 	echo ""
-	echo "# --- sendCommandBroadCast(\"STATset\", \"...\") — original UDP/broadcast helper; not in Sony.MonitorControl TCP stack ---"
+	echo "# --- sendCommandBroadCast(\"STATset\", \"...\") — original UDP/broadcast helper; not in MonitorControl TCP stack ---"
 	rg -o 'sendCommandBroadCast\("STATset", "[^"]+' "$REF" --glob '*.cs' 2>/dev/null | sed 's/.*", "//' | sort -u
 
 	echo ""

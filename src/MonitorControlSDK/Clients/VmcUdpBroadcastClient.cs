@@ -1,11 +1,11 @@
 using System.Net;
-using Sony.MonitorControl.Internal;
-using Sony.MonitorControl.Protocol;
-using Sony.MonitorControl.Transport;
+using MonitorControl.Internal;
+using MonitorControl.Protocol;
+using MonitorControl.Transport;
 
-namespace Sony.MonitorControl.Clients;
+namespace MonitorControl.Clients;
 
-/// <summary>Which monitors receive a UDP SDCP VMC datagram (Sony manual Group / All).</summary>
+/// <summary>Which monitors receive a UDP SDCP VMC datagram (Group / All broadcast modes per programmer manual).</summary>
 public enum VmcUdpBroadcastScope
 {
 	/// <summary>Group ID and unit ID both <c>0xFF</c> in the SDCP header.</summary>

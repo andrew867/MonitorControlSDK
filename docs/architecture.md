@@ -2,7 +2,7 @@
 
 ## What ships
 
-The **Sony.MonitorControl** assembly is plain **.NET 8** C#: SDAP/SDCP framing, TCP/UDP transports, VMS/VMC/VMA payload builders, and typed clients. There is **no** P/Invoke into external control binaries.
+The **MonitorControl** assembly is plain **.NET 8** C#: SDAP/SDCP framing, TCP/UDP transports, VMS/VMC/VMA payload builders, and typed clients. There is **no** P/Invoke into external control binaries.
 
 ## Naming: `Legacy*` types
 

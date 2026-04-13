@@ -1,7 +1,7 @@
 using System;
-using Sony.MonitorControl.Internal;
+using MonitorControl.Internal;
 
-namespace Sony.MonitorControl.Protocol;
+namespace MonitorControl.Protocol;
 
 /// <summary>SDCP wire buffer (V3 header + payload, optional V4 extended header) matching legacy <c>SdcpPacket</c> layout.</summary>
 public sealed class SdcpMessageBuffer
@@ -27,7 +27,7 @@ public sealed class SdcpMessageBuffer
 
 	public const byte SDCP_COMMAND_RESPONSE_NG = 0;
 
-	/// <summary>SDCP version 3 item number for VMC: ASCII commands in the Data field (<c>B000h</c> per Sony PVM-740 Interface Manual for Programmers excerpt).</summary>
+	/// <summary>SDCP version 3 item number for VMC: ASCII commands in the Data field (<c>B000h</c> per PVM-740 programmer manual excerpt).</summary>
 	public const ushort SdcpV3ItemVideoMonitorControl = 0xB000;
 
 	/// <summary>SDCP v3 item number for VMC on monitors with built-in controllers (<c>B001h</c> per same excerpt). <see cref="Clients.VmcClient"/> uses <see cref="SdcpV3ItemVideoMonitorControl"/> by default.</summary>

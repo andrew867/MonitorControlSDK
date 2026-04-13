@@ -1,7 +1,7 @@
 using System.Net.Sockets;
-using Sony.MonitorControl.Protocol;
+using MonitorControl.Protocol;
 
-namespace Sony.MonitorControl.Transport;
+namespace MonitorControl.Transport;
 
 /// <summary>TCP connection to monitor SDCP port (default 53484), matching legacy <c>SdcpTcp</c> framing behavior.</summary>
 public sealed class SdcpConnection : ISdcpTransport, IAsyncDisposable, IDisposable

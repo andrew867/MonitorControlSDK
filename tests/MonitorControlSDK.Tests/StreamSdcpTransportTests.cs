@@ -1,10 +1,10 @@
 using System.IO;
-using Sony.MonitorControl.Internal;
-using Sony.MonitorControl.Protocol;
-using Sony.MonitorControl.Transport;
+using MonitorControl.Internal;
+using MonitorControl.Protocol;
+using MonitorControl.Transport;
 using Xunit;
 
-namespace Sony.MonitorControl.Tests;
+namespace MonitorControl.Tests;
 
 public sealed class StreamSdcpTransportTests
 {

@@ -1,6 +1,6 @@
 using System.Net;
-using Sony.MonitorControl.Clients;
-using Sony.MonitorControl.Transport;
+using MonitorControl.Clients;
+using MonitorControl.Transport;
 
 // One-shot UDP SDCP VMC (Group / All). Discovery advertisements stay on SDAP UDP 53862 (see Sample.Discovery).
 // Replace broadcast with your subnet directed address (e.g. 192.168.1.255) if global broadcast is filtered.

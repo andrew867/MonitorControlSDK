@@ -43,7 +43,7 @@ SHOWIPADDRESS
 WBSEL
 WBSEL USER
 
-# --- sendCommandBroadCast("STATset", "...") — original UDP/broadcast helper; not in Sony.MonitorControl TCP stack ---
+# --- sendCommandBroadCast("STATset", "...") — original UDP/broadcast helper; not in MonitorControl TCP stack ---
 MENUOFF
 SHOWADDR SINGLE
 SHOWBOTHIDIP

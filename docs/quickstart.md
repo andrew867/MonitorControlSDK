@@ -7,8 +7,8 @@ You need **.NET 8 SDK** ([download](https://dotnet.microsoft.com/download/dotnet
 ```bash
 git clone https://github.com/andrew867/MonitorControlSDK.git
 cd MonitorControlSDK
-dotnet build Sony.MonitorControl.sln -c Release
-dotnet test Sony.MonitorControl.sln -c Release
+dotnet build MonitorControl.sln -c Release
+dotnet test MonitorControl.sln -c Release
 ```
 
 ## 2. Discover monitors with SDAP (2 min)
@@ -47,8 +47,8 @@ dotnet run --project samples/Sample.UdpVmcBroadcast -- 192.168.1.255
 ## 4. Use the library from C# (3 min)
 
 ```csharp
-using Sony.MonitorControl.Clients;
-using Sony.MonitorControl.Transport;
+using MonitorControl.Clients;
+using MonitorControl.Transport;
 
 using var tcp = new SdcpConnection("192.168.0.10");
 tcp.Open();
@@ -76,5 +76,5 @@ Open `http://127.0.0.1:5080/` for the browser demo and `http://127.0.0.1:5080/sw
 
 ## Troubleshooting
 
-- **Timeout / connection refused:** firewall, wrong IP, SDCP disabled on monitor, or non-Sony / incompatible firmware path.
+- **Timeout / connection refused:** firewall, wrong IP, SDCP disabled on monitor, or incompatible / unexpected firmware path.
 - **Empty or `(null)` VMC:** field name not supported on that model, or password lock (see error codes doc).

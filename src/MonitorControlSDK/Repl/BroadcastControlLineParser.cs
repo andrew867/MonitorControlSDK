@@ -1,4 +1,4 @@
-namespace Sony.MonitorControl.Repl;
+namespace MonitorControl.Repl;
 
 /// <summary>Parses REPL lines for broadcast-style monitor control (see docs/spec/broadcast-realtime-control.md).</summary>
 public static class BroadcastControlLineParser

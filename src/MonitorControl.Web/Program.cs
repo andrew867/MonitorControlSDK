@@ -1,6 +1,6 @@
 using System.Text.Json;
 using Microsoft.AspNetCore.Http.Json;
-using Sony.MonitorControl.Web;
+using MonitorControl.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -7,7 +7,7 @@
 #   SDK image + matching runner for Windows) instead of relying on a host-installed SDK
 #
 # Optional CI/CD variables (Settings → CI/CD → Variables)
-# - NUGET_API_KEY — push public Sony.MonitorControl package to NuGet.org on semver tags
+# - NUGET_API_KEY — push public MonitorControl.Sdk package to NuGet.org on semver tags
 #
 # Docs: docs/ci-cd.md
 
@@ -54,9 +54,9 @@ build:linux:
   before_script:
     - dotnet --version
   script:
-    - dotnet restore Sony.MonitorControl.sln
-    - dotnet build Sony.MonitorControl.sln -c Release --no-restore
-    - dotnet test Sony.MonitorControl.sln -c Release --no-build --verbosity normal
+    - dotnet restore MonitorControl.sln
+    - dotnet build MonitorControl.sln -c Release --no-restore
+    - dotnet test MonitorControl.sln -c Release --no-build --verbosity normal
     - dotnet publish src/MonitorControl.Cli/MonitorControl.Cli.csproj -c Release -r linux-x64 --self-contained false -o artifacts/monitorctl-linux-x64
   artifacts:
     name: "monitorctl-linux-$CI_COMMIT_SHORT_SHA"
@@ -76,9 +76,9 @@ build:windows:
   before_script:
     - dotnet --version
   script:
-    - dotnet restore Sony.MonitorControl.sln
-    - dotnet build Sony.MonitorControl.sln -c Release --no-restore
-    - dotnet test Sony.MonitorControl.sln -c Release --no-build --verbosity normal
+    - dotnet restore MonitorControl.sln
+    - dotnet build MonitorControl.sln -c Release --no-restore
+    - dotnet test MonitorControl.sln -c Release --no-build --verbosity normal
     - dotnet publish src/MonitorControl.Cli/MonitorControl.Cli.csproj -c Release -r win-x64 --self-contained false -o artifacts/monitorctl-win-x64
   artifacts:
     name: "monitorctl-windows-$CI_COMMIT_SHORT_SHA"
@@ -104,8 +104,8 @@ package:nupkg:
   before_script:
     - dotnet --version
   script:
-    - dotnet restore Sony.MonitorControl.sln
-    - dotnet build Sony.MonitorControl.sln -c Release --no-restore
+    - dotnet restore MonitorControl.sln
+    - dotnet build MonitorControl.sln -c Release --no-restore
     - dotnet pack src/MonitorControlSDK/MonitorControlSDK.csproj -c Release --no-build -o publish/nupkg
   artifacts:
     name: "nupkg-$CI_COMMIT_SHORT_SHA"

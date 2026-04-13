@@ -1,13 +1,13 @@
 # PVM-740 Interface Manual for Programmers — synthesis (public excerpt)
 
-This document **consolidates the protocol material** from the HTML excerpt of *Sony PVM-740 Interface Manual for Programmers* hosted on **ManualsLib** (13 pages as rendered), so integrators **do not depend on a third-party site** for core header rules, timing, and VMC spelling.
+This document **consolidates the protocol material** from the HTML excerpt of *PVM-740 Interface Manual for Programmers* hosted on **ManualsLib** (13 pages as rendered), so integrators **do not depend on a third-party site** for core header rules, timing, and VMC spelling.
 
-- **Original manufacturer:** Sony Corporation.  
+- **Original manufacturer:** as stated on the published manual excerpt (see link below).  
 - **Excerpt consulted:** [ManualsLib — PVM-740 programmer manual](http://www.manualslib.com/manual/1270703/Sony-Pvm-740.html) (pages 3–12 captured 2026-04-13).  
 - **Authoritative implementation in this repo:** [`SdcpMessageBuffer`](../../src/MonitorControlSDK/Protocol/SdcpMessageBuffer.cs), [`SdcpConnection`](../../src/MonitorControlSDK/Transport/SdcpConnection.cs), [`SdapAdvertisementPacket`](../../src/MonitorControlSDK/Protocol/SdapAdvertisementPacket.cs), [`VmcClient`](../../src/MonitorControlSDK/Clients/VmcClient.cs).  
 - **Full PVM-740 VMC spellings (appendix):** [appendices/pvm-740-vmc-catalog-from-manual.txt](appendices/pvm-740-vmc-catalog-from-manual.txt).
 
-ManualsLib is not Sony; if the live page diverges, prefer **captures from your hardware** and update this file.
+ManualsLib is a third-party host, not the equipment OEM’s official distribution; if the live page diverges, prefer **captures from your hardware** and update this file.
 
 ---
 
@@ -24,7 +24,7 @@ ManualsLib is not Sony; if the live page diverges, prefer **captures from your h
 |---------|----------------|----------------|
 | **SDAP** | **53862** / UDP | Status advertisement. |
 | **SDCP** | **53484** / TCP and UDP | Control + status; see connection modes below. |
-| **FTP** | **21** | Listed in the manual’s port table; **not implemented** in Sony.MonitorControl. |
+| **FTP** | **21** | Listed in the manual’s port table; **not implemented** in MonitorControl. |
 
 Cabling: **straight** Ethernet cable; hub should support **AUTO MDIX** (straight/cross detection).
 
@@ -100,7 +100,7 @@ The excerpt lists additional SDAP payload concepts (versioned across SDAP v2–v
 
 **Manual rule:** when a **Group ID** is set for UDP broadcast, **monitors do not return** a response.
 
-**Sony.MonitorControl** implements **TCP** `SdcpConnection` to **53484**, **SDAP** listen on **53862**, and **UDP SDCP VMC** send helpers (`SdcpUdpBroadcastTransport`, `VmcUdpBroadcastClient`) for manual **Group / All** shading. **SDAP** remains the advertisement / neighbor-discovery path; UDP SDCP does not return status in those broadcast modes.
+**MonitorControl** implements **TCP** `SdcpConnection` to **53484**, **SDAP** listen on **53862**, and **UDP SDCP VMC** send helpers (`SdcpUdpBroadcastTransport`, `VmcUdpBroadcastClient`) for manual **Group / All** shading. **SDAP** remains the advertisement / neighbor-discovery path; UDP SDCP does not return status in those broadcast modes.
 
 ### Command pacing (manual pages 4–5)
 
@@ -156,7 +156,7 @@ On error: response **NG**, **Item number** repeats the **request’s** item, and
 | `INFOknob` | Controller → monitor | Rotary switch state (manual). |
 | `INFObutton` | Controller → monitor | Keypad / cursor buttons (manual). |
 
-**Sony.MonitorControl** ships **`STATget` / `STATset`** via [`VmcClient`](../../src/MonitorControlSDK/Clients/VmcClient.cs). It does **not** include dedicated helpers for **`INFOknob` / `INFObutton`** — you can still send them with the same client by using the appropriate **category string** as the first `Send(…)` segment if your device accepts them.
+**MonitorControl** ships **`STATget` / `STATset`** via [`VmcClient`](../../src/MonitorControlSDK/Clients/VmcClient.cs). It does **not** include dedicated helpers for **`INFOknob` / `INFObutton`** — you can still send them with the same client by using the appropriate **category string** as the first `Send(…)` segment if your device accepts them.
 
 ### TCP sequence (manual page 8)
 

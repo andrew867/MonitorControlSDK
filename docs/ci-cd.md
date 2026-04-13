@@ -29,7 +29,7 @@ This repository is wired for **two remotes**: GitHub for public builds, releases
 | Item | Purpose |
 |------|---------|
 | `GITHUB_TOKEN` | Default; `release` job uses `contents: write` + `packages: write` for releases and GitHub Packages |
-| `NUGET_API_KEY` | Optional repository **secret** — [NuGet API key](https://www.nuget.org/account/apikeys) with **Push** scope for `Sony.MonitorControl`. If unset, the NuGet.org step logs a skip and exits successfully |
+| `NUGET_API_KEY` | Optional repository **secret** — [NuGet API key](https://www.nuget.org/account/apikeys) with **Push** scope for `MonitorControl.Sdk`. If unset, the NuGet.org step logs a skip and exits successfully |
 
 ### Badges
 
@@ -59,7 +59,7 @@ Install **.NET 8 SDK** on each runner. For **Docker** executors instead, uncomme
 ### Stages
 
 1. **`build:linux` / `build:windows`** — restore, build, test, publish **monitorctl** for `linux-x64` / `win-x64`; artifacts per job.
-2. **`package:nupkg`** — packs `Sony.MonitorControl` into `publish/nupkg/` (runs on Linux after `build:linux` without needing its artifacts).
+2. **`package:nupkg`** — packs `MonitorControl.Sdk` into `publish/nupkg/` (runs on Linux after `build:linux` without needing its artifacts).
 3. **`release:gitlab`** — GitLab **Release** record for semver tags (`vMAJOR.MINOR.PATCH`).
 4. **`publish:gitlab-nuget`** — `dotnet nuget push` to this project’s **GitLab NuGet Package Registry** (uses `CI_JOB_TOKEN`). Requires GitLab **15.1+** and project setting allowing the job token to access the registry (see GitLab docs *“Job token permissions”*).
 5. **`release:nuget-org`** — pushes to **NuGet.org** when the masked variable **`NUGET_API_KEY`** is set; otherwise prints a skip message.

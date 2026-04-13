@@ -1,9 +1,9 @@
 using System;
 using System.Linq;
-using Sony.MonitorControl.Internal;
-using Sony.MonitorControl.Transport;
+using MonitorControl.Internal;
+using MonitorControl.Transport;
 
-namespace Sony.MonitorControl.Protocol;
+namespace MonitorControl.Protocol;
 
 /// <summary>Binary VMS command engine (complete port of legacy <c>VmsCommand</c>).</summary>
 public sealed class VmsCommandEngine

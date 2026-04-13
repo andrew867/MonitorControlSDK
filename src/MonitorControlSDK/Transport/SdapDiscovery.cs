@@ -1,8 +1,8 @@
 using System.Net;
 using System.Net.Sockets;
-using Sony.MonitorControl.Protocol;
+using MonitorControl.Protocol;
 
-namespace Sony.MonitorControl.Transport;
+namespace MonitorControl.Transport;
 
 /// <summary>Listens for SDAP monitor advertisements on UDP port 53862 (legacy <c>SdapUdp</c>).</summary>
 public sealed class SdapDiscovery : IDisposable

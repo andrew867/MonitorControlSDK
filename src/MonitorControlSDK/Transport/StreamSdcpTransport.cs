@@ -1,7 +1,7 @@
 using System.IO;
-using Sony.MonitorControl.Protocol;
+using MonitorControl.Protocol;
 
-namespace Sony.MonitorControl.Transport;
+namespace MonitorControl.Transport;
 
 /// <summary>SDCP framing over an arbitrary <see cref="Stream"/> (tests, proxies). Matches <see cref="SdcpConnection"/> read/write sizes.</summary>
 public sealed class StreamSdcpTransport : ISdcpTransport, IDisposable

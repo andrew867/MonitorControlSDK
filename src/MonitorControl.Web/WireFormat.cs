@@ -1,6 +1,6 @@
 using System.Globalization;
 
-namespace Sony.MonitorControl.Web;
+namespace MonitorControl.Web;
 
 internal static class WireFormat
 {

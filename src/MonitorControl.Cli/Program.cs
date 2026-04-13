@@ -1,8 +1,8 @@
 using System.CommandLine;
 using System.Net;
-using Sony.MonitorControl.Clients;
-using Sony.MonitorControl.Protocol;
-using Sony.MonitorControl.Transport;
+using MonitorControl.Clients;
+using MonitorControl.Protocol;
+using MonitorControl.Transport;
 
 var hostOption = new Option<string>("--host", "Monitor IP address") { IsRequired = true };
 var bindOption = new Option<string?>("--bind", "Local IP to bind for SDAP (default: any)");
@@ -47,7 +47,7 @@ var vmaCmd = new Command("vma-version", "VMA: read control software version stri
 vmaCmd.AddOption(hostOption);
 vmaCmd.SetHandler(RunVmaVersion, hostOption);
 
-var root = new RootCommand("Sony monitor SDAP/SDCP control CLI (MonitorControlSDK)");
+var root = new RootCommand("SDAP/SDCP monitor control CLI (MonitorControlSDK)");
 root.AddCommand(discoverCmd);
 root.AddCommand(vmcBcastCmd);
 root.AddCommand(vmsCmd);

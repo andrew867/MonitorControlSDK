@@ -1,8 +1,8 @@
-using Sony.MonitorControl.Internal;
-using Sony.MonitorControl.Protocol;
-using Sony.MonitorControl.Transport;
+using MonitorControl.Internal;
+using MonitorControl.Protocol;
+using MonitorControl.Transport;
 
-namespace Sony.MonitorControl.Clients;
+namespace MonitorControl.Clients;
 
 /// <summary>VMA service and adjustment commands (SDCP item 0xF000 / v3 VMA header).</summary>
 public sealed class VmaClient

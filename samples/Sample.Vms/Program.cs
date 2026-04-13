@@ -1,6 +1,6 @@
-using Sony.MonitorControl.Clients;
-using Sony.MonitorControl.Protocol;
-using Sony.MonitorControl.Transport;
+using MonitorControl.Clients;
+using MonitorControl.Protocol;
+using MonitorControl.Transport;
 
 if (args.Length < 1)
 {

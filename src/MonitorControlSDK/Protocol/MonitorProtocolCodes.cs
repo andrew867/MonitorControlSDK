@@ -1,4 +1,4 @@
-namespace Sony.MonitorControl.Protocol;
+namespace MonitorControl.Protocol;
 
 /// <summary>Return codes used by legacy command helpers (32 = success).</summary>
 public static class MonitorProtocolCodes

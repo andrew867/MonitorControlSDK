@@ -1,6 +1,6 @@
 # Firmware updates (VMA service class)
 
-This document describes **what this SDK can place on the wire** and the **minimum conceptual sequence** for monitor control software. It is **not** a substitute for Sony service documentation or bench validation.
+This document describes **what this SDK can place on the wire** and the **minimum conceptual sequence** for monitor control software. It is **not** a substitute for OEM service documentation or bench validation.
 
 See also [**references parity**](../reference/references-parity.md) — what historical `references/` firmware-updater trees cover beyond wire helpers (UI, chunk files, **not** reproduced here).
 
@@ -40,4 +40,4 @@ Incorrect images or wrong ordering can **brick** hardware. Use isolated VLANs, r
 
 ## External context
 
-Sony **projector** protocol manuals discuss **SDAP** on UDP **53862** (same port as this monitor stack) but use **ADCP** on TCP **53595** for control — **different** from monitor SDCP **53484**. See [reference/external-sources.md](../reference/external-sources.md).
+Some **projector** protocol manuals discuss **SDAP** on UDP **53862** (same port as this monitor stack) but use **ADCP** on TCP **53595** for control — **different** from monitor SDCP **53484**. See [reference/external-sources.md](../reference/external-sources.md).

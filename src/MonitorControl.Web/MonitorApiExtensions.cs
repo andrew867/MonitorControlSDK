@@ -1,12 +1,12 @@
 using System.Net;
 using System.Net.Sockets;
 using Microsoft.AspNetCore.Mvc;
-using Sony.MonitorControl.Clients;
-using Sony.MonitorControl.Internal;
-using Sony.MonitorControl.Protocol;
-using Sony.MonitorControl.Transport;
+using MonitorControl.Clients;
+using MonitorControl.Internal;
+using MonitorControl.Protocol;
+using MonitorControl.Transport;
 
-namespace Sony.MonitorControl.Web;
+namespace MonitorControl.Web;
 
 internal static class MonitorApiExtensions
 {

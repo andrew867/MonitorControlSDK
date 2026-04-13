@@ -39,13 +39,13 @@ jobs:
           cache-dependency-path: "**/*.csproj"
 
       - name: Restore
-        run: dotnet restore Sony.MonitorControl.sln
+        run: dotnet restore MonitorControl.sln
 
       - name: Build
-        run: dotnet build Sony.MonitorControl.sln -c Release --no-restore
+        run: dotnet build MonitorControl.sln -c Release --no-restore
 
       - name: Test
-        run: dotnet test Sony.MonitorControl.sln -c Release --no-build --verbosity normal
+        run: dotnet test MonitorControl.sln -c Release --no-build --verbosity normal
 
       - name: Pack SDK (NuGet)
         run: dotnet pack src/MonitorControlSDK/MonitorControlSDK.csproj -c Release --no-build -o "${{ github.workspace }}/artifacts/nupkg"

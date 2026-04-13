@@ -1,7 +1,7 @@
-using Sony.MonitorControl.Protocol;
-using Sony.MonitorControl.Transport;
+using MonitorControl.Protocol;
+using MonitorControl.Transport;
 
-namespace Sony.MonitorControl.Clients;
+namespace MonitorControl.Clients;
 
 /// <summary>High-level VMS (SDCP v4 item 0xB900) command client.</summary>
 public sealed class VmsClient

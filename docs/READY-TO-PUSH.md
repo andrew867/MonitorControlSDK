@@ -6,8 +6,8 @@ Nothing in this document runs automatically. **Do not push** until you have revi
 
 ## Pre-flight
 
-1. `dotnet build Sony.MonitorControl.sln -c Release`
-2. `dotnet test Sony.MonitorControl.sln -c Release`
+1. `dotnet build MonitorControl.sln -c Release`
+2. `dotnet test MonitorControl.sln -c Release`
 3. `git status` — ensure no accidental firmware blobs or local-only trees are staged.
 
 ## Set remote and push (when you approve)

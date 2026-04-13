@@ -15,7 +15,7 @@
 ## Calibration helpers
 
 - **CAL short press**: toggles `FLATFIELDPATTERN ON` / `OFF` (flat field for setup).
-- **CAL long press (~1.5 s)**: sends `WBSEL USER` then `FLATFIELDPATTERN ON` (white-balance prep pattern on many Sony manuals — confirm on device).
+- **CAL long press (~1.5 s)**: sends `WBSEL USER` then `FLATFIELDPATTERN ON` (white-balance prep pattern on many OEM manuals — confirm on device).
 - **Serial**: `flat on` / `flat off`, `cal show`, `cal reset`, and extended `cap …` endpoints (see `help` on serial).
 
 NVS namespace **`kbcal`** stores per-mode ADC endpoints (`b0/b1`, `c0/c1`, `r0/r1`, `g0/g1`, `bl0/bl1`, `a0/a1`, `ch0/ch1`, `ph0/ph1`).

@@ -1,8 +1,8 @@
-using Sony.MonitorControl.Internal;
-using Sony.MonitorControl.Protocol;
+using MonitorControl.Internal;
+using MonitorControl.Protocol;
 using Xunit;
 
-namespace Sony.MonitorControl.Tests;
+namespace MonitorControl.Tests;
 
 public sealed class FirmwareWireEncodingTests
 {

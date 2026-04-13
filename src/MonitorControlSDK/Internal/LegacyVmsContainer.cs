@@ -1,6 +1,6 @@
 using System;
 
-namespace Sony.MonitorControl.Internal;
+namespace MonitorControl.Internal;
 
 public sealed class LegacyVmsContainer : ILegacySdcpContainer
 {

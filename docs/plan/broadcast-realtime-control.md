@@ -11,7 +11,7 @@ Ship [samples/Sample.BroadcastControl](../../samples/Sample.BroadcastControl): a
 
 ## Dependencies
 
-- `Sony.MonitorControl` library: `SdcpConnection`, `VmcClient`, optional `VmsClient` for future extension.
+- `MonitorControl` library: `SdcpConnection`, `VmcClient`, optional `VmsClient` for future extension.
 
 ## Test plan
 

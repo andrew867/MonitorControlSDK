@@ -41,7 +41,7 @@ openapi-generator-cli generate \
 
 ## 4. Arduino / “arduino-rest-api style”
 
-There is no first-party Sony generator for Wiring. Practical options:
+There is no first-party vendor generator for Wiring. Practical options:
 
 - **HTTP + hand-built JSON** (this repo’s sketches) — smallest flash footprint.
 - **ArduinoJson** + thin wrappers around `POST /api/vmc/set` bodies shaped like the OpenAPI `VmcSetBody` schema (derive field names from Swagger).
