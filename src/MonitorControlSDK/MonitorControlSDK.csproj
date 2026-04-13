@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>Sony.MonitorControl</RootNamespace>
+    <AssemblyName>Sony.MonitorControl</AssemblyName>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+    <PackageId>Sony.MonitorControl</PackageId>
+    <Version>0.0.1</Version>
+    <Authors>Andrew Green</Authors>
+    <Description>SDAP/SDCP client library for Sony professional monitors: TCP SDCP, SDAP listen, and optional UDP SDCP VMC broadcast (Group/All).</Description>
+    <PackageProjectUrl>https://github.com/andrew867/MonitorControlSDK</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/andrew867/MonitorControlSDK.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="MonitorControlSDK.Tests" />
+  </ItemGroup>
+</Project>

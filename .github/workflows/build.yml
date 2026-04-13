@@ -1,0 +1,53 @@
+name: build-and-pack
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Restore
+        run: dotnet restore Sony.MonitorControl.sln
+
+      - name: Build
+        run: dotnet build Sony.MonitorControl.sln -c Release --no-restore
+
+      - name: Test
+        run: dotnet test Sony.MonitorControl.sln -c Release --no-build --verbosity normal
+
+      - name: Pack SDK (NuGet)
+        run: dotnet pack src/MonitorControlSDK/MonitorControlSDK.csproj -c Release --no-build -o "${{ github.workspace }}/artifacts/nupkg"
+
+      - name: Publish CLI (RID)
+        shell: bash
+        run: |
+          set -euo pipefail
+          case "${{ matrix.os }}" in
+            windows-latest) RID=win-x64 ;;
+            ubuntu-latest) RID=linux-x64 ;;
+            macos-latest) RID=osx-arm64 ;;
+            *) echo "Unknown runner"; exit 1 ;;
+          esac
+          dotnet publish src/MonitorControl.Cli/MonitorControl.Cli.csproj -c Release -r "$RID" --self-contained false -o "${{ github.workspace }}/artifacts/monitorctl-${RID}"
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-${{ matrix.os }}
+          if-no-files-found: error
+          path: |
+            artifacts/nupkg/*
+            artifacts/monitorctl-*/*

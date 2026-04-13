@@ -1,0 +1,55 @@
+# VMC STAT tokens collected from references/ (C# corpus)
+#
+# Regenerated: 2026-04-13T16:15Z — bash scripts/regen-appendices.sh
+# Scanned: references/**/*.cs
+#
+# Encoding: VmcClient.Send("STATset", seg1, seg2, ...) joins with spaces (LegacyVmcContainer.setCommand).
+# Some forks used one string "FLATFIELDPATTERN OFF" vs two args "FLATFIELDPATTERN", "OFF" — same wire.
+#
+# --- STATget / getSTATgetMessage string literals ---
+BACKLIGHT
+BBIAS
+BGAIN
+GBIAS
+GGAIN
+MODEL
+RBIAS
+RGAIN
+
+# --- STATset first literal (sendCommand second argument); more args may follow ---
+ALLBRIGHTNESS
+ALLCONTRAST
+BBIAS
+BGAIN
+BRIGHTNESS
+COLORB
+COLORG
+COLORR
+COLORW
+CONTRAST
+ENTER
+FLATFIELDPATTERN
+FLATFIELDPATTERN OFF
+FLATFIELDPATTERN ON
+GBIAS
+GGAIN
+MENUOFF
+RBIAS
+RGAIN
+SHOWADDR SINGLE
+SHOWBOTHIDIP
+SHOWID
+SHOWIPADDRESS
+WBSEL
+WBSEL USER
+
+# --- sendCommandBroadCast("STATset", "...") — original UDP/broadcast helper; not in Sony.MonitorControl TCP stack ---
+MENUOFF
+SHOWADDR SINGLE
+SHOWBOTHIDIP
+SHOWID
+SHOWIPADDRESS
+
+# --- Notes ---
+# STATret appears as VMC_CMM_RET constant in several ControlVmcCommand files; no sendCommand("STATret"...) literal found in references/**/*.cs scan.
+# sendCommand("STATset", "", ...) appears in historical firmware-updater sources (empty tail).

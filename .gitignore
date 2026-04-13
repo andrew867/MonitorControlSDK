@@ -1,0 +1,35 @@
+bin/
+obj/
+.vs/
+*.user
+*.suo
+TestResults/
+*.DotSettings.user
+.idea/
+*.rsuser
+launchSettings.json
+!src/MonitorControl.Web/Properties/launchSettings.json
+
+references/
+
+# Firmware / device update payloads (anywhere in repo)
+**/UPDATES/**/bin/
+**/UPDATE/**/*.bin
+**/*.fpga
+**/*.bit
+**/*.rbf
+**/*.mcs
+
+# Optional analysis-tool lock files (ignore if present)
+*.id0
+*.id1
+*.id2
+*.nam
+*.til
+
+# Publish / CI output
+artifacts/
+publish/
+
+# OneDrive
+~$*
