@@ -13,9 +13,11 @@
  *            long press (~1.5 s): STATset WBSEL USER then FLATFIELDPATTERN ON (green-field WB prep)
  *   POWER  — each press: alternate POWERSAVING OFF / ON (standby-ish; chassis-specific)
  *
- * Serial 115200: help | mode pic|rgb|grade | cap bmin… | cap rmin… | flat on|off
+ * Serial 115200: help | discover [ms] | portal | web | mode pic|rgb|grade | cap … | flat on|off
  *
- * NVS "kbcal": b0/b1/c0/c1 + r0/r1/g0/g1/b0/b1 + a0/a1/ch0/ch1/ph0/ph1 for per-mode ADC endpoints.
+ * NVS "kbcal": ADC calibration. NVS "mcfg": WiFi SSID/password + monitor IP (see wifi_sdap_web.ino).
+ * First boot with no WiFi SSID opens a captive AP **MonitorCtrl-XX** (password **monitorctl**) and web UI on :80.
+ * After STA connects, same UI is on **http://\<device-ip\>:8080** (SDAP discover needs STA on the monitor LAN).
  */
 
 #if !defined(ESP32)
@@ -28,16 +30,32 @@
 #include <string.h>
 #include <strings.h>
 
-static const char* WIFI_SSID = "your-ssid";
-static const char* WIFI_PASSWORD = "your-password";
+extern char gMonitorHost[48];
 
-static const char* MONITOR_HOST = "192.168.1.10";
+void webLoop(void);
+bool wifiConnectOrPortal(void);
+bool wifiPortalActive(void);
+void serialDiscoverSdap(unsigned long ms);
+void enterPortalFromRunning(void);
+
+/* ADC defaults: override in this file for your board, e.g. #define PIN_ADC_A 15 */
+#ifndef PIN_ADC_A
+#if defined(CONFIG_IDF_TARGET_ESP32S3) && CONFIG_IDF_TARGET_ESP32S3
+#define PIN_ADC_A 4
+#define PIN_ADC_B 5
+#define PIN_ADC_C 6
+#elif defined(CONFIG_IDF_TARGET_ESP32S2) && CONFIG_IDF_TARGET_ESP32S2
+#define PIN_ADC_A 1
+#define PIN_ADC_B 2
+#define PIN_ADC_C 3
+#else
+#define PIN_ADC_A 34
+#define PIN_ADC_B 35
+#define PIN_ADC_C 32
+#endif
+#endif
+
 static const uint16_t SDCP_PORT = 53484;
-
-// --- ADC (ESP32: prefer ADC1 pins with WiFi) ---
-static const int PIN_ADC_A = 34;  // Bright / R gain / Aperture
-static const int PIN_ADC_B = 35;  // Contrast / G gain / Chroma
-static const int PIN_ADC_C = 32;  // (unused in picture mode) B gain / Phase
 
 static const int ADC_FULL_SCALE = 4095;
 
@@ -295,11 +313,37 @@ static void handleSerialLine(char* line) {
   trimInPlace(line);
   if (!line[0]) return;
   if (!strcasecmp(line, "help")) {
+    Serial.println(F("discover [ms] — SDAP UDP 53862 (default 5000)"));
+    Serial.println(F("portal — open config AP (MonitorCtrl-XX / monitorctl)"));
+    Serial.println(F("web — print config URL when on STA"));
     Serial.println(F("mode pic|rgb|grade"));
     Serial.println(F("cap bmin bmax cmin cmax | cap rmin rmax gmin gmax blmin blmax"));
     Serial.println(F("cap amin amax chmin chmax phmin phmax  (grade mode ADC ranges)"));
     Serial.println(F("flat on | flat off"));
     Serial.println(F("cal show | cal reset"));
+    return;
+  }
+  if (!strncasecmp(line, "discover", 8)) {
+    unsigned long ms = 5000;
+    if (strlen(line) > 8) {
+      char* p = line + 8;
+      while (*p == ' ') p++;
+      if (*p) ms = (unsigned)strtoul(p, nullptr, 10);
+      if (ms < 500) ms = 500;
+      if (ms > 30000) ms = 30000;
+    }
+    serialDiscoverSdap(ms);
+    return;
+  }
+  if (!strcasecmp(line, "portal")) {
+    enterPortalFromRunning();
+    return;
+  }
+  if (!strcasecmp(line, "web")) {
+    if (WiFi.status() == WL_CONNECTED)
+      Serial.printf("http://%s:8080/\n", WiFi.localIP().toString().c_str());
+    else
+      Serial.println(F("WiFi not connected."));
     return;
   }
   if (!strcasecmp(line, "mode pic")) {
@@ -322,7 +366,7 @@ static void handleSerialLine(char* line) {
   }
   if (!strcasecmp(line, "flat on")) {
     char err[80];
-    if (vmcStatSetTail(MONITOR_HOST, "FLATFIELDPATTERN ON", err, sizeof(err))) {
+    if (vmcStatSetTail(gMonitorHost, "FLATFIELDPATTERN ON", err, sizeof(err))) {
       gFlatOn = true;
       Serial.println(F("FLAT ON ok"));
     } else
@@ -331,7 +375,7 @@ static void handleSerialLine(char* line) {
   }
   if (!strcasecmp(line, "flat off")) {
     char err[80];
-    if (vmcStatSetTail(MONITOR_HOST, "FLATFIELDPATTERN OFF", err, sizeof(err))) {
+    if (vmcStatSetTail(gMonitorHost, "FLATFIELDPATTERN OFF", err, sizeof(err))) {
       gFlatOn = false;
       Serial.println(F("FLAT OFF ok"));
     } else
@@ -465,7 +509,7 @@ static void onPowerPress() {
   char err[96];
   bool next = !gPowerStandby;
   const char* tail = next ? "POWERSAVING ON" : "POWERSAVING OFF";
-  if (vmcStatSetTail(MONITOR_HOST, tail, err, sizeof(err))) {
+  if (vmcStatSetTail(gMonitorHost, tail, err, sizeof(err))) {
     gPowerStandby = next;
     Serial.printf("POWER %s OK\n", tail);
   } else
@@ -493,7 +537,7 @@ static void pollCalButton() {
           char err[96];
           bool nextFlat = !gFlatOn;
           const char* tail = nextFlat ? "FLATFIELDPATTERN ON" : "FLATFIELDPATTERN OFF";
-          if (vmcStatSetTail(MONITOR_HOST, tail, err, sizeof(err))) {
+          if (vmcStatSetTail(gMonitorHost, tail, err, sizeof(err))) {
             gFlatOn = nextFlat;
             Serial.printf("CAL short %s OK\n", tail);
           } else
@@ -507,11 +551,11 @@ static void pollCalButton() {
   if (!gCalReleased && !gCalLongDone && gCalPressedAt > 0 && (now - gCalPressedAt) >= CAL_LONG_MS) {
     char err[96];
     gCalLongDone = true;
-    if (vmcStatSetTail(MONITOR_HOST, "WBSEL USER", err, sizeof(err)))
+    if (vmcStatSetTail(gMonitorHost, "WBSEL USER", err, sizeof(err)))
       Serial.println(F("CAL long: WBSEL USER OK"));
     else
       Serial.printf("CAL long WBSEL fail: %s\n", err);
-    if (vmcStatSetTail(MONITOR_HOST, "FLATFIELDPATTERN ON", err, sizeof(err))) {
+    if (vmcStatSetTail(gMonitorHost, "FLATFIELDPATTERN ON", err, sizeof(err))) {
       gFlatOn = true;
       Serial.println(F("CAL long: FLAT ON OK"));
     } else
@@ -535,20 +579,23 @@ void setup() {
   gCalReleased = digitalRead(PIN_BTN_CAL) == HIGH;
   gModeLastMs = gPwrLastMs = gCalLastMs = millis();
 
-  WiFi.mode(WIFI_STA);
-  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(400);
-    Serial.print('.');
-  }
-  Serial.println();
-  Serial.println(WiFi.localIP());
-  Serial.println(F("Buttons: MODE cycle | CAL flat toggle / long=WBSEL+FLAT | POWER POWERSAVING"));
-  Serial.println(F("Serial: help"));
+  bool okSta = wifiConnectOrPortal();
+  if (okSta) {
+    if (gMonitorHost[0] == 0)
+      Serial.println(F("No monitor IP — open http://DEVICE_IP:8080/ or serial after setting mhost."));
+    Serial.println(F("Buttons: MODE cycle | CAL flat toggle / long=WBSEL+FLAT | POWER POWERSAVING"));
+    Serial.println(F("Serial: help | discover | portal | web"));
+  } else
+    Serial.println(F("Config portal active — join AP and open http://192.168.4.1/"));
 }
 
 void loop() {
+  webLoop();
   pollSerial();
+  if (wifiPortalActive() || gMonitorHost[0] == 0) {
+    delay(40);
+    return;
+  }
   pollEdgeButton(PIN_BTN_MODE, gModeReleased, gModeLastMs, onModePress);
   pollEdgeButton(PIN_BTN_POWER, gPwrReleased, gPwrLastMs, onPowerPress);
   pollCalButton();
@@ -587,30 +634,30 @@ void loop() {
     bool ok = true;
     switch (gMode) {
       case MODE_PICTURE:
-        ok = vmcStatSet2(MONITOR_HOST, "BRIGHTNESS", va, err, sizeof(err));
+        ok = vmcStatSet2(gMonitorHost, "BRIGHTNESS", va, err, sizeof(err));
         if (!ok) Serial.printf("BRIGHT: %s\n", err);
-        ok = vmcStatSet2(MONITOR_HOST, "CONTRAST", vb, err, sizeof(err)) && ok;
+        ok = vmcStatSet2(gMonitorHost, "CONTRAST", vb, err, sizeof(err)) && ok;
         if (!ok) Serial.printf("CONT: %s\n", err);
         lastA = va;
         lastB = vb;
         break;
       case MODE_RGB_GAIN:
-        ok = vmcStatSet2(MONITOR_HOST, "RGAIN", va, err, sizeof(err));
+        ok = vmcStatSet2(gMonitorHost, "RGAIN", va, err, sizeof(err));
         if (!ok) Serial.printf("RGAIN: %s\n", err);
-        ok = vmcStatSet2(MONITOR_HOST, "GGAIN", vb, err, sizeof(err)) && ok;
+        ok = vmcStatSet2(gMonitorHost, "GGAIN", vb, err, sizeof(err)) && ok;
         if (!ok) Serial.printf("GGAIN: %s\n", err);
-        ok = vmcStatSet2(MONITOR_HOST, "BGAIN", vc, err, sizeof(err)) && ok;
+        ok = vmcStatSet2(gMonitorHost, "BGAIN", vc, err, sizeof(err)) && ok;
         if (!ok) Serial.printf("BGAIN: %s\n", err);
         lastA = va;
         lastB = vb;
         lastC = vc;
         break;
       case MODE_GRADE:
-        ok = vmcStatSet2(MONITOR_HOST, "APERTURE", va, err, sizeof(err));
+        ok = vmcStatSet2(gMonitorHost, "APERTURE", va, err, sizeof(err));
         if (!ok) Serial.printf("APERTURE: %s\n", err);
-        ok = vmcStatSet2(MONITOR_HOST, "CHROMA", vb, err, sizeof(err)) && ok;
+        ok = vmcStatSet2(gMonitorHost, "CHROMA", vb, err, sizeof(err)) && ok;
         if (!ok) Serial.printf("CHROMA: %s\n", err);
-        ok = vmcStatSet2(MONITOR_HOST, "PHASE", vc, err, sizeof(err)) && ok;
+        ok = vmcStatSet2(gMonitorHost, "PHASE", vc, err, sizeof(err)) && ok;
         if (!ok) Serial.printf("PHASE: %s\n", err);
         lastA = va;
         lastB = vb;

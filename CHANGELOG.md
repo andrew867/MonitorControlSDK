@@ -4,6 +4,16 @@ All notable changes to this project are documented here. The format is inspired 
 
 ## [Unreleased]
 
+### Examples (ESP32 native)
+
+- **SDAP discovery** on UDP **53862** (decode aligned with `SdapAdvertisementPacket`) from serial `discover` and from the web UI.
+- **HTML5** captive portal + STA config on **:8080** (`config_portal.h`, `wifi_sdap_web.ino`): WiFi scan/save, monitor IP, erase NVS; **DNSServer** for captive behaviour on the setup AP.
+- **NVS `mcfg`** for `ssid` / `pass` / `mhost`; default ADC pin sets for **ESP32** vs **ESP32-S3** / **S2** via `CONFIG_IDF_TARGET_*`.
+
+### Documentation
+
+- Aligned [docs/diagrams/monitor-control-flows.md](docs/diagrams/monitor-control-flows.md) and [docs/quickstart.md](docs/quickstart.md) with ESP32 **SDAP + web provisioning** (no longer `MONITOR_HOST`-only).
+
 ## [0.4.0] — 2026-04-13
 
 ### Documentation

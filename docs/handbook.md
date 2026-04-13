@@ -85,6 +85,8 @@ Full route table, query parameters, JSON bodies, and firmware gate: [guide/web-a
 
 **Modes on native ESP32:** **PICTURE** (brightness/contrast), **RGB_GAIN** (`RGAIN`/`GGAIN`/`BGAIN`), **GRADE** (aperture/chroma/phase ranges per README). **MODE** / **CAL** / **POWER** buttons and serial `cap` / `flat` commands are documented in the example README.
 
+**Provisioning:** The same example now ships a **captive WiFi AP** (`MonitorCtrl-*` / default password in sketch) plus an **HTML5** page (`config_portal.h`) for STA credentials, **SDAP discovery** (UDP **53862**) to pick **Connection IP**, and a **STA-side** config server on **port 8080** — see [`examples/esp32-sdcp-vmc/README.md`](../examples/esp32-sdcp-vmc/README.md).
+
 ### 5.5 Python gateway (`examples/python-service`)
 
 Proxies **`/api/*`** to the .NET base URL and streams **`GET /api/events/...`** (SSE) through to the client. **`/ws/monitor-watch` is not proxied** — browsers or tools must open WebSocket connections to the **MonitorControl.Web** port. Details: [examples/python-service/README.md](../examples/python-service/README.md), [diagrams/monitor-control-flows.md](diagrams/monitor-control-flows.md) (Python gateway figure).

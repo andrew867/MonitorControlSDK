@@ -68,7 +68,7 @@ Optional **Python** reverse proxy on port **8000**: [examples/python-service/REA
 
 ## 5b. ESP32 native SDCP (no HTTP, no PC in the control path)
 
-If you need **on-wire** VMC from an ESP32 on the same LAN as the monitor, flash [`examples/esp32-sdcp-vmc/monitor_knobs_sdcp.ino`](../examples/esp32-sdcp-vmc/monitor_knobs_sdcp.ino). Configure WiFi and `MONITOR_HOST`, then use pots/buttons per [examples/esp32-sdcp-vmc/README.md](../examples/esp32-sdcp-vmc/README.md). Flow diagrams: [diagrams/monitor-control-flows.md](diagrams/monitor-control-flows.md).
+If you need **on-wire** VMC from an ESP32 on the same LAN as the monitor, open the **esp32-sdcp-vmc** folder in Arduino IDE (sketch `monitor_knobs_sdcp.ino` plus `wifi_sdap_web.ino` and `config_portal.h`). First boot starts a **captive portal** for WiFi; use the page or **SDAP** discovery to set the monitor IP (NVS `mhost`), then use pots/buttons per [examples/esp32-sdcp-vmc/README.md](../examples/esp32-sdcp-vmc/README.md). Flow diagrams: [diagrams/monitor-control-flows.md](diagrams/monitor-control-flows.md).
 
 ## 6. Go deeper
 

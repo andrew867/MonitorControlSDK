@@ -12,7 +12,7 @@ High-level views of **where data moves** and **how physical controls** reach the
 | **MonitorControl.Web** | `GET /api/sdap/discover` | Opens TCP **53484** per request (or UDP for `/api/vmc/broadcast`) | Same as SDK under the host | OpenAPI + static UI |
 | **Python gateway** (`examples/python-service`) | Proxied `GET /api/sdap/discover` | Proxied `POST /api/*` | Same as .NET upstream | **SSE** proxied for `GET /api/events/*`; **WebSocket** is **not** proxied — use .NET port (see below) |
 | **ESP32 HTTP** (`monitor_knobs_http.ino`) | Manual / SDAP elsewhere | WiFi → HTTP → gateway → TCP **53484** | JSON `POST /api/vmc/set` | No SDCP on MCU |
-| **ESP32 native** (`monitor_knobs_sdcp.ino`) | **Not used in sketch** (set `MONITOR_HOST`) | WiFi → **TCP 53484** | Hand-built **SDCP v3** + item **0xB000** + ASCII | Parity with SDK header layout |
+| **ESP32 native** (`monitor_knobs_sdcp.ino` + `wifi_sdap_web.ino`) | **SDAP** UDP **53862** (web + serial) + NVS `mhost` | WiFi → **TCP 53484** | Hand-built **SDCP v3** + item **0xB000** + ASCII | Parity with SDK header layout |
 | **Sample.BroadcastControl** | Manual host arg | **Long-lived** TCP **53484** | REPL `get` / `set` | One session, many commands |
 
 ## End-to-end stacks (LAN)
@@ -56,6 +56,7 @@ flowchart LR
   Cli --> SDAP
 
   EspSdcp --> SDCP
+  SDAP -.->|decode| EspSdcp
 
   SDAP -.->|listen| Web
   SDAP -.->|listen| Py
@@ -118,7 +119,7 @@ flowchart TB
   SDCP_udp --> Mon
 ```
 
-The **ESP32 native sketch** does not run an SDAP listener; you set `MONITOR_HOST` to the monitor’s IP (often learned once from SDAP on a PC).
+The **ESP32 native example** decodes **SDAP** on UDP **53862** (browser button or serial `discover`) and stores the monitor **Connection IP** in NVS (`mhost`). You can still set the IP manually from the config UI if you prefer.
 
 ## VMC over TCP: C# / web host (reference)
 
@@ -152,7 +153,7 @@ sequenceDiagram
   participant M as Monitor
 
   F->>F: buildVmcPacket STATset token value
-  F->>W: connect MONITOR_HOST SDCP_PORT
+  F->>W: connect monitor IP (NVS mhost) SDCP_PORT
   F->>W: write 13 + ASCII bytes
   W->>M: SDCP v3 frame
   M-->>W: response bytes

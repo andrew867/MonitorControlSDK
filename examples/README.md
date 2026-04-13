@@ -45,11 +45,11 @@ Full wiring and defines: [arduino-knobs-brightness-contrast/README.md](arduino-k
 | Aspect | Detail |
 |--------|--------|
 | **Hardware** | **ESP32 only** (`#error` on non-ESP32) — WiFi + `WiFiClient`. |
-| **Sketch** | `monitor_knobs_sdcp.ino` |
+| **Sketch** | `monitor_knobs_sdcp.ino` + `wifi_sdap_web.ino` + `config_portal.h` |
 | **Control path** | WiFi → **TCP connect monitor IP port 53484** → write **SDCP v3** frames with item **0xB000** and ASCII `STATget` / `STATset` in the data area → read response, check response byte **OK**. |
 | **Parity** | Header construction matches C# layout documented in [sdcp-framing-and-items.md](../docs/reference/sdcp-framing-and-items.md); see handbook §5.4. |
-| **Modes** | **PICTURE** (brightness/contrast), **RGB_GAIN**, **GRADE** (aperture/chroma/phase); **MODE** / **CAL** / **POWER** buttons; serial `help`, `cap …`, `flat on/off`, `cal show/reset`. |
-| **Discovery** | Sketch uses **`MONITOR_HOST`**; it does **not** listen on SDAP. Use PC `monitorctl discover` or `Sample.Discovery` once, then hard-code or provision IP. |
+| **Modes** | **PICTURE** (brightness/contrast), **RGB_GAIN**, **GRADE** (aperture/chroma/phase); **MODE** / **CAL** / **POWER** buttons; serial `help`, `discover`, `portal`, `web`, `cap …`, `flat on/off`, `cal show/reset`. |
+| **Discovery + provisioning** | **SDAP** on **UDP 53862** (browser button + serial `discover`), **HTML5** captive portal for WiFi + monitor IP (NVS `mcfg`), STA UI on **:8080**. |
 | **UDP multi-monitor** | Not in this sketch; use .NET [`VmcUdpBroadcastClient`](../src/MonitorControlSDK/Clients/VmcUdpBroadcastClient.cs) or `POST /api/vmc/broadcast` for Group/All. |
 
 Full GPIO table, VMC tokens, and safety notes: [esp32-sdcp-vmc/README.md](esp32-sdcp-vmc/README.md).
