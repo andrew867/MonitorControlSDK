@@ -63,7 +63,7 @@ jobs:
           dotnet publish src/MonitorControl.Cli/MonitorControl.Cli.csproj -c Release -r "$RID" --self-contained false -o "${{ github.workspace }}/artifacts/monitorctl-${RID}"
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: build-${{ matrix.os }}
           if-no-files-found: error
