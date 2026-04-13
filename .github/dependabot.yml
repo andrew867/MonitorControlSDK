@@ -19,6 +19,17 @@ updates:
       dotnet-dependencies:
         patterns:
           - "*"
+    ignore:
+      # CLI uses beta API surface; upgrade deliberately when migrating to stable System.CommandLine.
+      - dependency-name: "System.CommandLine"
+      - dependency-name: "Microsoft.NET.Test.Sdk"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "Swashbuckle.AspNetCore"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "xunit"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "xunit.runner.visualstudio"
+        update-types: ["version-update:semver-major"]
 
   - package-ecosystem: "github-actions"
     directory: "/"
