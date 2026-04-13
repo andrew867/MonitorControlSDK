@@ -70,7 +70,7 @@ Full guide: [docs/guide/web-api-and-python-gateway.md](docs/guide/web-api-and-py
 | [src/MonitorControl.Cli/](src/MonitorControl.Cli/) | **`monitorctl`** CLI |
 | [examples/python-service/](examples/python-service/) | Optional Python service in front of the HTTP API |
 | [examples/arduino-knobs-brightness-contrast/](examples/arduino-knobs-brightness-contrast/) | ESP32 / ESP8266: analog inputs → brightness / contrast via HTTP |
-| [examples/esp32-sdcp-vmc/](examples/esp32-sdcp-vmc/) | ESP32: same idea over native TCP SDCP |
+| [examples/esp32-sdcp-vmc/](examples/esp32-sdcp-vmc/) | ESP32: **native TCP SDCP** (V3 + item `0xB000`), multi-mode knobs — no HTTP gateway; see [examples/esp32-sdcp-vmc/README.md](examples/esp32-sdcp-vmc/README.md) |
 | [scripts/](scripts/) | OpenAPI fetch / C client generation helpers; [openapi/](openapi/) holds the committed spec |
 | [samples/](samples/) | Runnable .NET samples (including UDP VMC broadcast) |
 | [docs/](docs/) | Protocol and product documentation maintained with the code |

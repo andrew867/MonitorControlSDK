@@ -28,6 +28,6 @@ The VMS **system configuration** branch includes opcodes with **SNMP** in the co
 2. **Hex dump** helpers in [`monitorctl`](../../src/MonitorControl.Cli/Program.cs) (`vms-info` subcommand dumps leading payload bytes).
 3. **Unit tests** for framing and float codecs under [`tests/MonitorControlSDK.Tests/`](../tests/MonitorControlSDK.Tests/).
 
-## External manuals
+## Optional third-party manuals
 
-See [reference/external-sources.md](../reference/external-sources.md) for programmer manuals and community SDCP implementations useful for cross-checking headers.
+In-repo synthesis and framing docs are enough to implement clients: [pvm-740-programmer-manual-synthesis.md](../reference/pvm-740-programmer-manual-synthesis.md), [sdcp-framing-and-items.md](../reference/sdcp-framing-and-items.md). For optional cross-checks only, see [reference/external-sources.md](../reference/external-sources.md).

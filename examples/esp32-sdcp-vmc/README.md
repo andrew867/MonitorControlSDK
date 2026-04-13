@@ -44,9 +44,14 @@ Each press alternates **`STATset POWERSAVING OFF`** and **`STATset POWERSAVING O
 
 - **ESP8266** (limited ADC), **TLS**, or **central auth/rate limits** → [`../arduino-knobs-brightness-contrast/`](../arduino-knobs-brightness-contrast/) calling `MonitorControl.Web`.
 
+## Diagrams and parity with C#
+
+End-to-end **integration matrix**, **ESP32 native sequence** (this sketch), **Python SSE vs WebSocket ports**, and **dual knob paths** (HTTP vs on-wire): [docs/diagrams/monitor-control-flows.md](../../docs/diagrams/monitor-control-flows.md). The [engineering handbook](../../docs/handbook.md) §5.4 lists byte-level parity between `buildVmcPacket` and [`SdcpMessageBuffer`](../../src/MonitorControlSDK/Protocol/SdcpMessageBuffer.cs).
+
 ## Reference
 
 - [SDCP framing and item numbers](../../docs/reference/sdcp-framing-and-items.md)
 - [VMC command surface](../../docs/reference/vmc-command-surface.md)
+- [spec/vmc-string-catalog.md](../../docs/spec/vmc-string-catalog.md)
 - [PVM-740 VMC catalog (manual-derived)](../../docs/reference/appendices/pvm-740-vmc-catalog-from-manual.txt)
 - [Mermaid flows](../../docs/diagrams/monitor-control-flows.md)

@@ -22,7 +22,7 @@ See [docs/testing/broadcast-realtime-control-tests.md](../testing/broadcast-real
 1. Spec + test plan documents (this repo).
 2. Optional `StreamSdcpTransport` in SDK for loopback protocol tests (no TCP mock for framing).
 3. Sample project + README in `samples/Sample.BroadcastControl/`.
-4. CI builds sample on Windows/Linux/macOS.
+4. **CI:** `MonitorControl.sln` includes `Sample.BroadcastControl`; `dotnet build` / `dotnet test` in [`.github/workflows/build.yml`](../../.github/workflows/build.yml) (and GitLab) compile the sample on every push — no separate sample-only job required.
 
 ## Success criteria
 

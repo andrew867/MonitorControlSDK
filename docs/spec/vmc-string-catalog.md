@@ -10,3 +10,5 @@ This spec page is the **entry point** for all VMC ASCII documentation in this re
 
 SDK entry: [`VmcClient`](../../src/MonitorControlSDK/Clients/VmcClient.cs).  
 HTTP: `POST /api/vmc/get` and `POST /api/vmc/set` in [guide/web-api-and-python-gateway.md](../guide/web-api-and-python-gateway.md).
+
+**ESP32 native (on-wire, no HTTP):** [`examples/esp32-sdcp-vmc/monitor_knobs_sdcp.ino`](../../examples/esp32-sdcp-vmc/monitor_knobs_sdcp.ino) builds the same ASCII tails inside SDCP v3 item **0xB000** frames — diagram vs C# in [diagrams/monitor-control-flows.md](../diagrams/monitor-control-flows.md).

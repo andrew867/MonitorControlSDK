@@ -29,15 +29,25 @@ set MONITOR_CONTROL_API_URL=http://127.0.0.1:5080
 uvicorn main:app --host 127.0.0.1 --port 8000
 ```
 
-Browse `http://127.0.0.1:8000` — static assets are served locally; `/api/*` is proxied to the .NET process. **SSE** (`GET /api/events/…`) is streamed end-to-end. **WebSocket** (`/ws/monitor-watch`) is not proxied yet — use the .NET port directly for WS, or extend `main.py`.
+Browse `http://127.0.0.1:8000` — static assets are served locally; **`/api/*`** is proxied to the .NET process via [`main.py`](main.py) route `proxy()`.
+
+### SSE (proxied)
+
+`GET /api/events/...` matches the proxy; when `full_path.startswith("events/")` and the method is **GET**, the handler uses `httpx` **`stream`** and returns a FastAPI **`StreamingResponse`**, so the browser can subscribe to SSE **through port 8000**.
+
+### WebSocket (not proxied)
+
+**`GET /ws/monitor-watch`** is **outside** `/api/...` and is **not** registered in `main.py`. The static UI’s WebSocket links must point at **MonitorControl.Web** (default `ws://127.0.0.1:5080/ws/monitor-watch?...`). To hide that split, extend the gateway (for example mount an `async` WebSocket route that dials the upstream .NET WebSocket or re-implements the poll loop in Python).
+
+### Firmware POSTs
+
+Firmware POSTs still require the .NET server to allow dangerous firmware (`MonitorControl:AllowDangerousFirmware` or `MONITOR_CONTROL_ALLOW_DANGEROUS_FIRMWARE=1`) and the browser must send `X-Firmware-Ack: CONFIRM` (the copied UI does this when the checkbox is checked).
 
 ## Environment
 
 | Variable | Default | Purpose |
 |----------|---------|---------|
 | `MONITOR_CONTROL_API_URL` | `http://127.0.0.1:5080` | Upstream .NET base URL |
-
-Firmware POSTs still require the .NET server to allow dangerous firmware (`MonitorControl:AllowDangerousFirmware` or `MONITOR_CONTROL_ALLOW_DANGEROUS_FIRMWARE=1`) and the browser must send `X-Firmware-Ack: CONFIRM` (the copied UI does this when the checkbox is checked).
 
 ## Using only Python as HTTP client
 

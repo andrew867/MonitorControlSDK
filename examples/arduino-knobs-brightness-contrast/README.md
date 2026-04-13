@@ -44,4 +44,12 @@ Bind to `0.0.0.0` so devices on the LAN can reach the API (firewall permitting).
 
 ## Flow diagrams
 
-See [docs/diagrams/monitor-control-flows.md](../../docs/diagrams/monitor-control-flows.md).
+See [docs/diagrams/monitor-control-flows.md](../../docs/diagrams/monitor-control-flows.md) — **Physical UI** section compares this HTTP path to the **ESP32 native TCP** path.
+
+## ESP32: native SDCP alternative
+
+On **ESP32** only, you can skip HTTP entirely and speak **SDCP v3** on TCP **53484** from the firmware ([`examples/esp32-sdcp-vmc/`](../esp32-sdcp-vmc/), `monitor_knobs_sdcp.ino`). That trades gateway simplicity for **wire-format maintenance** in C++. Use HTTP (this sketch) when you want **ESP8266**, **centralized auth**, or **minimal** on-device protocol code.
+
+## Live push (SSE / WebSocket)
+
+This sketch only uses **`POST /api/vmc/set`**. For **SSE** or **WebSocket** live snapshots, use the bundled web UI on **MonitorControl.Web** or call those endpoints yourself. If you run the **Python gateway** on :8000, SSE for `/api/events/...` is proxied; **WebSocket** must still target the **.NET** port (see [examples/python-service/README.md](../python-service/README.md)).

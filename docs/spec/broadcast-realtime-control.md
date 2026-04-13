@@ -7,6 +7,8 @@
 
 **Not in this sample:** **UDP SDCP** multi-monitor **Group / All** VMC (`VmcUdpBroadcastClient`, CLI `vmc-broadcast`, `POST /api/vmc/broadcast`) — fire-and-forget with no TCP session; see [pvm-740-programmer-manual-synthesis.md](../reference/pvm-740-programmer-manual-synthesis.md).
 
+**Different artifact:** the [**ESP32 native**](../../examples/esp32-sdcp-vmc/) sketch is also “broadcast-adjacent” in spirit (live knobs) but uses **many short TCP transactions** (connect → `STATset` → read → close) from firmware, not this .NET REPL process.
+
 ## Interactive grammar (REPL)
 
 Commands are line-oriented (stdin), UTF-8, trimmed whitespace.

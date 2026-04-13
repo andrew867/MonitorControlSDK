@@ -29,4 +29,4 @@ Requires stable IP, model, and firmware matrix documentation.
 
 ## Local NuGet
 
-Repository [nuget.config](../nuget.config) maps all packages to **nuget.org** so `dotnet test` resolves under `PackageSourceMapping` user policies.
+Repository root [`nuget.config`](../../nuget.config) maps package sources so `dotnet restore` / `dotnet test` resolve under typical `PackageSourceMapping` policies.

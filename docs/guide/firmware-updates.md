@@ -38,6 +38,6 @@ Before/after upgrade, use:
 
 Incorrect images or wrong ordering can **brick** hardware. Use isolated VLANs, redundant power, and recovery paths mandated by your facility.
 
-## External context
+## Optional third-party context
 
-Some **projector** protocol manuals discuss **SDAP** on UDP **53862** (same port as this monitor stack) but use **ADCP** on TCP **53595** for control — **different** from monitor SDCP **53484**. See [reference/external-sources.md](../reference/external-sources.md).
+Some **projector** protocol manuals discuss **SDAP** on UDP **53862** (same port as this monitor stack) but use **ADCP** on TCP **53595** for control — **different** from monitor SDCP **53484**. Optional links: [reference/external-sources.md](../reference/external-sources.md).

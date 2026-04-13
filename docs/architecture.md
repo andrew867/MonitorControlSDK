@@ -21,7 +21,7 @@ Human-facing documentation is entirely under [`docs/`](index.md); the [**enginee
 
 ## Control flows (diagrams)
 
-Mermaid overviews of SDAP/SDCP, VMC sequences, HTTP bridging, and physical control paths: [`docs/diagrams/monitor-control-flows.md`](diagrams/monitor-control-flows.md).
+Mermaid overviews: **integration matrix** (SDK / CLI / web / Python / ESP32 HTTP vs native TCP), SDAP vs SDCP, **ESP32 on-wire sequence** (`buildVmcPacket` parity with `SdcpMessageBuffer`), **Python SSE vs WebSocket** ports, dual knob paths, `Sample.BroadcastControl` REPL, SSE polling — [`docs/diagrams/monitor-control-flows.md`](diagrams/monitor-control-flows.md).
 
 ## Reference `references/` tree
 

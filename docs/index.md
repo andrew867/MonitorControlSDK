@@ -10,12 +10,13 @@ Single source of truth for **MonitorControl.Sdk** — SDAP discovery and SDCP co
 ## First-time path (~10 minutes)
 
 1. Skim [**SDCP framing and item numbers**](reference/sdcp-framing-and-items.md) — ports, headers, V3 vs V4.
-2. Optional: [**Control flow diagrams (Mermaid)**](diagrams/monitor-control-flows.md) — discovery, SDCP, HTTP gateway, push polling, knob-style controls.
+2. Optional: [**Control flow diagrams (Mermaid)**](diagrams/monitor-control-flows.md) — integration matrix, ESP32 **native TCP** sequence, Python **SSE vs WebSocket** ports, dual knob paths (HTTP vs on-wire), `Sample.BroadcastControl` REPL, discovery vs control.
 3. Pick your path:
    - **ASCII shading / menus:** [**VMC command surface**](reference/vmc-command-surface.md) + [`VmcClient`](../src/MonitorControlSDK/Clients/VmcClient.cs) (TCP) + [`VmcUdpBroadcastClient`](../src/MonitorControlSDK/Clients/VmcUdpBroadcastClient.cs) (UDP Group/All).
    - **Structured factory / setup:** [**VMS overview**](reference/vms-overview.md) + [`VmsCommandEngine`](../src/MonitorControlSDK/Protocol/VmsCommandEngine.cs).
    - **Service / firmware (dangerous):** [**VMA wire reference**](reference/vma-wire-reference.md) + [**Firmware updates**](guide/firmware-updates.md) + [`VmaClient`](../src/MonitorControlSDK/Clients/VmaClient.cs).
-   - **MCU / physical UI:** [examples/arduino-knobs-brightness-contrast](../examples/arduino-knobs-brightness-contrast/) (HTTP to the web API).
+   - **MCU / physical UI (HTTP):** [examples/arduino-knobs-brightness-contrast](../examples/arduino-knobs-brightness-contrast/) → `POST /api/vmc/set` on **MonitorControl.Web**.
+   - **MCU / on-wire SDCP (ESP32):** [examples/esp32-sdcp-vmc](../examples/esp32-sdcp-vmc/) — `monitor_knobs_sdcp.ino`, TCP **53484**, hand-built V3 **0xB000** frames (no gateway PC).
    - **Mapping `references/` to the shipped SDK:** [**references parity**](reference/references-parity.md) + [**VMC literal appendix**](reference/appendices/vmc-stat-tokens-from-references.txt).
 
 ## Reference (exhaustive opcode data)

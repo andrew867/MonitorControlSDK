@@ -64,6 +64,12 @@ dotnet run --project src/MonitorControl.Web --urls http://127.0.0.1:5080
 
 Open `http://127.0.0.1:5080/` for the browser demo and `http://127.0.0.1:5080/swagger` for OpenAPI. Details: [guide/web-api-and-python-gateway.md](guide/web-api-and-python-gateway.md).
 
+Optional **Python** reverse proxy on port **8000**: [examples/python-service/README.md](../examples/python-service/README.md) (proxies `/api/*` and SSE; **WebSocket** still uses the .NET port).
+
+## 5b. ESP32 native SDCP (no HTTP, no PC in the control path)
+
+If you need **on-wire** VMC from an ESP32 on the same LAN as the monitor, flash [`examples/esp32-sdcp-vmc/monitor_knobs_sdcp.ino`](../examples/esp32-sdcp-vmc/monitor_knobs_sdcp.ino). Configure WiFi and `MONITOR_HOST`, then use pots/buttons per [examples/esp32-sdcp-vmc/README.md](../examples/esp32-sdcp-vmc/README.md). Flow diagrams: [diagrams/monitor-control-flows.md](diagrams/monitor-control-flows.md).
+
 ## 6. Go deeper
 
 | Goal | Read next |

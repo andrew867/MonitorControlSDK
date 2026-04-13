@@ -61,7 +61,14 @@ Only one process can bind UDP **53862** on a given interface. If discover fails 
 
 ## Python gateway
 
-See [`examples/python-service/README.md`](../../examples/python-service/README.md). It proxies `/api/*` to the .NET base URL and serves the same static UI from port **8000** by default.
+See [`examples/python-service/README.md`](../../examples/python-service/README.md). It proxies **`/api/*`** to the .NET base URL and serves the same static UI from port **8000** by default.
+
+### SSE vs WebSocket when using Python
+
+- **SSE** (`GET /api/events/monitor?...`): proxied — the browser can stay on **:8000** and the FastAPI app streams from the upstream .NET URL ([`main.py`](../../examples/python-service/main.py) detects `full_path.startswith("events/")` and uses `httpx` streaming).
+- **WebSocket** (`GET /ws/monitor-watch`): **not proxied** by `python-service`. Open the WebSocket to the **MonitorControl.Web** listener (e.g. `ws://127.0.0.1:5080/ws/monitor-watch?host=...`), same host/port as Swagger.
+
+See [diagrams/monitor-control-flows.md](../diagrams/monitor-control-flows.md) (Python gateway figure).
 
 ## Push-style updates (SSE / WebSocket)
 
@@ -72,10 +79,10 @@ SDCP in this stack is **request/response** on TCP; the monitor does not open an 
 
 ## Integration checklist for third-party web apps
 
-1. Run `MonitorControl.Web` (or proxy through the Python gateway).
-2. Call `GET /api/sdap/discover` to learn monitor IPs (or use fixed inventory).
-3. Use `POST /api/vmc/get` / `vmc/set` for shading and UI automation; optional `POST /api/vmc/broadcast` for UDP Group/All (same tokens as `vmc/set` but no per-monitor response).
-4. Use `GET /api/events/monitor` or `/ws/monitor-watch` when you want push-shaped updates without client-side polling loops.
+1. Run `MonitorControl.Web` (or proxy **REST + SSE** through the Python gateway on **:8000** while keeping .NET on **:5080**).
+2. Call `GET /api/sdap/discover` to learn monitor IPs (or use fixed inventory). Only one process should bind UDP **53862** per interface.
+3. Use `POST /api/vmc/get` / `vmc/set` for shading and UI automation; optional `POST /api/vmc/broadcast` for UDP Group/All (same token list as `vmc/set` but **no** per-monitor TCP response).
+4. Use `GET /api/events/monitor` (SSE) and/or **WebSocket** `GET /ws/monitor-watch` for push-shaped updates. If you use **python-service**, SSE can go through **:8000**; WebSocket must target the **.NET** port (see [diagrams/monitor-control-flows.md](../diagrams/monitor-control-flows.md)).
 5. Use `POST /api/vms/product-info` for structured factory reads.
 6. Restrict firmware routes to authenticated operators; keep firmware disabled in production unless you fully control the OTA sequence.
 

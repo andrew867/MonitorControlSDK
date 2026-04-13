@@ -22,3 +22,4 @@ Run this **whenever** minimal API routes, request/response DTOs, or Swagger meta
 
 - [docs/guide/openapi-codegen.md](../docs/guide/openapi-codegen.md) — C client via Docker, alternatives.
 - [docs/guide/web-api-and-python-gateway.md](../docs/guide/web-api-and-python-gateway.md) — REST + SSE + WebSocket semantics (push is server-side polling).
+- [docs/diagrams/monitor-control-flows.md](../docs/diagrams/monitor-control-flows.md) — how HTTP fits with CLI, ESP32 on-wire, and Python proxy.
