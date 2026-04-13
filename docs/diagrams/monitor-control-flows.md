@@ -1,10 +1,10 @@
 # Monitor control flows (Mermaid)
 
-High-level views of **where data moves** and **how common picture controls** reach the monitor. Ports and item numbers match [SDCP framing and item numbers](../reference/sdcp-framing-and-items.md).
+High-level views of **where data moves** and **how common picture controls** reach the monitor. Ports and item numbers match [SDCP framing and item numbers](../reference/sdcp-framing-and-items.md). **HTTP routes** match [`MonitorApiExtensions`](../../src/MonitorControl.Web/MonitorApiExtensions.cs) + [`MonitorPushEndpoints`](../../src/MonitorControl.Web/MonitorPushEndpoints.cs) as of the committed [OpenAPI snapshot](../../openapi/monitorcontrol.openapi.json).
 
 ## End-to-end stacks
 
-Two common integration shapes: **direct SDCP** from a PC or embedded device that speaks the wire protocol, or **HTTP JSON** through [MonitorControl.Web](../../src/MonitorControl.Web/) (same SDCP underneath).
+Two common integration shapes: **direct SDCP** from a PC or embedded device that speaks the wire protocol, or **HTTP JSON** through [MonitorControl.Web](../../src/MonitorControl.Web/) (same SDCP underneath). The CLI (`monitorctl`) uses the **SDK directly** (no HTTP).
 
 ```mermaid
 flowchart LR
@@ -35,10 +35,14 @@ flowchart LR
   WebApi --> SDCP
   DotNet --> SDCP
   DotNet --> SDCPu
+  Cli[monitorctl CLI] --> SDCP
+  Cli --> SDCPu
+  Cli --> SDAP
 
   SDAP -.->|discover IP / serial| Web
   SDAP -.->|discover| Py
   SDAP -.->|discover| DotNet
+  SDAP -.->|discover| Cli
   Mon --> SDAP
   Mon <--> SDCP
   SDCPu --> Mon
@@ -92,7 +96,7 @@ sequenceDiagram
 
 ## HTTP path: browser or MCU to monitor
 
-The web host opens a **short-lived SDCP connection** per request, runs `VmcClient`, then closes TCP.
+The web host opens a **short-lived SDCP connection** per request for most `/api/*` routes (VMC get/set, VMS, VMA), then closes TCP. **UDP VMC broadcast** uses `VmcUdpBroadcastClient` without a TCP session.
 
 ```mermaid
 flowchart LR
@@ -100,6 +104,49 @@ flowchart LR
   B --> C[VmcClient.Send STATset]
   C --> D["SdcpConnection<br/>53484"]
   D --> E[(Monitor)]
+```
+
+## MonitorControl.Web route surface (REST + push)
+
+```mermaid
+flowchart TB
+  subgraph REST["/api — JSON request/response"]
+    H[GET /api/health]
+    D[GET /api/sdap/discover]
+    VG[POST /api/vmc/get]
+    VS[POST /api/vmc/set]
+    VB[POST /api/vmc/broadcast]
+    VI[POST /api/vms/product-info]
+    VAv[VMA reads: control-software-version, kernel-version, rtc, fpga*]
+    FW[VMA firmware: upgrade-* + restart<br/>403 unless firmware gate]
+  end
+
+  subgraph Push["Synthetic live data"]
+    SSE[GET /api/events/monitor<br/>SSE text/event-stream]
+    WS[GET /ws/monitor-watch<br/>WebSocket JSON snapshots]
+  end
+
+  Client[Browser / automation / MCU] --> REST
+  Client --> Push
+```
+
+## CLI (`monitorctl`) to transport
+
+```mermaid
+flowchart LR
+  subgraph Commands
+    c1[discover]
+    c2[vmc]
+    c3[vmc-broadcast]
+    c4[vms-info]
+    c5[vma-version]
+  end
+
+  c1 --> SDAP[SdapDiscovery UDP 53862]
+  c2 --> TCP[SdcpConnection TCP 53484]
+  c4 --> TCP
+  c5 --> TCP
+  c3 --> UDP[VmcUdpBroadcastClient UDP 53484]
 ```
 
 ## Local controls: knobs to brightness / contrast
@@ -138,9 +185,24 @@ flowchart LR
   GW -->|SSE or WebSocket JSON| Cli
 ```
 
+## SDK layering (library only)
+
+```mermaid
+flowchart TB
+  App[Your app / CLI / web host]
+
+  App --> Clients[VmcClient / VmsClient / VmaClient]
+  Clients --> Containers[LegacyVmc / LegacyVms / LegacyVma containers]
+  Containers --> Buf[SdcpMessageBuffer V3 or V4]
+  Buf --> Transports[Tcp SdcpConnection<br/>Udp SdcpUdpBroadcastTransport]
+
+  Transports --> Mon[(Monitor LAN)]
+```
+
 ## Related
 
+- [Engineering handbook](../handbook.md) — full reading order and trust boundaries.
 - [Web API guide](../guide/web-api-and-python-gateway.md) — route table, SSE/WebSocket, firmware gate.
-- [OpenAPI codegen](../guide/openapi-codegen.md) — fetch `swagger.json`, generate C client.
+- [OpenAPI codegen](../guide/openapi-codegen.md) — committed `openapi/*.json`, generate C client.
 - HTTP knobs: [`examples/arduino-knobs-brightness-contrast/`](../../examples/arduino-knobs-brightness-contrast/).
 - Native SDCP knobs: [`examples/esp32-sdcp-vmc/`](../../examples/esp32-sdcp-vmc/).

@@ -1,6 +1,8 @@
-# External sources (cross-check only)
+# Optional third-party sources (cross-check only)
 
-Use these to sanity-check headers and ports. **This repository’s C# remains authoritative** for behavior we ship; public PDFs may describe **projectors** or **older monitors** with small differences.
+**You do not need these links to implement or operate against this repository.** All SDAP/SDCP/VMC rules exercised by the shipped code are documented under [`docs/reference/`](.) and [`docs/spec/`](../spec/), including the in-repo [**PVM-740 programmer manual synthesis**](pvm-740-programmer-manual-synthesis.md).
+
+Use the table below only to sanity-check headers and ports against public materials. **This repository’s C# remains authoritative** for behavior we ship; public PDFs may describe **projectors** or **older monitors** with small differences.
 
 For **in-repo** supplementary reference code under [`references/`](../../references/), see [**references-parity.md**](references-parity.md) (maps every subtree to `src/` or marks UI-only / out-of-scope items).
 

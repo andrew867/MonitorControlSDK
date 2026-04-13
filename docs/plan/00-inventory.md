@@ -36,4 +36,4 @@ This file maps **concerns** to **source files** in **MonitorControlSDK** only. T
 
 ## Documentation entry
 
-Start at [**docs/index.md**](../index.md).
+Start at [**docs/index.md**](../index.md); for auditors, [**docs/handbook.md**](../handbook.md) is the single narrative across protocol, implementation, and examples.

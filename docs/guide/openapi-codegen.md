@@ -1,16 +1,29 @@
 # OpenAPI → C client (and similar generators)
 
-`MonitorControl.Web` exposes **OpenAPI 3** at `/swagger/v1/swagger.json` when the app is running. You can feed that document to **OpenAPI Generator** to emit a **libcurl-based C client**, **Java**, **Python**, **TypeScript**, etc., instead of hand-rolling JSON bodies (as in the [Arduino HTTP knob example](../../examples/arduino-knobs-brightness-contrast/)).
+`MonitorControl.Web` exposes **OpenAPI 3** at `/swagger/v1/swagger.json` when the app is running. The repository also **commits** the same document as [`openapi/monitorcontrol.openapi.json`](../../openapi/monitorcontrol.openapi.json) so CI, reviewers, and codegen pipelines can consume a **frozen** spec without starting ASP.NET. See [`openapi/README.md`](../../openapi/README.md).
 
-## 1. Fetch the spec to disk
+You can feed that document to **OpenAPI Generator** to emit a **libcurl-based C client**, **Java**, **Python**, **TypeScript**, etc., instead of hand-rolling JSON bodies (as in the [Arduino HTTP knob example](../../examples/arduino-knobs-brightness-contrast/)).
 
-From the repository root (bash):
+## 1. Use the committed spec (preferred)
+
+For local experiments, open the JSON directly:
+
+```bash
+openapi-generator-cli generate \
+  -i openapi/monitorcontrol.openapi.json \
+  -g c \
+  -o generated/openapi-c
+```
+
+## 1b. Refresh the spec from a running host
+
+When you change routes or DTOs, regenerate the committed file from the repository root (bash):
 
 ```bash
 bash scripts/fetch-openapi.sh
 ```
 
-This starts the web host briefly, downloads `openapi/monitorcontrol.openapi.json`, then exits.
+This starts the web host briefly, overwrites `openapi/monitorcontrol.openapi.json`, then exits. **Commit** the updated JSON with your API change.
 
 Override the ephemeral port if needed:
 

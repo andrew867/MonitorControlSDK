@@ -68,6 +68,7 @@ Open `http://127.0.0.1:5080/` for the browser demo and `http://127.0.0.1:5080/sw
 
 | Goal | Read next |
 |------|-----------|
+| Full-stack narrative (protocols + code + examples) | [handbook.md](handbook.md) |
 | All error codes | [reference/sdcp-error-codes.md](reference/sdcp-error-codes.md) |
 | V3 vs V4 headers, item numbers | [reference/sdcp-framing-and-items.md](reference/sdcp-framing-and-items.md) |
 | VMC `STATget` / `STATset` tokens | [reference/vmc-command-surface.md](reference/vmc-command-surface.md) |

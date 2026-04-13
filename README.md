@@ -16,9 +16,9 @@ The repository ships:
 
 ---
 
-## Recent release (v0.2.0, 2026-04-13)
+## Recent release (v0.3.0, 2026-04-13)
 
-Minor release **0.2.0** follows [Semantic Versioning](https://semver.org/). The public NuGet package id is **`MonitorControl.Sdk`**, .NET namespaces are **`MonitorControl.*`**, and the solution file is **`MonitorControl.sln`** (replacing the previous vendor-prefixed package id, namespaces, and solution name). Upgrade by changing the package reference and `using` directives; protocol behavior is unchanged. Patch history: [v0.1.2](https://github.com/andrew867/MonitorControlSDK/releases/tag/v0.1.2), [v0.1.1](https://github.com/andrew867/MonitorControlSDK/releases/tag/v0.1.1).
+Patch-style documentation release **0.3.0** follows [Semantic Versioning](https://semver.org/). It adds an [**engineering handbook**](docs/handbook.md), expands Mermaid diagrams (CLI, full HTTP surface, SDK layering), indexes [`samples/README.md`](samples/README.md) and [`examples/README.md`](examples/README.md), and **commits** the OpenAPI 3 snapshot at [`openapi/monitorcontrol.openapi.json`](openapi/monitorcontrol.openapi.json) for offline codegen and review. No intentional wire-protocol or public API breaking changes from **0.2.0**. Earlier: [v0.2.0](https://github.com/andrew867/MonitorControlSDK/releases/tag/v0.2.0), [v0.1.2](https://github.com/andrew867/MonitorControlSDK/releases/tag/v0.1.2), [v0.1.1](https://github.com/andrew867/MonitorControlSDK/releases/tag/v0.1.1).
 
 ---
 
@@ -27,7 +27,9 @@ Minor release **0.2.0** follows [Semantic Versioning](https://semver.org/). The 
 | Resource | Description |
 |----------|-------------|
 | **[docs/index.md](docs/index.md)** | Documentation hub: tutorials, opcode references, firmware notes |
+| **[docs/handbook.md](docs/handbook.md)** | Engineering handbook: protocols, implementation map, surfaces, OpenAPI, safety |
 | **[docs/quickstart.md](docs/quickstart.md)** | Short onboarding: build, discover, first commands |
+| **[openapi/monitorcontrol.openapi.json](openapi/monitorcontrol.openapi.json)** | Committed OpenAPI 3 spec (regenerate with `bash scripts/fetch-openapi.sh`) |
 | **[docs/reference/references-parity.md](docs/reference/references-parity.md)** | Map between `references/` snapshots and the shipped SDK |
 | **[docs/ci-cd.md](docs/ci-cd.md)** | GitHub Actions and GitLab CI/CD setup |
 
@@ -69,7 +71,7 @@ Full guide: [docs/guide/web-api-and-python-gateway.md](docs/guide/web-api-and-py
 | [examples/python-service/](examples/python-service/) | Optional Python service in front of the HTTP API |
 | [examples/arduino-knobs-brightness-contrast/](examples/arduino-knobs-brightness-contrast/) | ESP32 / ESP8266: analog inputs → brightness / contrast via HTTP |
 | [examples/esp32-sdcp-vmc/](examples/esp32-sdcp-vmc/) | ESP32: same idea over native TCP SDCP |
-| [scripts/](scripts/) | OpenAPI fetch / C client generation helpers |
+| [scripts/](scripts/) | OpenAPI fetch / C client generation helpers; [openapi/](openapi/) holds the committed spec |
 | [samples/](samples/) | Runnable .NET samples (including UDP VMC broadcast) |
 | [docs/](docs/) | Protocol and product documentation maintained with the code |
 | [references/](references/) | Read-only reference snapshots; see parity doc above |
@@ -80,6 +82,7 @@ Full guide: [docs/guide/web-api-and-python-gateway.md](docs/guide/web-api-and-py
 
 ## Releases, NuGet, and CI/CD
 
+- **Changelog:** [CHANGELOG.md](CHANGELOG.md)
 - **Versioning:** Git tags of the form `vMAJOR.MINOR.PATCH`; package version is set in [`src/MonitorControlSDK/MonitorControlSDK.csproj`](src/MonitorControlSDK/MonitorControlSDK.csproj).
 - **NuGet:** [MonitorControl.Sdk](https://www.nuget.org/packages/MonitorControl.Sdk) (when published for a given tag).
 - **Automation:** [docs/ci-cd.md](docs/ci-cd.md) describes GitHub Actions (build matrix, releases, GitHub Packages, optional NuGet.org) and GitLab CI for self-hosted runners.

@@ -13,4 +13,4 @@ Operational notes from that excerpt:
 - Default **broadcast interval**: monitor **15 s**, controller **30 s** (your firmware may differ).  
 - When driving **UDP** menu/cursor traffic toward devices, leave **≥ 50 ms** between packets (BKM-15R reference **100 ms** in the excerpt).
 
-Cross-checks with public materials: [reference/external-sources.md](../reference/external-sources.md).
+Optional third-party cross-checks: [reference/external-sources.md](../reference/external-sources.md) (not required for implementation in this repo).

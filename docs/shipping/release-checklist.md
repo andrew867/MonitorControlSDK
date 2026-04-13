@@ -3,8 +3,9 @@
 ## Pre-release
 
 - [ ] Version bump in [MonitorControlSDK.csproj](../../src/MonitorControlSDK/MonitorControlSDK.csproj) `<Version>`.
+- [ ] If **HTTP routes or request bodies** changed: `bash scripts/fetch-openapi.sh` and commit [openapi/monitorcontrol.openapi.json](../../openapi/monitorcontrol.openapi.json).
 - [ ] `dotnet pack src/MonitorControlSDK/MonitorControlSDK.csproj -c Release` produces `.nupkg` + symbols.
-- [ ] `CHANGELOG` entry (optional file) summarizing breaking API changes.
+- [ ] [CHANGELOG.md](../../CHANGELOG.md) entry for user-visible changes (docs, API, protocol notes).
 - [ ] Run full solution build + test on Windows target OS.
 
 ## Package metadata

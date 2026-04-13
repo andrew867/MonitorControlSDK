@@ -43,7 +43,7 @@ Then **`Data[n]`** — for VMC/VMA, the payload builders write ASCII or binary i
 
 ## Targeting (group / unit)
 
-Bytes **6–7** (V3) encode single / group / all / P2P targeting. Writers: `setSingleConnection`, `setGroupConnection`, `setAllConnection`, `setP2pConnection` on `SdcpMessageBuffer`. Values match the tables described in public **PVM-740 Interface Manual for Programmers** (SDCP section) — see [external-sources.md](external-sources.md).
+Bytes **6–7** (V3) encode single / group / all / P2P targeting. Writers: `setSingleConnection`, `setGroupConnection`, `setAllConnection`, `setP2pConnection` on `SdcpMessageBuffer`. Values match the tables in the **in-repo** [PVM-740 programmer manual synthesis](pvm-740-programmer-manual-synthesis.md) (same content as the public excerpt, consolidated here).
 
 ## Other item constants (internal / future)
 
@@ -51,4 +51,4 @@ Bytes **6–7** (V3) encode single / group / all / P2P targeting. Writers: `setS
 
 ## Public documentation (similar protocol)
 
-The **PVM-740** programmer manual excerpt (ManualsLib) and community SDCP libraries match the header above. The repository now **hosts a full synthesis** so you do not need the live ManualsLib page for core rules: [pvm-740-programmer-manual-synthesis.md](pvm-740-programmer-manual-synthesis.md). Additional URLs: [external-sources.md](external-sources.md). **Always validate** on your chassis.
+The **PVM-740** programmer manual excerpt and community SDCP libraries align with the header above. This repository **hosts the full synthesis** so you do not need any live external page for core rules: [pvm-740-programmer-manual-synthesis.md](pvm-740-programmer-manual-synthesis.md). Optional third-party URLs: [external-sources.md](external-sources.md). **Always validate** on your chassis.

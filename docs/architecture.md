@@ -17,7 +17,7 @@ Types such as `LegacyVmcContainer`, `LegacyVmsContainer`, `LegacyVmaContainer`, 
 
 ## Documentation
 
-Human-facing documentation is entirely under [`docs/`](index.md); generated opcode appendices live under [`docs/reference/appendices/`](reference/appendices/README.md).
+Human-facing documentation is entirely under [`docs/`](index.md); the [**engineering handbook**](handbook.md) ties protocol, implementation, and examples together for reviewers. Generated opcode appendices live under [`docs/reference/appendices/`](reference/appendices/README.md).
 
 ## Control flows (diagrams)
 
