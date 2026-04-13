@@ -1,6 +1,6 @@
 # VMC command surface (`STATget` / `STATset`)
 
-VMC uses SDCP **V3**, item **0xB000**, with an ASCII payload: `CATEGORY arg1 arg2 …` packed into the data area — see [`LegacyVmcContainer.setCommand`](../../src/MonitorControlSDK/Internal/LegacyVmcContainer.cs) and [`VmcClient`](../../src/MonitorControlSDK/Clients/VmcClient.cs).
+VMC uses SDCP **V3**, item **0xB000**, with an ASCII payload: `CATEGORY arg1 arg2 …` packed into the data area — see [`LegacyVmcContainer.setCommand`](../../src/MonitorControlSDK/Internal/LegacyVmcContainer.cs) and [`VmcClient`](../../src/MonitorControlSDK/Clients/VmcClient.cs) (**TCP** session, request/response). The **same** payload layout can be sent on **UDP** port **53484** for manual **Group / All** broadcast modes using [`VmcUdpBroadcastClient`](../../src/MonitorControlSDK/Clients/VmcUdpBroadcastClient.cs) (fire-and-forget; no response per PVM-740 excerpt).
 
 ## Categories
 
@@ -26,7 +26,7 @@ All **string literals** mined from the C# reference tree are kept in one machine
 
 1. **STATget** / `getSTATgetMessage("…")` field names  
 2. **STATset** first token (`sendCommand` second argument); more tokens may follow  
-3. **`sendCommandBroadCast("STATset", "…")`** strings (legacy broadcast path — **not** implemented in `SdcpConnection`; see [references-parity.md](references-parity.md))
+3. **`sendCommandBroadCast("STATset", "…")`** strings (legacy UDP broadcast path — use [`VmcUdpBroadcastClient`](../../src/MonitorControlSDK/Clients/VmcUdpBroadcastClient.cs); see [references-parity.md](references-parity.md))
 
 Regenerate after adding new C# trees under `references/`:
 

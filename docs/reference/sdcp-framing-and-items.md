@@ -1,6 +1,6 @@
 # SDCP framing and item numbers
 
-All behavior described here is implemented in [`SdcpMessageBuffer`](../../src/MonitorControlSDK/Protocol/SdcpMessageBuffer.cs) and sent over TCP by [`SdcpConnection`](../../src/MonitorControlSDK/Transport/SdcpConnection.cs) (default port **53484**).
+All framing described here is implemented in [`SdcpMessageBuffer`](../../src/MonitorControlSDK/Protocol/SdcpMessageBuffer.cs). The same **V3** bytes are sent over **TCP** by [`SdcpConnection`](../../src/MonitorControlSDK/Transport/SdcpConnection.cs) and may be sent over **UDP** (same port **53484**) for **Group / All** broadcast control via [`SdcpUdpBroadcastTransport`](../../src/MonitorControlSDK/Transport/SdcpUdpBroadcastTransport.cs) + [`VmcUdpBroadcastClient`](../../src/MonitorControlSDK/Clients/VmcUdpBroadcastClient.cs).
 
 **Public programmer manual excerpt (consolidated):** [pvm-740-programmer-manual-synthesis.md](pvm-740-programmer-manual-synthesis.md) — ports, SDAP/SDCP rules, pacing, VMC categories, and PVM-740 command spellings ([appendices/pvm-740-vmc-catalog-from-manual.txt](appendices/pvm-740-vmc-catalog-from-manual.txt)).
 
@@ -9,6 +9,7 @@ All behavior described here is implemented in [`SdcpMessageBuffer`](../../src/Mo
 | Service | Protocol | Port | Type in code |
 |---------|-----------|------|----------------|
 | SDCP control | TCP | 53484 | `SdcpConnection.DefaultPort` |
+| SDCP VMC (Group / All broadcast) | UDP | 53484 | `SdcpUdpBroadcastTransport` + `VmcUdpBroadcastClient` |
 | SDAP discovery | UDP | 53862 | `SdapDiscovery.DefaultPort` |
 
 ## V3 frame (VMC, VMA)

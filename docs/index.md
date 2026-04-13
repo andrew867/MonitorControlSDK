@@ -8,7 +8,7 @@ Single source of truth for **Sony.MonitorControl** — SDAP discovery and SDCP c
 2. Skim [**SDCP framing and item numbers**](reference/sdcp-framing-and-items.md) — ports, headers, V3 vs V4.
 3. Optional: [**Control flow diagrams (Mermaid)**](diagrams/monitor-control-flows.md) — discovery, SDCP, HTTP gateway, and knob-style controls.
 4. Pick your path:
-   - **ASCII shading / menus:** [**VMC command surface**](reference/vmc-command-surface.md) + [`VmcClient`](../src/MonitorControlSDK/Clients/VmcClient.cs).
+   - **ASCII shading / menus:** [**VMC command surface**](reference/vmc-command-surface.md) + [`VmcClient`](../src/MonitorControlSDK/Clients/VmcClient.cs) (TCP) + [`VmcUdpBroadcastClient`](../src/MonitorControlSDK/Clients/VmcUdpBroadcastClient.cs) (UDP Group/All).
    - **Structured factory / setup:** [**VMS overview**](reference/vms-overview.md) + [`VmsCommandEngine`](../src/MonitorControlSDK/Protocol/VmsCommandEngine.cs).
    - **Service / firmware (dangerous):** [**VMA wire reference**](reference/vma-wire-reference.md) + [**Firmware updates**](guide/firmware-updates.md) + [`VmaClient`](../src/MonitorControlSDK/Clients/VmaClient.cs).
    - **MCU / physical UI:** [examples/arduino-knobs-brightness-contrast](../examples/arduino-knobs-brightness-contrast/) (HTTP to the web API).
@@ -35,7 +35,7 @@ Single source of truth for **Sony.MonitorControl** — SDAP discovery and SDCP c
 | **HTTP API + browser UI + Python gateway** | [guide/web-api-and-python-gateway.md](guide/web-api-and-python-gateway.md) |
 | **OpenAPI → C client (codegen)** | [guide/openapi-codegen.md](guide/openapi-codegen.md) |
 | Firmware VMA sequence and SDK API | [guide/firmware-updates.md](guide/firmware-updates.md) |
-| TCP/UDP surfaces, Telnet/SSH, SNMP wording | [guide/network-and-debug.md](guide/network-and-debug.md) |
+| TCP/UDP surfaces, Telnet/SSH, SNMP wording | [guide/network-and-debug.md](guide/network-and-debug.md) (includes SDCP UDP **53484**) |
 | Broadcast-style REPL sample | [spec/broadcast-realtime-control.md](spec/broadcast-realtime-control.md) |
 
 ## Repository map
@@ -48,7 +48,7 @@ Single source of truth for **Sony.MonitorControl** — SDAP discovery and SDCP c
 | [`examples/python-service/`](../examples/python-service/) | Optional Python `uvicorn` gateway to the HTTP API |
 | [`examples/arduino-knobs-brightness-contrast/`](../examples/arduino-knobs-brightness-contrast/) | ESP32/ESP8266 sketch: ADC → `POST /api/vmc/set` |
 | [`examples/esp32-sdcp-vmc/`](../examples/esp32-sdcp-vmc/) | ESP32: ADC → native TCP SDCP / VMC (no HTTP) |
-| [`samples/`](../samples/) | Runnable examples |
+| [`samples/`](../samples/) | Runnable examples (including [`Sample.UdpVmcBroadcast`](../samples/Sample.UdpVmcBroadcast/) for UDP SDCP VMC) |
 | [`tests/`](../tests/) | Unit tests |
 | [`docs/plan/00-inventory.md`](plan/00-inventory.md) | Which **source files** implement which concern |
 | [`scripts/regen-appendices.sh`](../scripts/regen-appendices.sh) | Regenerate VMS + VMC appendix text files |

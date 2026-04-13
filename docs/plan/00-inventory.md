@@ -17,6 +17,7 @@ This file maps **concerns** to **source files** in **MonitorControlSDK** only. T
 | Concern | Primary types |
 |---------|----------------|
 | TCP SDCP | [`SdcpConnection`](../../src/MonitorControlSDK/Transport/SdcpConnection.cs), [`StreamSdcpTransport`](../../src/MonitorControlSDK/Transport/StreamSdcpTransport.cs), [`ISdcpTransport`](../../src/MonitorControlSDK/Transport/ISdcpTransport.cs) |
+| UDP SDCP VMC broadcast | [`SdcpUdpBroadcastTransport`](../../src/MonitorControlSDK/Transport/SdcpUdpBroadcastTransport.cs), [`VmcUdpBroadcastClient`](../../src/MonitorControlSDK/Clients/VmcUdpBroadcastClient.cs) |
 | UDP SDAP listen | [`SdapDiscovery`](../../src/MonitorControlSDK/Transport/SdapDiscovery.cs) |
 | Operator clients | [`VmcClient`](../../src/MonitorControlSDK/Clients/VmcClient.cs), [`VmsClient`](../../src/MonitorControlSDK/Clients/VmsClient.cs), [`VmaClient`](../../src/MonitorControlSDK/Clients/VmaClient.cs) |
 

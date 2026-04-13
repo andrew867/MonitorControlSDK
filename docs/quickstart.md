@@ -35,6 +35,15 @@ Or the minimal sample:
 dotnet run --project samples/Sample.Vmc -- 192.168.0.10 MODEL
 ```
 
+### Optional: UDP SDCP VMC (multi-monitor “Group / All”)
+
+**SDAP** on UDP **53862** is still how monitors **advertise** themselves. **UDP SDCP** on **53484** is for **broadcast shading** when your fleet is configured for Group/All (see [pvm-740-programmer-manual-synthesis.md](reference/pvm-740-programmer-manual-synthesis.md)):
+
+```bash
+dotnet run --project src/MonitorControl.Cli -- vmc-broadcast --scope all -- STATset BRIGHTNESS 512
+dotnet run --project samples/Sample.UdpVmcBroadcast -- 192.168.1.255
+```
+
 ## 4. Use the library from C# (3 min)
 
 ```csharp

@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonitorControl.Cli", "src\M
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.Discovery", "samples\Sample.Discovery\Sample.Discovery.csproj", "{D4E5F6A7-B8C9-0123-DEF0-234567890123}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.UdpVmcBroadcast", "samples\Sample.UdpVmcBroadcast\Sample.UdpVmcBroadcast.csproj", "{E1E1E1E1-2222-3333-4444-555555555555}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.Vmc", "samples\Sample.Vmc\Sample.Vmc.csproj", "{E5F6A7B8-C9D0-1234-EF01-345678901234}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.Vms", "samples\Sample.Vms\Sample.Vms.csproj", "{F6A7B8C9-D0E1-2345-F012-456789012345}"
@@ -41,6 +43,10 @@ Global
 		{D4E5F6A7-B8C9-0123-DEF0-234567890123}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D4E5F6A7-B8C9-0123-DEF0-234567890123}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D4E5F6A7-B8C9-0123-DEF0-234567890123}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E1E1E1E1-2222-3333-4444-555555555555}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1E1E1E1-2222-3333-4444-555555555555}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1E1E1E1-2222-3333-4444-555555555555}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1E1E1E1-2222-3333-4444-555555555555}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E5F6A7B8-C9D0-1234-EF01-345678901234}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E5F6A7B8-C9D0-1234-EF01-345678901234}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E5F6A7B8-C9D0-1234-EF01-345678901234}.Release|Any CPU.ActiveCfg = Release|Any CPU

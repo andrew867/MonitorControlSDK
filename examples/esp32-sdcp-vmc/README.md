@@ -1,6 +1,6 @@
 # Native SDCP / VMC on ESP32 (no HTTP gateway)
 
-`monitor_knobs_sdcp.ino` opens **TCP port 53484** to the monitor, sends **SDCP v3** frames with **item `0xB000`**, and embeds ASCII **`STATset …`** lines in the data area — the same framing as [`SdcpMessageBuffer.setupVmcPacketHeader`](../../src/MonitorControlSDK/Protocol/SdcpMessageBuffer.cs) + [`LegacyVmcContainer.setCommand`](../../src/MonitorControlSDK/Internal/LegacyVmcContainer.cs).
+`monitor_knobs_sdcp.ino` opens **TCP port 53484** to the monitor, sends **SDCP v3** frames with **item `0xB000`**, and embeds ASCII **`STATset …`** lines in the data area — the same framing as [`SdcpMessageBuffer.setupVmcPacketHeader`](../../src/MonitorControlSDK/Protocol/SdcpMessageBuffer.cs) + [`LegacyVmcContainer.setCommand`](../../src/MonitorControlSDK/Internal/LegacyVmcContainer.cs). (Multi-monitor **UDP** SDCP on the same port is implemented in the .NET SDK as [`VmcUdpBroadcastClient`](../../src/MonitorControlSDK/Clients/VmcUdpBroadcastClient.cs); this sketch stays TCP-first for reliable WiFi stacks.)
 
 ## Modes (MODE button or serial)
 

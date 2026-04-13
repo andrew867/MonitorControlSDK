@@ -8,11 +8,29 @@ var hostOption = new Option<string>("--host", "Monitor IP address") { IsRequired
 var bindOption = new Option<string?>("--bind", "Local IP to bind for SDAP (default: any)");
 var filterOption = new Option<string?>("--filter", "Product name prefix filter");
 var timeoutOption = new Option<int>("--timeout-ms", () => 10_000, "SDCP receive timeout");
+var bcastIpOption = new Option<string?>("--broadcast", "UDP destination IP (default 255.255.255.255)");
+var bcastPortOption = new Option<int>("--port", () => SdcpConnection.DefaultPort, "UDP destination port");
+var bcastBindOption = new Option<string?>("--local-bind", "Optional local bind address for UDP socket");
+var scopeOption = new Option<string>("--scope", () => "all", "all | group");
+var groupOption = new Option<int>("--group-id", () => 1, "Group ID 1–99 when scope=group");
+var tokensArgument = new Argument<string[]>("tokens", "VMC tokens, e.g. STATset BRIGHTNESS 512")
+{
+	Arity = ArgumentArity.OneOrMore,
+};
 
 var discoverCmd = new Command("discover", "Listen for SDAP advertisements (UDP 53862)");
 discoverCmd.AddOption(bindOption);
 discoverCmd.AddOption(filterOption);
 discoverCmd.SetHandler(RunDiscover, bindOption, filterOption);
+
+var vmcBcastCmd = new Command("vmc-broadcast", "Send VMC over UDP SDCP (Group/All; no response)");
+vmcBcastCmd.AddOption(scopeOption);
+vmcBcastCmd.AddOption(groupOption);
+vmcBcastCmd.AddOption(bcastIpOption);
+vmcBcastCmd.AddOption(bcastPortOption);
+vmcBcastCmd.AddOption(bcastBindOption);
+vmcBcastCmd.AddArgument(tokensArgument);
+vmcBcastCmd.SetHandler(RunVmcBroadcast, scopeOption, groupOption, bcastIpOption, bcastPortOption, bcastBindOption, tokensArgument);
 
 var vmsCmd = new Command("vms-info", "VMS: product info + common packaged status (requires SDCP)");
 vmsCmd.AddOption(hostOption);
@@ -31,11 +49,50 @@ vmaCmd.SetHandler(RunVmaVersion, hostOption);
 
 var root = new RootCommand("Sony monitor SDAP/SDCP control CLI (MonitorControlSDK)");
 root.AddCommand(discoverCmd);
+root.AddCommand(vmcBcastCmd);
 root.AddCommand(vmsCmd);
 root.AddCommand(vmcCmd);
 root.AddCommand(vmaCmd);
 
 return await root.InvokeAsync(args);
+
+static void RunVmcBroadcast(string scope, int groupId, string? broadcastIp, int port, string? localBind, string[] tokens)
+{
+	if (tokens.Length < 1)
+	{
+		Console.Error.WriteLine("At least one token is required (e.g. STATset BRIGHTNESS 512).");
+		return;
+	}
+
+	IPAddress destIp = IPAddress.Broadcast;
+	if (!string.IsNullOrWhiteSpace(broadcastIp))
+	{
+		if (!IPAddress.TryParse(broadcastIp, out IPAddress? parsed))
+		{
+			Console.Error.WriteLine("Invalid --broadcast address.");
+			return;
+		}
+
+		destIp = parsed;
+	}
+
+	IPEndPoint? localEp = null;
+	if (!string.IsNullOrWhiteSpace(localBind) && IPAddress.TryParse(localBind, out var lb))
+	{
+		localEp = new IPEndPoint(lb, 0);
+	}
+
+	var dest = new IPEndPoint(destIp, port);
+	var vmcScope = string.Equals(scope, "group", StringComparison.OrdinalIgnoreCase)
+		? VmcUdpBroadcastScope.Group
+		: VmcUdpBroadcastScope.AllMonitors;
+	byte gid = (byte)Math.Clamp(groupId, 1, 99);
+	using var client = new VmcUdpBroadcastClient(dest, localEp);
+	string category = tokens[0];
+	string[] tail = tokens.Length > 1 ? tokens[1..] : Array.Empty<string>();
+	bool ok = client.TrySend(vmcScope, gid, category, tail);
+	Console.WriteLine(ok ? "UDP VMC send ok." : "UDP VMC send failed.");
+}
 
 static void RunDiscover(string? bind, string? filter)
 {

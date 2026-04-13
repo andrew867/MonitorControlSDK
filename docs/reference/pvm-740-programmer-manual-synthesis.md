@@ -100,7 +100,7 @@ The excerpt lists additional SDAP payload concepts (versioned across SDAP v2–v
 
 **Manual rule:** when a **Group ID** is set for UDP broadcast, **monitors do not return** a response.
 
-**Sony.MonitorControl** today implements **TCP** `SdcpConnection` to **53484** (and SDAP listen on **53862**). It does **not** ship a UDP SDCP broadcaster client.
+**Sony.MonitorControl** implements **TCP** `SdcpConnection` to **53484**, **SDAP** listen on **53862**, and **UDP SDCP VMC** send helpers (`SdcpUdpBroadcastTransport`, `VmcUdpBroadcastClient`) for manual **Group / All** shading. **SDAP** remains the advertisement / neighbor-discovery path; UDP SDCP does not return status in those broadcast modes.
 
 ### Command pacing (manual pages 4–5)
 
@@ -175,6 +175,7 @@ See **[appendices/pvm-740-vmc-catalog-from-manual.txt](appendices/pvm-740-vmc-ca
 | Manual requirement | Repo status |
 |---------------------|-------------|
 | SDCP TCP **53484** | `SdcpConnection.DefaultPort` |
+| SDCP UDP **53484** (Group / All VMC) | `SdcpUdpBroadcastTransport` + `VmcUdpBroadcastClient` |
 | SDAP UDP **53862** | `SdapDiscovery.DefaultPort` |
 | V3 header **03h / 0Bh / SONY** | `setupVmcPacketHeader` / `setupVma` |
 | Item **B000h** VMC | `VmcClient` (default) |

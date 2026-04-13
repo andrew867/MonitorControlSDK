@@ -23,6 +23,7 @@ flowchart LR
   subgraph Monitor_LAN["Monitor (LAN)"]
     SDAP["UDP SDAP :53862<br/>advertisements"]
     SDCP["TCP SDCP :53484<br/>VMC / VMS / VMA"]
+    SDCPu["UDP SDCP :53484<br/>VMC Group/All"]
     Mon[(Professional monitor)]
   end
 
@@ -33,12 +34,14 @@ flowchart LR
 
   WebApi --> SDCP
   DotNet --> SDCP
+  DotNet --> SDCPu
 
   SDAP -.->|discover IP / serial| Web
   SDAP -.->|discover| Py
   SDAP -.->|discover| DotNet
   Mon --> SDAP
   Mon <--> SDCP
+  SDCPu --> Mon
 ```
 
 ## Discovery vs control traffic
@@ -56,10 +59,12 @@ flowchart TB
   SDAP_rx --> Host
 
   Host -->|TCP connect 53484| SDCP_sock[SDCP session]
+  Host -->|UDP datagram 53484| SDCP_udp[VMC broadcast<br/>Group / All]
   SDCP_sock --> V3
   SDCP_sock --> V4
   V3 --> Mon[(Monitor)]
   V4 --> Mon
+  SDCP_udp --> Mon
 ```
 
 ## VMC: reads and writes (picture and identity)

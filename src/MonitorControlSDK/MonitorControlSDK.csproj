@@ -8,7 +8,7 @@
     <PackageId>Sony.MonitorControl</PackageId>
     <Version>0.1.0</Version>
     <Authors>Andrew Green</Authors>
-    <Description>SDAP/SDCP client library for Sony professional monitors (protocol port from legacy MonitorNetwork).</Description>
+    <Description>SDAP/SDCP client library for Sony professional monitors: TCP SDCP, SDAP listen, and optional UDP SDCP VMC broadcast (Group/All).</Description>
     <PackageProjectUrl>https://github.com/andrew867/MonitorControlSDK</PackageProjectUrl>
     <RepositoryUrl>https://github.com/andrew867/MonitorControlSDK.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>

@@ -31,6 +31,7 @@ All JSON bodies use **camelCase** by default (`host`, `timeoutMs`, …).
 | GET | `/api/sdap/discover` | query `durationMs`, optional `bind` | UDP 53862 listen window; returns unique devices |
 | POST | `/api/vmc/get` | `{ "host", "field", "timeoutMs"? }` | `STATget` |
 | POST | `/api/vmc/set` | `{ "host", "args": ["TOKEN","…"], "timeoutMs"? }` | `STATset` tail |
+| POST | `/api/vmc/broadcast` | `{ "scope": "all"|"group", "groupId"?, "broadcastAddress"?, "port"?, "localBind"?, "tokens": ["STATset","BRIGHTNESS","512"] }` | **UDP** SDCP VMC to **53484** (no TCP `host`; affects every monitor in scope — use with care) |
 | GET | `/api/events/monitor` | query `host`, optional `fields` (comma `STATget` names), `intervalMs` | **SSE** (`text/event-stream`): server polls `STATget` and pushes JSON lines. Custom event `fault` carries SDCP/TCP errors. |
 | GET | `/ws/monitor-watch` | query `host`, optional `fields`, `intervalMs` | **WebSocket** (binary/text UTF‑8 JSON objects): same poll model as SSE. |
 | POST | `/api/vms/product-info` | `{ "host", "timeoutMs"? }` | VMS product info + hex payload |
@@ -73,7 +74,7 @@ Sony SDCP in this stack is **request/response** on TCP; the monitor does not ope
 
 1. Run `MonitorControl.Web` (or proxy through the Python gateway).
 2. Call `GET /api/sdap/discover` to learn monitor IPs (or use fixed inventory).
-3. Use `POST /api/vmc/get` / `vmc/set` for shading and UI automation.
+3. Use `POST /api/vmc/get` / `vmc/set` for shading and UI automation; optional `POST /api/vmc/broadcast` for UDP Group/All (same tokens as `vmc/set` but no per-monitor response).
 4. Use `GET /api/events/monitor` or `/ws/monitor-watch` when you want push-shaped updates without client-side polling loops.
 5. Use `POST /api/vms/product-info` for structured factory reads.
 6. Restrict firmware routes to authenticated operators; keep firmware disabled in production unless you fully control the OTA sequence.

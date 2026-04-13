@@ -5,6 +5,7 @@
 | Surface | Protocol | Port | Code |
 |---------|-----------|------|------|
 | SDCP control | TCP | 53484 | [`SdcpConnection`](../../src/MonitorControlSDK/Transport/SdcpConnection.cs) |
+| SDCP VMC (UDP Group / All) | UDP | 53484 | [`SdcpUdpBroadcastTransport`](../../src/MonitorControlSDK/Transport/SdcpUdpBroadcastTransport.cs), [`VmcUdpBroadcastClient`](../../src/MonitorControlSDK/Clients/VmcUdpBroadcastClient.cs) |
 | SDAP advertisement | UDP | 53862 | [`SdapDiscovery`](../../src/MonitorControlSDK/Transport/SdapDiscovery.cs) |
 
 The **PVM-740 programmer manual** excerpt also lists **FTP TCP 21** on the monitor; this SDK does **not** implement FTP — see [reference/pvm-740-programmer-manual-synthesis.md](../reference/pvm-740-programmer-manual-synthesis.md).
@@ -23,7 +24,7 @@ The VMS **system configuration** branch includes opcodes with **SNMP** in the co
 
 ## Practical debugging
 
-1. **Packet capture** on a mirror port (Wireshark) filtering `tcp.port == 53484` or `udp.port == 53862`.
+1. **Packet capture** on a mirror port (Wireshark) filtering `tcp.port == 53484`, `udp.port == 53484` (SDCP datagrams), or `udp.port == 53862` (SDAP).
 2. **Hex dump** helpers in [`monitorctl`](../../src/MonitorControl.Cli/Program.cs) (`vms-info` subcommand dumps leading payload bytes).
 3. **Unit tests** for framing and float codecs under [`tests/MonitorControlSDK.Tests/`](../tests/MonitorControlSDK.Tests/).
 

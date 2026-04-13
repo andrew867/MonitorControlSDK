@@ -5,6 +5,8 @@
 - Single **SDCP TCP** connection to `SdcpConnection.DefaultPort` (53484), opened once at startup, closed on `quit` or Ctrl+C.
 - All control in v1 uses **VMC** (`VmcClient`): SDCP **V3** header, item **0xB000**, ASCII payload `STATget …` / `STATset …` as documented in [vmc-string-catalog.md](vmc-string-catalog.md).
 
+**Not in this sample:** **UDP SDCP** multi-monitor **Group / All** VMC (`VmcUdpBroadcastClient`, CLI `vmc-broadcast`, `POST /api/vmc/broadcast`) — fire-and-forget with no TCP session; see [pvm-740-programmer-manual-synthesis.md](../reference/pvm-740-programmer-manual-synthesis.md).
+
 ## Interactive grammar (REPL)
 
 Commands are line-oriented (stdin), UTF-8, trimmed whitespace.

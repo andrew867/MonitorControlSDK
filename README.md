@@ -19,6 +19,7 @@ dotnet build Sony.MonitorControl.sln -c Release
 dotnet test Sony.MonitorControl.sln -c Release
 dotnet run --project src/MonitorControl.Cli -- discover
 dotnet run --project src/MonitorControl.Cli -- vmc --host 192.168.0.10 MODEL
+dotnet run --project src/MonitorControl.Cli -- vmc-broadcast --scope all -- STATset BRIGHTNESS 512
 ```
 
 ## HTTP API + web UI (for any frontend)
@@ -40,7 +41,7 @@ Then open `http://127.0.0.1:5080/` (UI) and `http://127.0.0.1:5080/swagger` (Ope
 | [examples/arduino-knobs-brightness-contrast/](examples/arduino-knobs-brightness-contrast/) | ESP32/ESP8266: ADC pots → brightness/contrast via HTTP API |
 | [examples/esp32-sdcp-vmc/](examples/esp32-sdcp-vmc/) | ESP32: same knobs over native TCP SDCP (no gateway PC) |
 | [scripts/](scripts/) | `fetch-openapi.sh` / `generate-c-client.sh` for OpenAPI → C |
-| [samples/](samples/) | Runnable examples (including broadcast REPL) |
+| [samples/](samples/) | Runnable examples (TCP broadcast REPL, SDAP discovery, **UDP VMC broadcast** sample) |
 | [docs/](docs/) | **Authoritative** protocol and API documentation |
 | [references/](references/) | Decompiled legacy Sony tooling (read-only); parity in [docs/reference/references-parity.md](docs/reference/references-parity.md) |
 | [tests/](tests/) | Unit tests |

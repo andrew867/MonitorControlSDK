@@ -9,6 +9,7 @@ Located in [tests/MonitorControlSDK.Tests](../../tests/MonitorControlSDK.Tests).
 - **Framing**: V3/V4 header constants and item numbers (`SdcpMessageBufferTests`).
 - **Codec math**: VMS float encode/decode round-trip (`VmsFloatCodecTests`).
 - **Broadcast REPL**: line parsing (`BroadcastControlLineParserTests`); `StreamSdcpTransport` send/receive sizing (`StreamSdcpTransportTests`). See [broadcast-realtime-control-tests.md](broadcast-realtime-control-tests.md).
+- **UDP SDCP VMC header**: Group vs All `Group ID` / `Unit ID` bytes (`VmcUdpBroadcastWireTests`).
 
 These use **real buffers** (no socket mocks) to match on-wire layout.
 

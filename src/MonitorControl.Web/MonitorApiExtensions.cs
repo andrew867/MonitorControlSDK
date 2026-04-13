@@ -151,6 +151,53 @@ internal static class MonitorApiExtensions
 		})
 			.WithName("VmcSet");
 
+		api.MapPost("/vmc/broadcast", ([FromBody] VmcBroadcastBody body) =>
+		{
+			if (body.Tokens is null || body.Tokens.Count < 1)
+			{
+				return Results.BadRequest(new { error = "tokens must include at least the VMC category (e.g. STATset)." });
+			}
+
+			IPAddress destIp = IPAddress.Broadcast;
+			if (!string.IsNullOrWhiteSpace(body.BroadcastAddress))
+			{
+				if (!IPAddress.TryParse(body.BroadcastAddress.Trim(), out IPAddress? parsed))
+				{
+					return Results.BadRequest(new { error = "invalid broadcastAddress." });
+				}
+
+				destIp = parsed;
+			}
+
+			int port = body.Port is > 0 and < 65536 ? body.Port.Value : SdcpConnection.DefaultPort;
+			IPEndPoint? localEp = null;
+			if (!string.IsNullOrWhiteSpace(body.LocalBind) && IPAddress.TryParse(body.LocalBind.Trim(), out IPAddress? lb))
+			{
+				localEp = new IPEndPoint(lb, 0);
+			}
+
+			var dest = new IPEndPoint(destIp, port);
+			var scope = string.Equals(body.Scope, "group", StringComparison.OrdinalIgnoreCase)
+				? VmcUdpBroadcastScope.Group
+				: VmcUdpBroadcastScope.AllMonitors;
+			int gid = Math.Clamp(body.GroupId ?? 1, 1, 99);
+			try
+			{
+				using var client = new VmcUdpBroadcastClient(dest, localEp);
+				string category = body.Tokens[0];
+				string[] tail = body.Tokens.Count > 1
+					? body.Tokens.GetRange(1, body.Tokens.Count - 1).ToArray()
+					: Array.Empty<string>();
+				bool ok = client.TrySend(scope, (byte)gid, category, tail);
+				return Results.Ok(new VmcBroadcastResponse(ok, destIp.ToString(), port, body.Scope));
+			}
+			catch (Exception ex)
+			{
+				return Results.Problem(title: "UDP VMC broadcast failed", detail: ex.Message, statusCode: 502);
+			}
+		})
+			.WithName("VmcBroadcast");
+
 		api.MapPost("/vms/product-info", (IConfiguration config, [FromBody] HostBody body) =>
 		{
 			if (string.IsNullOrWhiteSpace(body.Host))
@@ -326,6 +373,10 @@ internal sealed record VmcGetResponse(string? Value);
 internal sealed record VmcSetBody(string Host, List<string> Args, int? TimeoutMs);
 
 internal sealed record VmcSetResponse(string[]? ResponseTokens, string? Error);
+
+internal sealed record VmcBroadcastBody(string? Scope, int? GroupId, string? BroadcastAddress, int? Port, string? LocalBind, List<string>? Tokens);
+
+internal sealed record VmcBroadcastResponse(bool Ok, string DestinationIp, int Port, string? Scope);
 
 internal sealed record VmsProductInfoResponse(bool Ok, int ProtocolCode, int DataLengthV4, string? PayloadHex, string? Message);
 
