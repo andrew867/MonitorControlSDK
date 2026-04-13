@@ -13,6 +13,7 @@ All notable changes to this project are documented here. The format is inspired 
 ### Documentation
 
 - Aligned [docs/diagrams/monitor-control-flows.md](docs/diagrams/monitor-control-flows.md) and [docs/quickstart.md](docs/quickstart.md) with ESP32 **SDAP + web provisioning** (no longer `MONITOR_HOST`-only).
+- Added [examples/esp32-sdcp-vmc/FUTURE_IMPROVEMENTS.md](examples/esp32-sdcp-vmc/FUTURE_IMPROVEMENTS.md) (roadmap notes beside the sketch).
 
 ## [0.4.0] — 2026-04-13
 

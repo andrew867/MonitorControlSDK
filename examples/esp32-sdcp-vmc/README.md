@@ -9,6 +9,7 @@ Arduino sketch(es) open **TCP port 53484** to the monitor, send **SDCP v3** fram
 | `monitor_knobs_sdcp.ino` | Pots, buttons, SDCP transactions, serial CLI |
 | `wifi_sdap_web.ino` | NVS `mcfg` (WiFi + monitor IP), **SDAP** UDP **53862**, **WebServer** + **DNSServer** captive portal |
 | `config_portal.h` | Single-page **HTML5** UI (dark theme, mobile-first) in PROGMEM |
+| [`FUTURE_IMPROVEMENTS.md`](FUTURE_IMPROVEMENTS.md) | Roadmap: security, mDNS, OTA, C3, resilience, hardware ideas, docs/CI |
 
 Arduino IDE **merges every `.ino` in the folder** into one build (alphabetical: `monitor_knobs_sdcp.ino` then `wifi_sdap_web.ino`).
 
@@ -67,6 +68,8 @@ Buttons default to **25 / 26 / 27** (change with `#define PIN_BTN_MODE` etc. if 
 
 - The setup AP uses a **shared default password** (`monitorctl`) — fine for lab provisioning; **change the softAP password in `wifi_sdap_web.ino`** (`WiFi.softAP`) before any sensitive environment.
 - The web UI has **no login** on port **8080** on your LAN — isolate the device on a **control VLAN** or firewall **8080** from untrusted clients.
+
+More hardening, mDNS, OTA, and hardware ideas: **[`FUTURE_IMPROVEMENTS.md`](FUTURE_IMPROVEMENTS.md)**.
 
 ## Calibration, power, wiring tables
 
