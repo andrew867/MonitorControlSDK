@@ -36,7 +36,9 @@ public sealed class VmsCommandEngine
 	{
 		if (BitConverter.IsLittleEndian)
 		{
-			return data.Reverse().ToArray();
+			byte[] copy = (byte[])data.Clone();
+			Array.Reverse(copy);
+			return copy;
 		}
 		return data;
 	}
@@ -45,14 +47,18 @@ public sealed class VmsCommandEngine
 	{
 		if (!BitConverter.IsLittleEndian)
 		{
-			return data.Reverse().ToArray();
+			byte[] copy = (byte[])data.Clone();
+			Array.Reverse(copy);
+			return copy;
 		}
 		return data;
 	}
 
 	public byte[] conv_endian(byte[] data)
 	{
-		return data.Reverse().ToArray();
+		byte[] copy = (byte[])data.Clone();
+		Array.Reverse(copy);
+		return copy;
 	}
 
 	public byte[] convVmsFloatValue(float data, short power)
