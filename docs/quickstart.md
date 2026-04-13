@@ -47,7 +47,15 @@ var vmc = new VmcClient(tcp);
 Console.WriteLine(vmc.GetStatString("MODEL"));
 ```
 
-## 5. Go deeper
+## 5. HTTP API (web or any language)
+
+```bash
+dotnet run --project src/MonitorControl.Web --urls http://127.0.0.1:5080
+```
+
+Open `http://127.0.0.1:5080/` for the browser demo and `http://127.0.0.1:5080/swagger` for OpenAPI. Details: [guide/web-api-and-python-gateway.md](guide/web-api-and-python-gateway.md).
+
+## 6. Go deeper
 
 | Goal | Read next |
 |------|-----------|

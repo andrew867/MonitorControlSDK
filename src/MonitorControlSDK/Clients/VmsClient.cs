@@ -10,10 +10,10 @@ public sealed class VmsClient
 
 	private readonly VmsCommandEngine _engine = new();
 
-	/// <summary>Creates a client over an opened <see cref="SdcpConnection"/>.</summary>
-	public VmsClient(SdcpConnection connection)
+	/// <summary>Creates a client over an opened SDCP transport (typically <see cref="SdcpConnection"/>).</summary>
+	public VmsClient(ISdcpTransport transport)
 	{
-		_transport = connection;
+		_transport = transport;
 	}
 
 	/// <summary>Full legacy-compatible command surface (pass <see cref="SdcpConnection"/> cast to <see cref="ISdcpTransport"/>).</summary>

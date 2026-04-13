@@ -8,6 +8,7 @@ TestResults/
 .idea/
 *.rsuser
 launchSettings.json
+!src/MonitorControl.Web/Properties/launchSettings.json
 
 references/
 

@@ -20,12 +20,22 @@ dotnet run --project src/MonitorControl.Cli -- discover
 dotnet run --project src/MonitorControl.Cli -- vmc --host 192.168.0.10 MODEL
 ```
 
+## HTTP API + web UI (for any frontend)
+
+```bash
+dotnet run --project src/MonitorControl.Web --urls http://127.0.0.1:5080
+```
+
+Then open `http://127.0.0.1:5080/` (UI) and `http://127.0.0.1:5080/swagger` (OpenAPI). Optional Python proxy: [examples/python-service/README.md](examples/python-service/README.md). Full doc: [docs/guide/web-api-and-python-gateway.md](docs/guide/web-api-and-python-gateway.md).
+
 ## Layout
 
 | Path | Purpose |
 |------|---------|
 | [src/MonitorControlSDK/](src/MonitorControlSDK/) | NuGet package `Sony.MonitorControl` |
+| [src/MonitorControl.Web/](src/MonitorControl.Web/) | HTTP JSON API + Swagger + browser UI |
 | [src/MonitorControl.Cli/](src/MonitorControl.Cli/) | `monitorctl` |
+| [examples/python-service/](examples/python-service/) | Optional Python gateway to the HTTP API |
 | [samples/](samples/) | Runnable examples (including broadcast REPL) |
 | [docs/](docs/) | **Authoritative** protocol and API documentation |
 | [tests/](tests/) | Unit tests |

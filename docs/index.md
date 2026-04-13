@@ -26,6 +26,7 @@ Single source of truth for **Sony.MonitorControl** — SDAP discovery and SDCP c
 
 | Topic | Document |
 |--------|-----------|
+| **HTTP API + browser UI + Python gateway** | [guide/web-api-and-python-gateway.md](guide/web-api-and-python-gateway.md) |
 | Firmware VMA sequence and SDK API | [guide/firmware-updates.md](guide/firmware-updates.md) |
 | TCP/UDP surfaces, Telnet/SSH, SNMP wording | [guide/network-and-debug.md](guide/network-and-debug.md) |
 | Broadcast-style REPL sample | [spec/broadcast-realtime-control.md](spec/broadcast-realtime-control.md) |
@@ -35,7 +36,9 @@ Single source of truth for **Sony.MonitorControl** — SDAP discovery and SDCP c
 | Path | Role |
 |------|------|
 | [`src/MonitorControlSDK/`](../src/MonitorControlSDK/) | Library: protocol, transport, clients |
+| [`src/MonitorControl.Web/`](../src/MonitorControl.Web/) | **HTTP JSON API**, Swagger, browser UI |
 | [`src/MonitorControl.Cli/`](../src/MonitorControl.Cli/) | `monitorctl` |
+| [`examples/python-service/`](../examples/python-service/) | Optional Python `uvicorn` gateway to the HTTP API |
 | [`samples/`](../samples/) | Runnable examples |
 | [`tests/`](../tests/) | Unit tests |
 | [`docs/plan/00-inventory.md`](plan/00-inventory.md) | Which **source files** implement which concern |

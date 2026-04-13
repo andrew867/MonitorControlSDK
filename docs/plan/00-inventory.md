@@ -24,8 +24,10 @@ This file maps **concerns** to **source files** in **MonitorControlSDK** only. T
 
 | Surface | Path |
 |---------|------|
+| HTTP / JSON / Swagger / browser UI | [`src/MonitorControl.Web/`](../../src/MonitorControl.Web/) |
 | CLI | [`src/MonitorControl.Cli/`](../../src/MonitorControl.Cli/) |
-| Samples | [`samples/`](../samples/) |
+| Samples | [`samples/`](../../samples/) |
+| Python gateway (optional) | [`examples/python-service/`](../../examples/python-service/) |
 
 ## Documentation entry
 

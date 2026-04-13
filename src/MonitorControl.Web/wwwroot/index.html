@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Monitor Control</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1>MonitorControl</h1>
+    <p class="sub">SDAP discovery · SDCP VMC/VMS · VMA service &amp; firmware (guarded)</p>
+  </header>
+
+  <section>
+    <h2>Connection</h2>
+    <label>Monitor host (IP) <input id="host" type="text" placeholder="192.168.0.10" /></label>
+    <label>SDCP timeout (ms) <input id="timeout" type="number" value="10000" min="1000" max="120000" /></label>
+  </section>
+
+  <section>
+    <h2>SDAP discover</h2>
+    <label>Listen (ms) <input id="discoverMs" type="number" value="3000" min="200" max="60000" /></label>
+    <label>Bind local IP (optional) <input id="bind" type="text" placeholder="0.0.0.0 = any" /></label>
+    <button type="button" id="btnDiscover">Discover</button>
+    <pre id="outDiscover"></pre>
+  </section>
+
+  <section>
+    <h2>VMC</h2>
+    <label>STATget field <input id="vmcField" type="text" value="MODEL" /></label>
+    <button type="button" id="btnVmcGet">STATget</button>
+    <label>STATset args (space-separated) <input id="vmcSet" type="text" placeholder="BRIGHTNESS 512" /></label>
+    <button type="button" id="btnVmcSet">STATset</button>
+    <pre id="outVmc"></pre>
+  </section>
+
+  <section>
+    <h2>VMS</h2>
+    <button type="button" id="btnVms">Product information</button>
+    <pre id="outVms"></pre>
+  </section>
+
+  <section>
+    <h2>VMA (read)</h2>
+    <div class="row">
+      <button type="button" id="btnVmaSw">Control software version</button>
+      <button type="button" id="btnVmaKer">Kernel version</button>
+      <button type="button" id="btnVmaRtc">RTC</button>
+    </div>
+    <div class="row">
+      <button type="button" id="btnVmaFpga1">FPGA1 version</button>
+      <button type="button" id="btnVmaFpga2">FPGA2 version</button>
+      <button type="button" id="btnVmaFpgaC">FPGA core version</button>
+    </div>
+    <pre id="outVma"></pre>
+  </section>
+
+  <section class="danger">
+    <h2>Firmware (VMA service)</h2>
+    <p class="warn">Requires server config <code>MonitorControl:AllowDangerousFirmware=true</code> or env <code>MONITOR_CONTROL_ALLOW_DANGEROUS_FIRMWARE=1</code>, plus header <code>X-Firmware-Ack: CONFIRM</code>. Wrong use can brick hardware.</p>
+    <label><input type="checkbox" id="fwAck" /> I confirm I understand the risk (sends X-Firmware-Ack)</label>
+    <label>Kernel size (bytes) <input id="fwKer" type="number" min="0" step="1" /></label>
+    <label>FPGA size (bytes) <input id="fwFpga" type="number" min="0" step="1" /></label>
+    <label>Chunk index <input id="fwChunk" type="number" min="0" step="1" value="0" /></label>
+    <div class="row">
+      <button type="button" id="btnFwKer">POST kernel size</button>
+      <button type="button" id="btnFwFpga">POST FPGA size</button>
+      <button type="button" id="btnFwChunk">POST chunk index</button>
+      <button type="button" id="btnFwRestart">POST restart</button>
+    </div>
+    <pre id="outFw"></pre>
+  </section>
+
+  <footer>
+    <a href="/swagger">OpenAPI (Swagger)</a> · API base <code>/api</code>
+  </footer>
+  <script src="app.js"></script>
+</body>
+</html>
