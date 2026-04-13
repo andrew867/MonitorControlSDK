@@ -16,9 +16,9 @@ The repository ships:
 
 ---
 
-## Recent release (v0.1.1, 2026-04-13)
+## Recent release (v0.1.2, 2026-04-13)
 
-Patch release **0.1.1** follows [Semantic Versioning](https://semver.org/) for the NuGet package and tagged releases. It fixes a compiler error on current .NET SDKs where `Reverse()` on `byte[]` could bind to the `Span<T>` extension that returns `void`; endian helpers now copy the buffer and call `Array.Reverse` so CI builds reliably on Windows, Linux, and macOS.
+Patch release **0.1.2** follows [Semantic Versioning](https://semver.org/) for the NuGet package and tagged releases. It updates the GitHub Actions workflow to current major versions (`actions/checkout`, `actions/setup-dotnet`, `actions/upload-artifact`, `actions/download-artifact`) and keeps the package version in sync with the tag. For earlier fixes (endian helpers and CI), see [v0.1.1](https://github.com/andrew867/MonitorControlSDK/releases/tag/v0.1.1).
 
 ---
 
