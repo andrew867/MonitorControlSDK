@@ -1,0 +1,188 @@
+# MonitorControlSDK — GitLab CI/CD (self-hosted Linux + Windows)
+#
+# Prerequisites
+# - Register runners tagged `gitlab-linux` and `gitlab-windows` (edit tags below if yours differ)
+# - Shell executor: install .NET 8 SDK on each host
+# - Docker executor: add `image: mcr.microsoft.com/dotnet/sdk:8.0` to Linux jobs (and a Windows
+#   SDK image + matching runner for Windows) instead of relying on a host-installed SDK
+#
+# Optional CI/CD variables (Settings → CI/CD → Variables)
+# - NUGET_API_KEY — push public Sony.MonitorControl package to NuGet.org on semver tags
+#
+# Docs: docs/ci-cd.md
+
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH
+    - if: $CI_COMMIT_TAG
+
+variables:
+  DOTNET_CLI_TELEMETRY_OPTOUT: "1"
+  NUGET_XMLDOC_MODE: "skip"
+  MSBUILDTERMINALLOGGER: "auto"
+  GIT_DEPTH: "0"
+
+default:
+  interruptible: true
+
+stages:
+  - build
+  - package
+  - release
+
+# Uncomment for Docker executors without a host-installed SDK:
+# .sdk_image: &sdk_image
+#   image: mcr.microsoft.com/dotnet/sdk:8.0
+
+.dotnet_cache: &dotnet_cache
+  cache:
+    key:
+      files:
+        - "**/*.csproj"
+    paths:
+      - .nuget/packages/
+
+# -----------------------------------------------------------------------------
+# Parallel OS builds — artifacts are per-RID monitorctl folders
+# -----------------------------------------------------------------------------
+build:linux:
+  <<: *dotnet_cache
+  stage: build
+  tags:
+    - gitlab-linux
+  before_script:
+    - dotnet --version
+  script:
+    - dotnet restore Sony.MonitorControl.sln
+    - dotnet build Sony.MonitorControl.sln -c Release --no-restore
+    - dotnet test Sony.MonitorControl.sln -c Release --no-build --verbosity normal
+    - dotnet publish src/MonitorControl.Cli/MonitorControl.Cli.csproj -c Release -r linux-x64 --self-contained false -o artifacts/monitorctl-linux-x64
+  artifacts:
+    name: "monitorctl-linux-$CI_COMMIT_SHORT_SHA"
+    expire_in: 2 weeks
+    paths:
+      - artifacts/monitorctl-linux-x64/
+  rules:
+    - if: $CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+/
+    - if: $CI_COMMIT_BRANCH
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+
+build:windows:
+  <<: *dotnet_cache
+  stage: build
+  tags:
+    - gitlab-windows
+  before_script:
+    - dotnet --version
+  script:
+    - dotnet restore Sony.MonitorControl.sln
+    - dotnet build Sony.MonitorControl.sln -c Release --no-restore
+    - dotnet test Sony.MonitorControl.sln -c Release --no-build --verbosity normal
+    - dotnet publish src/MonitorControl.Cli/MonitorControl.Cli.csproj -c Release -r win-x64 --self-contained false -o artifacts/monitorctl-win-x64
+  artifacts:
+    name: "monitorctl-windows-$CI_COMMIT_SHORT_SHA"
+    expire_in: 2 weeks
+    paths:
+      - artifacts/monitorctl-win-x64/
+  rules:
+    - if: $CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+/
+    - if: $CI_COMMIT_BRANCH
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+
+# -----------------------------------------------------------------------------
+# NuGet pack (single job; output identical on any OS)
+# -----------------------------------------------------------------------------
+package:nupkg:
+  <<: *dotnet_cache
+  stage: package
+  tags:
+    - gitlab-linux
+  needs:
+    - job: build:linux
+      artifacts: false
+  before_script:
+    - dotnet --version
+  script:
+    - dotnet restore Sony.MonitorControl.sln
+    - dotnet build Sony.MonitorControl.sln -c Release --no-restore
+    - dotnet pack src/MonitorControlSDK/MonitorControlSDK.csproj -c Release --no-build -o publish/nupkg
+  artifacts:
+    name: "nupkg-$CI_COMMIT_SHORT_SHA"
+    expire_in: 1 month
+    paths:
+      - publish/nupkg/
+  rules:
+    - if: $CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+/
+    - if: $CI_COMMIT_BRANCH
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+
+# -----------------------------------------------------------------------------
+# GitLab Release metadata (semver tags) — binaries: download pipeline artifacts
+# -----------------------------------------------------------------------------
+release:gitlab:
+  stage: release
+  tags:
+    - gitlab-linux
+  needs:
+    - build:linux
+    - build:windows
+    - package:nupkg
+  rules:
+    - if: $CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+/
+  script:
+    - echo "GitLab Release $CI_COMMIT_TAG — download NuGet + monitorctl from this pipeline's jobs"
+  release:
+    tag_name: $CI_COMMIT_TAG
+    name: "Release $CI_COMMIT_TAG"
+    description: |
+      ## MonitorControlSDK $CI_COMMIT_TAG
+
+      **Artifacts** (this pipeline): NuGet packages from `package:nupkg`; `monitorctl` from `build:linux` / `build:windows`.
+
+      **Public mirror:** [github.com/andrew867/MonitorControlSDK](https://github.com/andrew867/MonitorControlSDK)
+
+# -----------------------------------------------------------------------------
+# GitLab NuGet Package Registry (same project) — requires GitLab 15.1+ job token rules
+# -----------------------------------------------------------------------------
+publish:gitlab-nuget:
+  <<: *dotnet_cache
+  stage: release
+  tags:
+    - gitlab-linux
+  needs:
+    - job: package:nupkg
+      artifacts: true
+  rules:
+    - if: $CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+/
+  before_script:
+    - dotnet --version
+  script:
+    - |
+      dotnet nuget push publish/nupkg/*.nupkg \
+        --source "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/nuget/index.json" \
+        --api-key "${CI_JOB_TOKEN}" \
+        --skip-duplicate
+
+# -----------------------------------------------------------------------------
+# NuGet.org — set masked variable NUGET_API_KEY to enable
+# -----------------------------------------------------------------------------
+release:nuget-org:
+  <<: *dotnet_cache
+  stage: release
+  tags:
+    - gitlab-linux
+  needs:
+    - job: package:nupkg
+      artifacts: true
+  rules:
+    - if: $CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+/
+  before_script:
+    - dotnet --version
+  script:
+    - |
+      if [ -z "${NUGET_API_KEY:-}" ]; then
+        echo "NUGET_API_KEY unset — skipping NuGet.org (add masked CI/CD variable to enable)."
+        exit 0
+      fi
+      dotnet nuget push publish/nupkg/*.nupkg -k "$NUGET_API_KEY" -s https://api.nuget.org/v3/index.json --skip-duplicate

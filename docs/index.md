@@ -32,6 +32,7 @@ Single source of truth for **Sony.MonitorControl** — SDAP discovery and SDCP c
 
 | Topic | Document |
 |--------|-----------|
+| **CI/CD (GitHub Actions + GitLab self-hosted)** | [ci-cd.md](ci-cd.md) |
 | **HTTP API + browser UI + Python gateway** | [guide/web-api-and-python-gateway.md](guide/web-api-and-python-gateway.md) |
 | **OpenAPI → C client (codegen)** | [guide/openapi-codegen.md](guide/openapi-codegen.md) |
 | Firmware VMA sequence and SDK API | [guide/firmware-updates.md](guide/firmware-updates.md) |

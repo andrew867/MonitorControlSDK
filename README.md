@@ -69,6 +69,7 @@ Open `http://127.0.0.1:5080/` (UI) and `http://127.0.0.1:5080/swagger` (OpenAPI)
 
 - **Tags:** `v0.1.1`, `v0.1.0`, … — semver from here on out.
 - **Package:** `Sony.MonitorControl` on NuGet (version tracks `<Version>` in the SDK csproj).
+- **CI/CD:** [docs/ci-cd.md](docs/ci-cd.md) — GitHub Actions (public matrix + releases + GitHub Packages + optional NuGet.org) and GitLab CI for **self-hosted** Linux/Windows runners.
 
 ---
 

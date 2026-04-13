@@ -1,14 +1,29 @@
 name: build-and-pack
 
+# Public CI: every PR + default branch + semver tags. Release assets + optional NuGet.org on tags.
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 on:
   push:
     branches: [main, master]
     tags:
       - "v*"
   pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  DOTNET_NO_LOGO: "1"
+  DOTNET_CLI_TELEMETRY_OPTOUT: "1"
 
 jobs:
   build:
+    name: Build (${{ matrix.os }})
     strategy:
       fail-fast: false
       matrix:
@@ -20,6 +35,8 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: "8.0.x"
+          cache: true
+          cache-dependency-path: "**/*.csproj"
 
       - name: Restore
         run: dotnet restore Sony.MonitorControl.sln
@@ -53,3 +70,73 @@ jobs:
           path: |
             artifacts/nupkg/*
             artifacts/monitorctl-*/*
+
+  release:
+    name: GitHub Release & registries
+    needs: build
+    if: github.ref_type == 'tag' && startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          pattern: build-*
+
+      - name: Collect NuGet + zipped monitorctl
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p release
+          nupkg=$(find dist -type f -name '*.nupkg' ! -name '*.symbols.nupkg' | head -1 || true)
+          if [[ -z "${nupkg}" ]]; then echo "No .nupkg found under dist/"; find dist -type f | head -50; exit 1; fi
+          cp "$nupkg" release/
+          snupkg=$(find dist -type f -name '*.snupkg' | head -1 || true)
+          if [[ -n "${snupkg}" ]]; then cp "$snupkg" release/; fi
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq zip >/dev/null
+          for name in monitorctl-linux-x64 monitorctl-win-x64 monitorctl-osx-arm64; do
+            dir=$(find dist -type d -name "$name" | head -1 || true)
+            if [[ -n "${dir}" ]]; then
+              (cd "$dir" && zip -r "$GITHUB_WORKSPACE/release/${name}.zip" .)
+            fi
+          done
+          ls -la release/
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          files: release/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push to GitHub Packages (NuGet)
+        shell: bash
+        run: |
+          set -euo pipefail
+          owner="${{ github.repository_owner }}"
+          dotnet nuget remove source github-gpr 2>/dev/null || true
+          dotnet nuget add source "https://nuget.pkg.github.com/${owner}/index.json" \
+            --name github-gpr \
+            --username "${owner}" \
+            --password "${{ secrets.GITHUB_TOKEN }}" \
+            --store-password-in-clear-text
+          dotnet nuget push release/*.nupkg --source github-gpr --skip-duplicate
+
+      - name: Push to NuGet.org
+        shell: bash
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+        run: |
+          set -euo pipefail
+          if [[ -z "${NUGET_API_KEY:-}" ]]; then
+            echo "NUGET_API_KEY not set — skipping NuGet.org (set repository secret to enable)."
+            exit 0
+          fi
+          dotnet nuget push release/*.nupkg \
+            -k "$NUGET_API_KEY" \
+            -s https://api.nuget.org/v3/index.json \
+            --skip-duplicate

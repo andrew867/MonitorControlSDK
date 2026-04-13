@@ -1,0 +1,27 @@
+version: 2
+updates:
+  - package-ecosystem: "nuget"
+    directories:
+      - "/src/MonitorControlSDK"
+      - "/src/MonitorControl.Cli"
+      - "/src/MonitorControl.Web"
+      - "/tests/MonitorControlSDK.Tests"
+      - "/samples/Sample.BroadcastControl"
+      - "/samples/Sample.Discovery"
+      - "/samples/Sample.UdpVmcBroadcast"
+      - "/samples/Sample.Vma"
+      - "/samples/Sample.Vmc"
+      - "/samples/Sample.Vms"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    groups:
+      dotnet-dependencies:
+        patterns:
+          - "*"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
