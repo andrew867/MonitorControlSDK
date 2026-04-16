@@ -29,11 +29,11 @@ All JSON bodies use **camelCase** by default (`host`, `timeoutMs`, …).
 |--------|------|------|--------|
 | GET | `/api/health` | — | Liveness |
 | GET | `/api/sdap/discover` | query `durationMs`, optional `bind` | UDP 53862 listen window; returns unique devices |
-| POST | `/api/vmc/get` | `{ "host", "field", "timeoutMs"? }` | `STATget` |
-| POST | `/api/vmc/set` | `{ "host", "args": ["TOKEN","…"], "timeoutMs"? }` | `STATset` tail |
-| POST | `/api/vmc/broadcast` | `{ "scope": "all"|"group", "groupId"?, "broadcastAddress"?, "port"?, "localBind"?, "tokens": ["STATset","BRIGHTNESS","512"] }` | **UDP** SDCP VMC to **53484** (no TCP `host`; affects every monitor in scope — use with care) |
-| GET | `/api/events/monitor` | query `host`, optional `fields` (comma `STATget` names), `intervalMs` | **SSE** (`text/event-stream`): server polls `STATget` and pushes JSON lines. Custom event `fault` carries SDCP/TCP errors. |
-| GET | `/ws/monitor-watch` | query `host`, optional `fields`, `intervalMs` | **WebSocket** (binary/text UTF‑8 JSON objects): same poll model as SSE. |
+| POST | `/api/vmc/get` | `{ "host", "field", "timeoutMs"?, "sdcpUnitId"?, "vmcItem"? }` | `STATget`; `sdcpUnitId` 0–255 = single-connection unit; `vmcItem` = `B000`\|`monitor` (default) or `B001`\|`builtIn` |
+| POST | `/api/vmc/set` | `{ "host", "args": ["TOKEN","…"], "timeoutMs"?, "sdcpUnitId"?, "vmcItem"? }` | `STATset` tail; same optional `sdcpUnitId` / `vmcItem` |
+| POST | `/api/vmc/broadcast` | `{ "scope", "groupId"?, "broadcastAddress"?, "port"?, "localBind"?, "tokens", "vmcItem"? }` | **UDP** SDCP VMC to **53484** (no TCP `host`; affects every monitor in scope — use with care) |
+| GET | `/api/events/monitor` | query `host`, optional `fields`, `intervalMs`, `sdcpUnitId`, `vmcItem` | **SSE** (`text/event-stream`): server polls `STATget` and pushes JSON lines. Custom event `fault` carries SDCP/TCP errors. |
+| GET | `/ws/monitor-watch` | query `host`, optional `fields`, `intervalMs`, `sdcpUnitId`, `vmcItem` | **WebSocket** (binary/text UTF‑8 JSON objects): same poll model as SSE. |
 | POST | `/api/vms/product-info` | `{ "host", "timeoutMs"? }` | VMS product info + hex payload |
 | POST | `/api/vma/control-software-version` | `{ "host", "timeoutMs"? }` | VMA read |
 | POST | `/api/vma/kernel-version` | same | |
@@ -72,7 +72,7 @@ See [diagrams/monitor-control-flows.md](../diagrams/monitor-control-flows.md) (P
 
 ## Push-style updates (SSE / WebSocket)
 
-SDCP in this stack is **request/response** on TCP; the monitor does not open an outbound HTTP channel. The **SSE** and **WebSocket** routes synthesize “live” updates by **polling `STATget`** on the server at `intervalMs` (default 2000 ms). Tune `fields` to tokens your chassis supports (defaults: `MODEL`, `BRIGHTNESS`, `CONTRAST`).
+SDCP in this stack is **request/response** on TCP; the monitor does not open an outbound HTTP channel. The **SSE** and **WebSocket** routes synthesize “live” updates by **polling `STATget`** on the server at `intervalMs` (default 2000 ms). Tune `fields` to tokens your chassis supports (defaults: `MODEL`, `BRIGHTNESS`, `CONTRAST`). Pass **`sdcpUnitId`** and **`vmcItem`** query parameters when the monitor matches the SDAP/TCP addressing rules in [pvm-740-programmer-manual-synthesis.md](../reference/pvm-740-programmer-manual-synthesis.md) (same strings as JSON `vmcItem`).
 
 - **Browser:** bundled UI → “Live snapshots (SSE)” uses `EventSource`.
 - **WebSocket URL:** `ws://<host>:<port>/ws/monitor-watch?host=<monitor-ip>&intervalMs=3000` (use `wss://` behind TLS).

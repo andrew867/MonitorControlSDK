@@ -24,7 +24,7 @@ The VMS **system configuration** branch includes opcodes with **SNMP** in the co
 
 ## Practical debugging
 
-1. **Packet capture** on a mirror port (Wireshark) filtering `tcp.port == 53484`, `udp.port == 53484` (SDCP datagrams), or `udp.port == 53862` (SDAP).
+1. **Packet capture** on a mirror port (Wireshark) filtering `tcp.port == 53484`, `udp.port == 53484` (SDCP datagrams), or `udp.port == 53862` (SDAP). On VMC frames, confirm bytes **9–10** (big-endian item **`B000h`** vs **`B001h`**) and bytes **6–7** (group/unit) match what [`VmcClient`](../../src/MonitorControlSDK/Clients/VmcClient.cs) was configured to send.
 2. **Hex dump** helpers in [`monitorctl`](../../src/MonitorControl.Cli/Program.cs) (`vms-info` subcommand dumps leading payload bytes).
 3. **Unit tests** for framing and float codecs under [`tests/MonitorControlSDK.Tests/`](../tests/MonitorControlSDK.Tests/).
 

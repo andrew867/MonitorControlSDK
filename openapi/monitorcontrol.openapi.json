@@ -487,6 +487,11 @@
               "type": "string"
             },
             "nullable": true
+          },
+          "vmcItem": {
+            "type": "string",
+            "description": "Optional: B000|monitor (default) or B001|builtIn for SDCP item number in the VMC header.",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -505,6 +510,17 @@
           "timeoutMs": {
             "type": "integer",
             "format": "int32",
+            "nullable": true
+          },
+          "sdcpUnitId": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Optional 0–255: SDCP single-connection unit (group 0). Omit for P2P (0,0).",
+            "nullable": true
+          },
+          "vmcItem": {
+            "type": "string",
+            "description": "Optional: B000|monitor (default) or B001|builtIn.",
             "nullable": true
           }
         },
@@ -527,6 +543,17 @@
           "timeoutMs": {
             "type": "integer",
             "format": "int32",
+            "nullable": true
+          },
+          "sdcpUnitId": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Optional 0–255: SDCP single-connection unit (group 0). Omit for P2P (0,0).",
+            "nullable": true
+          },
+          "vmcItem": {
+            "type": "string",
+            "description": "Optional: B000|monitor (default) or B001|builtIn.",
             "nullable": true
           }
         },

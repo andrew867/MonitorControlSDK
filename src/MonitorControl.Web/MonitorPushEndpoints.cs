@@ -2,6 +2,7 @@ using System.Net.WebSockets;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using MonitorControl.Clients;
+using MonitorControl.Protocol;
 using MonitorControl.Transport;
 
 namespace MonitorControl.Web;
@@ -37,6 +38,7 @@ internal static class MonitorPushEndpoints
 		[FromQuery] string? fields,
 		[FromQuery] int? intervalMs,
 		[FromQuery] int? sdcpUnitId,
+		[FromQuery] string? vmcItem,
 		CancellationToken cancellationToken)
 	{
 		if (string.IsNullOrWhiteSpace(host))
@@ -56,7 +58,7 @@ internal static class MonitorPushEndpoints
 
 		while (!cancellationToken.IsCancellationRequested)
 		{
-			await WriteSnapshotLineAsync(http.Response, host, timeout, fieldList, sdcpUnitId, cancellationToken)
+			await WriteSnapshotLineAsync(http.Response, host, timeout, fieldList, sdcpUnitId, vmcItem, cancellationToken)
 				.ConfigureAwait(false);
 			try
 			{
@@ -96,13 +98,18 @@ internal static class MonitorPushEndpoints
 		int timeout = config.GetValue("MonitorControl:DefaultSdcpTimeoutMs", 10_000);
 		string[] fieldList = ParseFields(http.Request.Query["fields"].ToString());
 		int? sdcpUnitId = int.TryParse(http.Request.Query["sdcpUnitId"], out int su) ? su : null;
+		string? vmcItem = http.Request.Query["vmcItem"].ToString();
+		if (string.IsNullOrWhiteSpace(vmcItem))
+		{
+			vmcItem = null;
+		}
 
 		using WebSocket ws = await http.WebSockets.AcceptWebSocketAsync().ConfigureAwait(false);
 
 		while (ws.State == WebSocketState.Open && !cancellationToken.IsCancellationRequested)
 		{
 			Dictionary<string, string?> dict =
-				await PollFieldsAsync(host, timeout, fieldList, sdcpUnitId, cancellationToken).ConfigureAwait(false);
+				await PollFieldsAsync(host, timeout, fieldList, sdcpUnitId, vmcItem, cancellationToken).ConfigureAwait(false);
 			byte[] utf8 = JsonSerializer.SerializeToUtf8Bytes(dict);
 			await ws.SendAsync(utf8, WebSocketMessageType.Text, endOfMessage: true, cancellationToken).ConfigureAwait(false);
 
@@ -128,10 +135,11 @@ internal static class MonitorPushEndpoints
 		int timeoutMs,
 		string[] fields,
 		int? sdcpUnitId,
+		string? vmcItem,
 		CancellationToken cancellationToken)
 	{
 		Dictionary<string, string?> dict =
-			await PollFieldsAsync(host, timeoutMs, fields, sdcpUnitId, cancellationToken).ConfigureAwait(false);
+			await PollFieldsAsync(host, timeoutMs, fields, sdcpUnitId, vmcItem, cancellationToken).ConfigureAwait(false);
 		if (dict.TryGetValue("_error", out string? err) && err is not null)
 		{
 			string escaped = JsonSerializer.Serialize(err);
@@ -151,6 +159,7 @@ internal static class MonitorPushEndpoints
 		int timeoutMs,
 		string[] fields,
 		int? sdcpUnitId,
+		string? vmcItem,
 		CancellationToken cancellationToken)
 	{
 		await Task.Yield();
@@ -163,7 +172,10 @@ internal static class MonitorPushEndpoints
 				SendTimeoutMs = timeoutMs,
 			};
 			tcp.Open();
-			var vmc = new VmcClient(tcp);
+			var vmc = new VmcClient(tcp)
+			{
+				VmcItemNumber = SdcpMessageBuffer.ParseVmcItemSpecifier(vmcItem),
+			};
 			if (sdcpUnitId is >= 0 and <= 255)
 			{
 				vmc.TcpSingleUnitId = (byte)sdcpUnitId.Value;

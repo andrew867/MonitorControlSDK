@@ -5,13 +5,16 @@ using MonitorControl.Transport;
 
 namespace MonitorControl.Clients;
 
-/// <summary>VMC (ASCII STATget / STATset) client over SDCP v3 item 0xB000.</summary>
+/// <summary>VMC (ASCII STATget / STATset) client over SDCP v3 item <see cref="SdcpMessageBuffer.SdcpV3ItemVideoMonitorControl"/> (<c>B000h</c>) by default, or <see cref="SdcpMessageBuffer.SdcpV3ItemVideoMonitorControlBuiltIn"/> (<c>B001h</c>) when <see cref="VmcItemNumber"/> is set.</summary>
 public sealed class VmcClient
 {
 	private readonly ISdcpTransport _transport;
 	private readonly object _sync = new();
 
 	public VmcClient(ISdcpTransport transport) => _transport = transport;
+
+	/// <summary>SDCP v3 item number for VMC payloads. Must be <c>B000h</c> or <c>B001h</c>; other values are normalized to <c>B000h</c>.</summary>
+	public ushort VmcItemNumber { get; set; } = SdcpMessageBuffer.SdcpV3ItemVideoMonitorControl;
 
 	/// <summary>
 	/// When set (typically 1–99), SDCP v3 uses <see cref="SdcpMessageBuffer.setSingleConnection"/> (group 0, this unit) instead of P2P (0,0).
@@ -78,7 +81,7 @@ public sealed class VmcClient
 
 	private void PrepareVmcHeader(SdcpMessageBuffer packet)
 	{
-		packet.setupVmcPacketHeader();
+		packet.setupVmcPacketHeader(SdcpMessageBuffer.NormalizeVmcItemNumber(VmcItemNumber));
 		if (TcpSingleUnitId is { } uid)
 		{
 			packet.setSingleConnection(uid);

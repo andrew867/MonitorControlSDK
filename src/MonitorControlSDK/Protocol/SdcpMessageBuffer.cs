@@ -438,8 +438,14 @@ public sealed class SdcpMessageBuffer
 		packetHeader[10] = 0;
 	}
 
-	public void setupVmcPacketHeader()
+	/// <summary>Writes the SDCP v3 monitor header and sets the VMC item number (bytes 9–10, big-endian).</summary>
+	/// <param name="sdcpV3VmcItem">
+	/// <see cref="SdcpV3ItemVideoMonitorControl"/> (<c>B000h</c>) or <see cref="SdcpV3ItemVideoMonitorControlBuiltIn"/> (<c>B001h</c>) per programmer manual.
+	/// Any other value is treated as <see cref="SdcpV3ItemVideoMonitorControl"/>.
+	/// </param>
+	public void setupVmcPacketHeader(ushort sdcpV3VmcItem = SdcpV3ItemVideoMonitorControl)
 	{
+		ushort item = NormalizeVmcItemNumber(sdcpV3VmcItem);
 		packetHeader[0] = 3;
 		packetHeader[1] = 11;
 		packetHeader[2] = 83;
@@ -448,8 +454,42 @@ public sealed class SdcpMessageBuffer
 		packetHeader[5] = 89;
 		setIDsByConnectType();
 		packetHeader[8] = 0;
-		packetHeader[9] = (byte)(SdcpV3ItemVideoMonitorControl >> 8);
-		packetHeader[10] = (byte)(SdcpV3ItemVideoMonitorControl & 0xFF);
+		packetHeader[9] = (byte)(item >> 8);
+		packetHeader[10] = (byte)(item & 0xFF);
+	}
+
+	/// <summary>Returns <paramref name="item"/> if it is <c>B000h</c> or <c>B001h</c>; otherwise <see cref="SdcpV3ItemVideoMonitorControl"/>.</summary>
+	public static ushort NormalizeVmcItemNumber(ushort item) =>
+		item == SdcpV3ItemVideoMonitorControlBuiltIn ? SdcpV3ItemVideoMonitorControlBuiltIn : SdcpV3ItemVideoMonitorControl;
+
+	/// <summary>
+	/// Resolves REST/CLI strings to a VMC item: <c>B000</c>/<c>monitor</c> → <see cref="SdcpV3ItemVideoMonitorControl"/>;
+	/// <c>B001</c>/<c>builtIn</c>/<c>built_in</c> → <see cref="SdcpV3ItemVideoMonitorControlBuiltIn"/>.
+	/// Null/empty and unknown tokens default to <see cref="SdcpV3ItemVideoMonitorControl"/>.
+	/// </summary>
+	public static ushort ParseVmcItemSpecifier(string? specifier)
+	{
+		if (string.IsNullOrWhiteSpace(specifier))
+		{
+			return SdcpV3ItemVideoMonitorControl;
+		}
+
+		string t = specifier.Trim();
+		if (t.Equals("B001", StringComparison.OrdinalIgnoreCase) ||
+		    t.Equals("builtIn", StringComparison.OrdinalIgnoreCase) ||
+		    t.Equals("built_in", StringComparison.OrdinalIgnoreCase) ||
+		    t.Equals("builtin", StringComparison.OrdinalIgnoreCase))
+		{
+			return SdcpV3ItemVideoMonitorControlBuiltIn;
+		}
+
+		if (t.Equals("B000", StringComparison.OrdinalIgnoreCase) ||
+		    t.Equals("monitor", StringComparison.OrdinalIgnoreCase))
+		{
+			return SdcpV3ItemVideoMonitorControl;
+		}
+
+		return SdcpV3ItemVideoMonitorControl;
 	}
 
 	public void setupVmsPacketHeader()

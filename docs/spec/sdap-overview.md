@@ -6,6 +6,8 @@ Field offsets (product name, serial, IP octets 50–53, group/unit 120–121, `S
 
 **TCP host selection:** firmware may leave the packet “connection IP” octets at `0.0.0.0`. For SDCP over TCP, use the UDP **source** address of the advertisement (see `SdapAdvertisementPacket.RecommendedControlIPv4` and discover API field `recommendedControlIPv4`).
 
+**After discovery:** optional SDCP **TCP unit** and **VMC item (`B000h` / `B001h`)** are configured on the control client, not in SDAP — see [quickstart.md](../quickstart.md) and [sdcp-framing-and-items.md](../reference/sdcp-framing-and-items.md).
+
 ## PVM-740 programmer manual (excerpt) alignment
 
 The **ManualsLib** excerpt of *PVM-740 Interface Manual for Programmers* describes **SDAP v4**: header ASCII **`"DA"`** (`44h 41h`), version **`04h`**, category **`0Bh`** (monitor) or **`0Ch`** (monitor controller), community **`"SONY"`**, plus product name (12 chars), serial, connection IP, acceptable IPs, power status, optional error/region/name fields, and **Group ID / Unit ID** (see [reference/pvm-740-programmer-manual-synthesis.md](../reference/pvm-740-programmer-manual-synthesis.md)).

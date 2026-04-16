@@ -15,7 +15,13 @@ Host is the **first non-option argument** or follows `--host`:
 ```bash
 dotnet run --project samples/Sample.BroadcastControl -- 192.168.0.10
 dotnet run --project samples/Sample.BroadcastControl -- --host 192.168.0.10
+dotnet run --project samples/Sample.BroadcastControl -- --vmc-item B001 --sdcp-unit 1 --host 192.168.0.10
 ```
+
+Optional flags (see [`VmcClient`](../../src/MonitorControlSDK/Clients/VmcClient.cs)):
+
+- **`--sdcp-unit <0–255>`** — SDCP single-connection unit (group 0); omit for P2P `(0,0)`.
+- **`--vmc-item`** — `B000`, `monitor` (default), or `B001`, `builtIn`, `built_in`, `builtin` for item **`B001h`**.
 
 ## Commands (summary)
 

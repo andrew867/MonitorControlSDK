@@ -19,7 +19,7 @@ SDAP is **UDP port 53862** — devices broadcast a small packet you can listen f
 dotnet run --project src/MonitorControl.Cli -- discover
 ```
 
-Note the **IP address** printed for each unit (see [`SdapAdvertisementPacket.ConnectionIp`](../src/MonitorControlSDK/Protocol/SdapAdvertisementPacket.cs)).
+Note **`tcpHost`** / **`recommendedControlIPv4`** in discover output when the packet lists **`0.0.0.0`** — use that address for SDCP TCP (see [`SdapAdvertisementPacket.RecommendedControlIPv4`](../src/MonitorControlSDK/Protocol/SdapAdvertisementPacket.cs)).
 
 ## 3. First SDCP command — read a VMC field (3 min)
 
@@ -29,10 +29,17 @@ SDCP uses **TCP port 53484** by default ([`SdcpConnection.DefaultPort`](../src/M
 dotnet run --project src/MonitorControl.Cli -- vmc --host 192.168.0.10 MODEL
 ```
 
+Optional **TCP unit** and **VMC item** (when SDAP shows a unit id or the chassis needs `B001h`):
+
+```bash
+dotnet run --project src/MonitorControl.Cli -- vmc --host 192.168.0.10 --sdcp-unit 1 --vmc-item B001 MODEL
+```
+
 Or the minimal sample:
 
 ```bash
 dotnet run --project samples/Sample.Vmc -- 192.168.0.10 MODEL
+dotnet run --project samples/Sample.Vmc -- 192.168.0.10 MODEL --sdcp-unit 1 --vmc-item builtIn
 ```
 
 ### Optional: UDP SDCP VMC (multi-monitor “Group / All”)
@@ -48,11 +55,16 @@ dotnet run --project samples/Sample.UdpVmcBroadcast -- 192.168.1.255
 
 ```csharp
 using MonitorControl.Clients;
+using MonitorControl.Protocol;
 using MonitorControl.Transport;
 
 using var tcp = new SdcpConnection("192.168.0.10");
 tcp.Open();
-var vmc = new VmcClient(tcp);
+var vmc = new VmcClient(tcp)
+{
+	TcpSingleUnitId = 1,
+	VmcItemNumber = SdcpMessageBuffer.SdcpV3ItemVideoMonitorControlBuiltIn,
+};
 Console.WriteLine(vmc.GetStatString("MODEL"));
 ```
 
@@ -84,4 +96,4 @@ If you need **on-wire** VMC from an ESP32 on the same LAN as the monitor, open t
 ## Troubleshooting
 
 - **Timeout / connection refused:** firewall, wrong IP, SDCP disabled on monitor, or incompatible / unexpected firmware path.
-- **Empty or `(null)` VMC:** field name not supported on that model, or password lock (see error codes doc).
+- **Empty or `(null)` VMC:** field name not supported on that model, wrong **SDCP item** (`B000` vs `B001`), wrong **TCP unit** header vs SDAP, partial TCP reads (fixed in current SDK), or password lock (see error codes doc).

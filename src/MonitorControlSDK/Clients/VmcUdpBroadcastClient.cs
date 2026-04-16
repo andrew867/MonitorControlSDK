@@ -11,7 +11,7 @@ public enum VmcUdpBroadcastScope
 	/// <summary>Group ID and unit ID both <c>0xFF</c> in the SDCP header.</summary>
 	AllMonitors,
 
-	/// <summary>Group ID set to <see cref="VmcUdpBroadcastClient.TrySend"/> / <see cref="Send"/> argument (1–99).</summary>
+	/// <summary>Group ID set to <see cref="VmcUdpBroadcastClient.TrySend"/> argument (1–99).</summary>
 	Group,
 }
 
@@ -22,6 +22,9 @@ public enum VmcUdpBroadcastScope
 public sealed class VmcUdpBroadcastClient : IDisposable
 {
 	private readonly SdcpUdpBroadcastTransport _transport;
+
+	/// <summary>SDCP v3 item for VMC (default <c>B000h</c>; use <c>B001h</c> for built-in-controller path per manual).</summary>
+	public ushort VmcItemNumber { get; set; } = SdcpMessageBuffer.SdcpV3ItemVideoMonitorControl;
 
 	/// <param name="destination">UDP destination; default is IPv4 <see cref="IPAddress.Broadcast"/> on <see cref="SdcpConnection.DefaultPort"/>.</param>
 	/// <param name="localBind">Optional local bind when multiple NICs exist.</param>
@@ -52,7 +55,7 @@ public sealed class VmcUdpBroadcastClient : IDisposable
 		}
 
 		LegacyVmcContainer vmc = packet.createVmcContainer();
-		packet.setupVmcPacketHeader();
+		packet.setupVmcPacketHeader(SdcpMessageBuffer.NormalizeVmcItemNumber(VmcItemNumber));
 		packet.clearContainer();
 		vmc.setCommand(category, segments);
 		return _transport.sendPacket(packet);

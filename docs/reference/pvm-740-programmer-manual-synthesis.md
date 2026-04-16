@@ -180,8 +180,8 @@ See **[appendices/pvm-740-vmc-catalog-from-manual.txt](appendices/pvm-740-vmc-ca
 | SDCP UDP **53484** (Group / All VMC) | `SdcpUdpBroadcastTransport` + `VmcUdpBroadcastClient` |
 | SDAP UDP **53862** | `SdapDiscovery.DefaultPort` |
 | V3 header **03h / 0Bh / SONY** | `setupVmcPacketHeader` / `setupVma` |
-| Item **B000h** VMC | `VmcClient` (default) |
-| Item **B001h** VMC (built-in controller) | **Public constants** on `SdcpMessageBuffer`; default client path remains **B000h** — extend locally if your product needs B001. |
+| Item **B000h** VMC | `VmcClient` default (`VmcItemNumber` / `setupVmcPacketHeader()`) |
+| Item **B001h** VMC (built-in controller) | `VmcClient.VmcItemNumber`, `VmcUdpBroadcastClient.VmcItemNumber`, `SdcpMessageBuffer.ParseVmcItemSpecifier`, REST `vmcItem`, CLI `--vmc-item`, web UI selector |
 | Max VMC data **499** (manual) | `SDCP_VMC_MAX_DATA_LEN = 499` in `SdcpMessageBuffer` |
 | Request/response bytes | `SDCP_COMMAND_REQUEST`, `…_RESPONSE_OK`, `…_RESPONSE_NG` |
 | Group / unit targeting | `setSingleConnection`, `setGroupConnection`, `setAllConnection`, `setP2pConnection` |

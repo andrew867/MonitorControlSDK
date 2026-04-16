@@ -21,6 +21,31 @@ public sealed class SdcpMessageBufferTests
 	}
 
 	[Fact]
+	public void VmcHeader_B001_Selectable()
+	{
+		var p = new SdcpMessageBuffer();
+		p.setupVmcPacketHeader(SdcpMessageBuffer.SdcpV3ItemVideoMonitorControlBuiltIn);
+		p.clearContainer();
+		Assert.Equal(0xB001, p.packet[9] * 256 + p.packet[10]);
+	}
+
+	[Fact]
+	public void ParseVmcItemSpecifier_null_or_whitespace_is_B000()
+	{
+		Assert.Equal(0xB000, SdcpMessageBuffer.ParseVmcItemSpecifier(null));
+		Assert.Equal(0xB000, SdcpMessageBuffer.ParseVmcItemSpecifier("   "));
+	}
+
+	[Theory]
+	[InlineData("B001", 0xB001)]
+	[InlineData("builtIn", 0xB001)]
+	[InlineData("B000", 0xB000)]
+	[InlineData("monitor", 0xB000)]
+	[InlineData("garbage", 0xB000)]
+	public void ParseVmcItemSpecifier_maps_tokens(string? input, ushort expected) =>
+		Assert.Equal(expected, SdcpMessageBuffer.ParseVmcItemSpecifier(input));
+
+	[Fact]
 	public void VmsV4Header_ItemNumber_Is0xB900()
 	{
 		var p = new SdcpMessageBuffer();

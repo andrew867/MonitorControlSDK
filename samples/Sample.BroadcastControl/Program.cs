@@ -1,9 +1,10 @@
 using MonitorControl.Clients;
 using MonitorControl.Internal;
+using MonitorControl.Protocol;
 using MonitorControl.Repl;
 using MonitorControl.Transport;
 
-if (!TryParseHost(args, out string? host, out byte? sdcpUnitId, out string? usageError))
+if (!TryParseHost(args, out string? host, out byte? sdcpUnitId, out string? vmcItem, out string? usageError))
 {
 	Console.Error.WriteLine(usageError);
 	return 1;
@@ -25,6 +26,12 @@ if (sdcpUnitId is { } u)
 {
 	vmc.TcpSingleUnitId = u;
 	Console.WriteLine("SDCP TCP single-connection unit id: {0}", u);
+}
+
+if (!string.IsNullOrWhiteSpace(vmcItem))
+{
+	vmc.VmcItemNumber = SdcpMessageBuffer.ParseVmcItemSpecifier(vmcItem);
+	Console.WriteLine("SDCP VMC item: {0:X4}h", vmc.VmcItemNumber);
 }
 
 Console.WriteLine("Connected to {0}:{1}. Commands: get, set, help, quit.", host, SdcpConnection.DefaultPort);
@@ -91,10 +98,11 @@ static void PrintVmcResponse(LegacyVmcContainer? c)
 	}
 }
 
-static bool TryParseHost(string[] args, out string? host, out byte? sdcpUnitId, out string? error)
+static bool TryParseHost(string[] args, out string? host, out byte? sdcpUnitId, out string? vmcItem, out string? error)
 {
 	host = null;
 	sdcpUnitId = null;
+	vmcItem = null;
 	error = null;
 	for (int i = 0; i < args.Length; i++)
 	{
@@ -112,6 +120,10 @@ static bool TryParseHost(string[] args, out string? host, out byte? sdcpUnitId, 
 
 			sdcpUnitId = uid;
 		}
+		else if (string.Equals(args[i], "--vmc-item", StringComparison.OrdinalIgnoreCase) && i + 1 < args.Length)
+		{
+			vmcItem = args[++i];
+		}
 		else if (!args[i].StartsWith("-", StringComparison.Ordinal) && host is null)
 		{
 			host = args[i];
@@ -121,7 +133,7 @@ static bool TryParseHost(string[] args, out string? host, out byte? sdcpUnitId, 
 	if (string.IsNullOrWhiteSpace(host))
 	{
 		error =
-			"Usage: Sample.BroadcastControl [--sdcp-unit <0-255>] --host <ip>   or   Sample.BroadcastControl [--sdcp-unit <n>] <ip>";
+			"Usage: Sample.BroadcastControl [--vmc-item B000|B001|monitor|builtIn] [--sdcp-unit <0-255>] --host <ip>   or   same flags then <ip>";
 		return false;
 	}
 

@@ -7,6 +7,16 @@ function hostBody() {
   return { host, timeoutMs: Number.isFinite(timeoutMs) ? timeoutMs : undefined };
 }
 
+/** Optional fields for VMC routes and live polling (matches REST / SSE query names). */
+function vmcTransportOptions() {
+  const o = {};
+  const su = Number.parseInt($("sdcpUnit").value, 10);
+  if (Number.isFinite(su) && su >= 0 && su <= 255) o.sdcpUnitId = su;
+  const vi = $("vmcItem").value.trim();
+  if (vi) o.vmcItem = vi;
+  return o;
+}
+
 function fwHeaders() {
   const h = { "Content-Type": "application/json" };
   if ($("fwAck").checked) h["X-Firmware-Ack"] = "CONFIRM";
@@ -55,6 +65,7 @@ $("btnVmcGet").onclick = async () => {
   try {
     const data = await api("POST", "/api/vmc/get", {
       ...hostBody(),
+      ...vmcTransportOptions(),
       field: $("vmcField").value.trim(),
     });
     show($("outVmc"), data);
@@ -66,7 +77,7 @@ $("btnVmcGet").onclick = async () => {
 $("btnVmcSet").onclick = async () => {
   const tail = $("vmcSet").value.trim().split(/\s+/).filter(Boolean);
   try {
-    const data = await api("POST", "/api/vmc/set", { ...hostBody(), args: tail });
+    const data = await api("POST", "/api/vmc/set", { ...hostBody(), ...vmcTransportOptions(), args: tail });
     show($("outVmc"), data);
   } catch (e) {
     show($("outVmc"), String(e.message));
@@ -95,6 +106,10 @@ $("btnSseStart").onclick = () => {
   const q = new URLSearchParams({ host });
   if (Number.isFinite(intervalMs)) q.set("intervalMs", String(intervalMs));
   if (fields) q.set("fields", fields);
+  const su = $("sdcpUnit").value.trim();
+  if (su) q.set("sdcpUnitId", su);
+  const vi = $("vmcItem").value.trim();
+  if (vi) q.set("vmcItem", vi);
   sseMonitor = new EventSource(`/api/events/monitor?${q}`);
   sseMonitor.onmessage = (ev) => {
     try {

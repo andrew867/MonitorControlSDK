@@ -16,7 +16,11 @@ The repository ships:
 
 ---
 
-## Recent release (v0.4.0, 2026-04-13)
+## Recent release (v0.4.1)
+
+Patch **0.4.1** improves **SDCP TCP** reliability (length-prefixed reads, V4 header buffer sizing), **SDAP** discoverability (**recommendedControlIPv4** when packet IP is zero), and operator switches for **TCP unit** plus **VMC item `B000h` / `B001h`** across the SDK, `monitorctl`, samples, **MonitorControl.Web** (REST, SSE, WebSocket, static UI), OpenAPI, and docs. See [docs/quickstart.md](docs/quickstart.md) and [docs/reference/sdcp-framing-and-items.md](docs/reference/sdcp-framing-and-items.md).
+
+## Earlier release (v0.4.0, 2026-04-13)
 
 Minor release **0.4.0** follows [Semantic Versioning](https://semver.org/). Documentation and diagrams now fully reflect **ESP32 native TCP SDCP** ([`examples/esp32-sdcp-vmc`](examples/esp32-sdcp-vmc/)), the **Python gateway** SSE vs WebSocket split, corrected **`Sample.BroadcastControl`** (TCP REPL only, no UDP), fixed **test plan** class names, and expanded cross-links across guides and specs. No intentional wire-protocol or public API breaking changes from **0.3.0**. Earlier: [v0.3.0](https://github.com/andrew867/MonitorControlSDK/releases/tag/v0.3.0), [v0.2.0](https://github.com/andrew867/MonitorControlSDK/releases/tag/v0.2.0), [v0.1.2](https://github.com/andrew867/MonitorControlSDK/releases/tag/v0.1.2), [v0.1.1](https://github.com/andrew867/MonitorControlSDK/releases/tag/v0.1.1).
 

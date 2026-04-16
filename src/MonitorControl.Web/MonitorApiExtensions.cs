@@ -18,6 +18,12 @@ internal static class MonitorApiExtensions
 		}
 	}
 
+	private static void ApplyVmcClientHeaders(VmcClient vmc, string? vmcItem, int? sdcpUnitId)
+	{
+		vmc.VmcItemNumber = SdcpMessageBuffer.ParseVmcItemSpecifier(vmcItem);
+		ApplySdcpUnit(vmc, sdcpUnitId);
+	}
+
 	internal static void MapMonitorControlApi(this WebApplication app)
 	{
 		var api = app.MapGroup("/api").WithTags("monitor");
@@ -117,7 +123,7 @@ internal static class MonitorApiExtensions
 				};
 				tcp.Open();
 				var vmc = new VmcClient(tcp);
-				ApplySdcpUnit(vmc, body.SdcpUnitId);
+				ApplyVmcClientHeaders(vmc, body.VmcItem, body.SdcpUnitId);
 				string? value = vmc.GetStatString(body.Field.Trim());
 				return Results.Ok(new VmcGetResponse(value));
 			}
@@ -145,7 +151,7 @@ internal static class MonitorApiExtensions
 				};
 				tcp.Open();
 				var vmc = new VmcClient(tcp);
-				ApplySdcpUnit(vmc, body.SdcpUnitId);
+				ApplyVmcClientHeaders(vmc, body.VmcItem, body.SdcpUnitId);
 				LegacyVmcContainer? r = vmc.Send("STATset", body.Args.ToArray());
 				if (r is null)
 				{
@@ -194,7 +200,10 @@ internal static class MonitorApiExtensions
 			int gid = Math.Clamp(body.GroupId ?? 1, 1, 99);
 			try
 			{
-				using var client = new VmcUdpBroadcastClient(dest, localEp);
+				using var client = new VmcUdpBroadcastClient(dest, localEp)
+				{
+					VmcItemNumber = SdcpMessageBuffer.ParseVmcItemSpecifier(body.VmcItem),
+				};
 				string category = body.Tokens[0];
 				string[] tail = body.Tokens.Count > 1
 					? body.Tokens.GetRange(1, body.Tokens.Count - 1).ToArray()
@@ -378,15 +387,22 @@ internal sealed record DiscoverResponse(int ListenDurationMs, IReadOnlyList<Disc
 
 internal record HostBody(string Host, int? TimeoutMs, int? SdcpUnitId);
 
-internal sealed record VmcGetBody(string Host, string Field, int? TimeoutMs, int? SdcpUnitId);
+internal sealed record VmcGetBody(string Host, string Field, int? TimeoutMs, int? SdcpUnitId, string? VmcItem);
 
 internal sealed record VmcGetResponse(string? Value);
 
-internal sealed record VmcSetBody(string Host, List<string> Args, int? TimeoutMs, int? SdcpUnitId);
+internal sealed record VmcSetBody(string Host, List<string> Args, int? TimeoutMs, int? SdcpUnitId, string? VmcItem);
 
 internal sealed record VmcSetResponse(string[]? ResponseTokens, string? Error);
 
-internal sealed record VmcBroadcastBody(string? Scope, int? GroupId, string? BroadcastAddress, int? Port, string? LocalBind, List<string>? Tokens);
+internal sealed record VmcBroadcastBody(
+	string? Scope,
+	int? GroupId,
+	string? BroadcastAddress,
+	int? Port,
+	string? LocalBind,
+	List<string>? Tokens,
+	string? VmcItem);
 
 internal sealed record VmcBroadcastResponse(bool Ok, string DestinationIp, int Port, string? Scope);
 

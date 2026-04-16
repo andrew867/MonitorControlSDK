@@ -13,7 +13,7 @@ High-level views of **where data moves** and **how physical controls** reach the
 | **Python gateway** (`examples/python-service`) | Proxied `GET /api/sdap/discover` | Proxied `POST /api/*` | Same as .NET upstream | **SSE** proxied for `GET /api/events/*`; **WebSocket** is **not** proxied — use .NET port (see below) |
 | **ESP32 HTTP** (`monitor_knobs_http.ino`) | Manual / SDAP elsewhere | WiFi → HTTP → gateway → TCP **53484** | JSON `POST /api/vmc/set` | No SDCP on MCU |
 | **ESP32 native** (`monitor_knobs_sdcp.ino` + `wifi_sdap_web.ino`) | **SDAP** UDP **53862** (web + serial) + NVS `mhost` | WiFi → **TCP 53484** | Hand-built **SDCP v3** + item **0xB000** + ASCII | Parity with SDK header layout |
-| **Sample.BroadcastControl** | Manual host arg | **Long-lived** TCP **53484** | REPL `get` / `set` | One session, many commands |
+| **Sample.BroadcastControl** | Manual host arg | **Long-lived** TCP **53484** | REPL `get` / `set`; optional `--sdcp-unit`, `--vmc-item` | One session, many commands |
 
 ## End-to-end stacks (LAN)
 

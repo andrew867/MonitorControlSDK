@@ -12,7 +12,7 @@ Types such as `LegacyVmcContainer`, `LegacyVmsContainer`, `LegacyVmaContainer`, 
 
 1. **Buffers** — `SdcpMessageBuffer` (V3/V4 layouts, lengths, community bytes).
 2. **Containers** — `Legacy*` types write opcode bytes into the buffer data region.
-3. **Engines / clients** — `VmsCommandEngine`, `VmcClient`, `VmaClient` orchestrate send/receive over `ISdcpTransport`.
+3. **Engines / clients** — `VmsCommandEngine`, `VmcClient`, `VmaClient` orchestrate send/receive over `ISdcpTransport`. `VmcClient` exposes **TCP unit** (`TcpSingleUnitId`) and **VMC SDCP item** (`VmcItemNumber`, `B000h` vs `B001h`) aligned with the programmer-manual tables.
 4. **Transports** — `SdcpConnection` (TCP), `StreamSdcpTransport` (`Stream` for tests or proxies).
 
 ## Documentation

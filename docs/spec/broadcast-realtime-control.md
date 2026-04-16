@@ -3,7 +3,7 @@
 ## Transport
 
 - Single **SDCP TCP** connection to `SdcpConnection.DefaultPort` (53484), opened once at startup, closed on `quit` or Ctrl+C.
-- All control in v1 uses **VMC** (`VmcClient`): SDCP **V3** header, item **0xB000**, ASCII payload `STATget …` / `STATset …` as documented in [vmc-string-catalog.md](vmc-string-catalog.md).
+- All control uses **VMC** (`VmcClient`): SDCP **V3** header, item **`0xB000`** by default or **`0xB001`** when started with `--vmc-item`, ASCII payload `STATget …` / `STATset …` as documented in [vmc-string-catalog.md](vmc-string-catalog.md). Optional **`--sdcp-unit`** maps to `TcpSingleUnitId` for single-connection TCP addressing.
 
 **Not in this sample:** **UDP SDCP** multi-monitor **Group / All** VMC (`VmcUdpBroadcastClient`, CLI `vmc-broadcast`, `POST /api/vmc/broadcast`) — fire-and-forget with no TCP session; see [pvm-740-programmer-manual-synthesis.md](../reference/pvm-740-programmer-manual-synthesis.md).
 

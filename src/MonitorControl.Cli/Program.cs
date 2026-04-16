@@ -17,6 +17,10 @@ var tokensArgument = new Argument<string[]>("tokens", "VMC tokens, e.g. STATset 
 {
 	Arity = ArgumentArity.OneOrMore,
 };
+var sdcpUnitOption = new Option<int?>("--sdcp-unit", "SDCP TCP single-connection unit id (0–255); omit for P2P (0,0).");
+var vmcItemOption = new Option<string?>(
+	"--vmc-item",
+	"VMC SDCP item: B000 or monitor (default); B001 or builtIn for built-in-controller path.");
 
 var discoverCmd = new Command("discover", "Listen for SDAP advertisements (UDP 53862)");
 discoverCmd.AddOption(bindOption);
@@ -29,8 +33,17 @@ vmcBcastCmd.AddOption(groupOption);
 vmcBcastCmd.AddOption(bcastIpOption);
 vmcBcastCmd.AddOption(bcastPortOption);
 vmcBcastCmd.AddOption(bcastBindOption);
+vmcBcastCmd.AddOption(vmcItemOption);
 vmcBcastCmd.AddArgument(tokensArgument);
-vmcBcastCmd.SetHandler(RunVmcBroadcast, scopeOption, groupOption, bcastIpOption, bcastPortOption, bcastBindOption, tokensArgument);
+vmcBcastCmd.SetHandler(
+	RunVmcBroadcast,
+	scopeOption,
+	groupOption,
+	bcastIpOption,
+	bcastPortOption,
+	bcastBindOption,
+	vmcItemOption,
+	tokensArgument);
 
 var vmsCmd = new Command("vms-info", "VMS: product info + common packaged status (requires SDCP)");
 vmsCmd.AddOption(hostOption);
@@ -40,8 +53,10 @@ vmsCmd.SetHandler(RunVmsInfo, hostOption, timeoutOption);
 var statArgument = new Argument<string>("stat", "STATget field name e.g. MODEL");
 var vmcCmd = new Command("vmc", "VMC: send STATget line (e.g. MODEL)");
 vmcCmd.AddOption(hostOption);
+vmcCmd.AddOption(sdcpUnitOption);
+vmcCmd.AddOption(vmcItemOption);
 vmcCmd.AddArgument(statArgument);
-vmcCmd.SetHandler(RunVmcGet, hostOption, statArgument);
+vmcCmd.SetHandler(RunVmcGet, hostOption, statArgument, sdcpUnitOption, vmcItemOption);
 
 var vmaCmd = new Command("vma-version", "VMA: read control software version string");
 vmaCmd.AddOption(hostOption);
@@ -56,7 +71,14 @@ root.AddCommand(vmaCmd);
 
 return await root.InvokeAsync(args);
 
-static void RunVmcBroadcast(string scope, int groupId, string? broadcastIp, int port, string? localBind, string[] tokens)
+static void RunVmcBroadcast(
+	string scope,
+	int groupId,
+	string? broadcastIp,
+	int port,
+	string? localBind,
+	string? vmcItem,
+	string[] tokens)
 {
 	if (tokens.Length < 1)
 	{
@@ -87,7 +109,10 @@ static void RunVmcBroadcast(string scope, int groupId, string? broadcastIp, int 
 		? VmcUdpBroadcastScope.Group
 		: VmcUdpBroadcastScope.AllMonitors;
 	byte gid = (byte)Math.Clamp(groupId, 1, 99);
-	using var client = new VmcUdpBroadcastClient(dest, localEp);
+	using var client = new VmcUdpBroadcastClient(dest, localEp)
+	{
+		VmcItemNumber = SdcpMessageBuffer.ParseVmcItemSpecifier(vmcItem),
+	};
 	string category = tokens[0];
 	string[] tail = tokens.Length > 1 ? tokens[1..] : Array.Empty<string>();
 	bool ok = client.TrySend(vmcScope, gid, category, tail);
@@ -165,11 +190,19 @@ static void RunVmsInfo(string host, int timeoutMs)
 	Console.WriteLine(HexDump(buf.data.AsSpan(0, Math.Min(buf.dataLengthV4, 64))));
 }
 
-static void RunVmcGet(string host, string stat)
+static void RunVmcGet(string host, string stat, int? sdcpUnit, string? vmcItem)
 {
 	using var tcp = new SdcpConnection(host);
 	tcp.Open();
-	var vmc = new VmcClient(tcp);
+	var vmc = new VmcClient(tcp)
+	{
+		VmcItemNumber = SdcpMessageBuffer.ParseVmcItemSpecifier(vmcItem),
+	};
+	if (sdcpUnit is >= 0 and <= 255)
+	{
+		vmc.TcpSingleUnitId = (byte)sdcpUnit.Value;
+	}
+
 	string? s = vmc.GetStatString(stat);
 	Console.WriteLine(s ?? "(null)");
 }

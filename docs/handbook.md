@@ -6,7 +6,7 @@ This document is the **narrative spine** for the repository: what the system is,
 
 **MonitorControl** is a **.NET 8** solution that speaks the same **LAN discovery and control** dialects as compatible **professional monitors**: **SDAP** (UDP advertisements) and **SDCP** (structured frames on TCP, with an optional **UDP** path for VMC broadcast). The shipped **NuGet** package is **`MonitorControl.Sdk`** (`MonitorControl.*` namespaces). Optional hosts wrap the library in **HTTP + OpenAPI** for integration with browsers, Python, or embedded HTTP stacks.
 
-**In-tree MCU examples:** (1) **ESP32 / ESP8266** over **HTTP** to `MonitorControl.Web` — minimal SDCP knowledge on the MCU. (2) **ESP32** over **native TCP SDCP** — full **V3 + item 0xB000** framing implemented in firmware to match the SDK (see [`examples/esp32-sdcp-vmc/monitor_knobs_sdcp.ino`](../examples/esp32-sdcp-vmc/monitor_knobs_sdcp.ino)).
+**In-tree MCU examples:** (1) **ESP32 / ESP8266** over **HTTP** to `MonitorControl.Web` — minimal SDCP knowledge on the MCU. (2) **ESP32** over **native TCP SDCP** — full **V3** framing with item **`0xB000`** (default) implemented in firmware to match the SDK; use **`0xB001`** on hardware that requires the built-in-controller item (see [`examples/esp32-sdcp-vmc/monitor_knobs_sdcp.ino`](../examples/esp32-sdcp-vmc/monitor_knobs_sdcp.ino)).
 
 **Out of scope:** consumer television stacks (for example BRAVIA Simple IP Control on different ports and framing), projector-only transports (for example ADCP on 53595), and any vendor binary control daemons. This tree is **plain managed C#** over sockets (plus optional Arduino sketches).
 
@@ -59,8 +59,8 @@ Implemented in [`Program.cs`](../src/MonitorControl.Cli/Program.cs) (`System.Com
 | Command | Transport | Purpose |
 |---------|-----------|---------|
 | `discover` | SDAP listen | Print advertisements (optional `--bind`, `--filter`) |
-| `vmc --host <ip> <field>` | TCP SDCP | `STATget` one field |
-| `vmc-broadcast` | UDP SDCP | `STATset` / other VMC category to Group or All (`--scope`, `--group-id`, `--broadcast`, `--port`, `--local-bind`) |
+| `vmc --host <ip> <field>` | TCP SDCP | `STATget` one field; optional `--sdcp-unit`, `--vmc-item` (B000/monitor vs B001/builtIn) |
+| `vmc-broadcast` | UDP SDCP | `STATset` / other VMC category to Group or All (`--scope`, `--group-id`, `--broadcast`, `--port`, `--local-bind`, optional `--vmc-item`) |
 | `vms-info --host <ip>` | TCP SDCP | VMS product info + common packaged status (hex preview) |
 | `vma-version --host <ip>` | TCP SDCP | VMA control software version read |
 

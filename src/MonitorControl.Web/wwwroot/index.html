@@ -16,6 +16,7 @@
     <h2>Connection</h2>
     <label>Monitor host (IP) <input id="host" type="text" placeholder="192.168.0.10" /></label>
     <label>SDCP timeout (ms) <input id="timeout" type="number" value="10000" min="1000" max="120000" /></label>
+    <label>SDCP TCP unit id (optional, 0–255) <input id="sdcpUnit" type="number" min="0" max="255" placeholder="P2P if empty" /></label>
   </section>
 
   <section>
@@ -28,6 +29,7 @@
 
   <section>
     <h2>VMC</h2>
+    <label>VMC SDCP item <select id="vmcItem"><option value="">B000 / monitor (default)</option><option value="B001">B001 / built-in controller</option></select></label>
     <label>STATget field <input id="vmcField" type="text" value="MODEL" /></label>
     <button type="button" id="btnVmcGet">STATget</button>
     <label>STATset args (space-separated) <input id="vmcSet" type="text" placeholder="BRIGHTNESS 512" /></label>

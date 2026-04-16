@@ -1,6 +1,6 @@
 # MonitorControl.Web
 
-ASP.NET Core host: JSON REST API (`/api/*`), **SSE** (`/api/events/monitor`), **WebSocket** (`/ws/monitor-watch`), Swagger UI / **OpenAPI 3** at `/swagger/v1/swagger.json`, and static browser demo under `wwwroot/`.
+ASP.NET Core host: JSON REST API (`/api/*`), **SSE** (`/api/events/monitor`), **WebSocket** (`/ws/monitor-watch`), Swagger UI / **OpenAPI 3** at `/swagger/v1/swagger.json`, and static browser demo under `wwwroot/`. The bundled UI exposes optional **SDCP TCP unit** and **VMC item** (`B000` / `B001`) for `STATget` / `STATset` and live polling — same fields as JSON `sdcpUnitId` / `vmcItem` on REST routes.
 
 Run: `dotnet run --project src/MonitorControl.Web --urls http://127.0.0.1:5080`
 
