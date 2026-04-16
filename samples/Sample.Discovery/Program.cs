@@ -8,7 +8,12 @@ while (DateTime.UtcNow < deadline)
 {
 	if (d.TryRead(null, out var p, out _))
 	{
-		Console.WriteLine("{0}\t{1}\t{2}", p.ConnectionIp, p.ProductName, p.SerialNumber);
+		Console.WriteLine(
+			"packetIp={0}\ttcpHost={1}\t{2}\t{3}",
+			p.ConnectionIp,
+			p.RecommendedControlIPv4 ?? "?",
+			p.ProductName,
+			p.SerialNumber);
 	}
 	else
 	{
