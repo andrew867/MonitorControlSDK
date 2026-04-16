@@ -93,7 +93,11 @@ public sealed class SdcpConnection : ISdcpTransport, IAsyncDisposable, IDisposab
 		{
 			NetworkStream stream = GetStream();
 			var array = new byte[packet.maxSize];
-			_ = stream.Read(array, 0, packet.maxSize);
+			if (!SdcpFrameReader.TryReadV3(stream, array.AsSpan(0, packet.maxSize), packet.maxSize))
+			{
+				return false;
+			}
+
 			packet.packet = array;
 		}
 		catch
@@ -110,7 +114,11 @@ public sealed class SdcpConnection : ISdcpTransport, IAsyncDisposable, IDisposab
 		{
 			NetworkStream stream = GetStream();
 			var array = new byte[packet.maxSize];
-			_ = stream.Read(array, 0, packet.maxSize);
+			if (!SdcpFrameReader.TryReadV4(stream, array.AsSpan(0, packet.maxSize), packet.maxSize))
+			{
+				return false;
+			}
+
 			packet.packetV4 = array;
 		}
 		catch
@@ -127,8 +135,23 @@ public sealed class SdcpConnection : ISdcpTransport, IAsyncDisposable, IDisposab
 		{
 			NetworkStream stream = GetStream();
 			var array = new byte[packet.maxSize];
-			int read = await stream.ReadAsync(array.AsMemory(0, packet.maxSize), cancellationToken).ConfigureAwait(false);
-			if (read <= 0)
+			if (!await SdcpFrameReader
+					.TryReadAllAsync(stream, array.AsMemory(0, SdcpFrameReader.V4HeaderLength), cancellationToken)
+					.ConfigureAwait(false))
+			{
+				return false;
+			}
+
+			int dataLen = (array[35] << 8) | array[36];
+			if (dataLen < 0 || dataLen > SdcpFrameReader.V4MaxPayloadIn973Buffer)
+			{
+				return false;
+			}
+
+			if (dataLen > 0 &&
+				!await SdcpFrameReader
+					.TryReadAllAsync(stream, array.AsMemory(SdcpFrameReader.V4HeaderLength, dataLen), cancellationToken)
+					.ConfigureAwait(false))
 			{
 				return false;
 			}

@@ -43,4 +43,35 @@ public sealed class StreamSdcpTransportTests
 		Assert.Equal(973, p.packet.Length);
 		Assert.Equal(3, p.packet[0]);
 	}
+
+	[Fact]
+	public void ReceivePacket_reassembles_v3_frame_when_reads_are_fragmented()
+	{
+		var incoming = new byte[973];
+		incoming[0] = 3;
+		incoming[1] = 11;
+		incoming[11] = 3;
+		incoming[12] = 192;
+		using var ms = new ChunkedMemoryStream(incoming, readChunk: 17);
+		using var tr = new StreamSdcpTransport(ms, ownsStream: false);
+		var p = new SdcpMessageBuffer();
+		Assert.True(tr.receivePacket(p));
+		Assert.Equal(973, p.packet.Length);
+	}
+
+	[Fact]
+	public void ReceivePacketV4_reassembles_when_reads_are_fragmented()
+	{
+		int payload = 100;
+		var incoming = new byte[37 + payload];
+		incoming[0] = 4;
+		incoming[1] = 11;
+		incoming[35] = (byte)(payload >> 8);
+		incoming[36] = (byte)payload;
+		using var ms = new ChunkedMemoryStream(incoming, readChunk: 5);
+		using var tr = new StreamSdcpTransport(ms, ownsStream: false);
+		var p = new SdcpMessageBuffer();
+		Assert.True(tr.receivePacketV4(p));
+		Assert.Equal(37 + payload, p.packetV4.Length);
+	}
 }

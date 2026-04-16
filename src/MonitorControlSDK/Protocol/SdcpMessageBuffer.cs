@@ -337,7 +337,8 @@ public sealed class SdcpMessageBuffer
 		connectType = SdcpPacketNetworkType.SDCP_PACKET_NETWORK_TYPE_P2P;
 		unitId = 1;
 		groupId = 1;
-		packetHeader = new byte[13];
+		// SDCP v3 uses the first 13 bytes; v4 extends through byte 36. Keep 37 so v3 and v4 wire paths can share one buffer without realloc on receive.
+		packetHeader = new byte[37];
 		packetData = new byte[960];
 		setupVma();
 		clearContainer();

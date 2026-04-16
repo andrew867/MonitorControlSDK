@@ -19,7 +19,8 @@ public sealed class StreamSdcpTransport : ISdcpTransport, IDisposable
 	{
 		try
 		{
-			_stream.Write(packet.packet, 0, packet.length);
+			byte[] wire = packet.packet;
+			_stream.Write(wire, 0, packet.length);
 			_stream.Flush();
 		}
 		catch
@@ -34,7 +35,8 @@ public sealed class StreamSdcpTransport : ISdcpTransport, IDisposable
 	{
 		try
 		{
-			_stream.Write(packet.packetV4, 0, packet.lengthV4);
+			byte[] wire = packet.packetV4;
+			_stream.Write(wire, 0, packet.lengthV4);
 			_stream.Flush();
 		}
 		catch
@@ -50,7 +52,11 @@ public sealed class StreamSdcpTransport : ISdcpTransport, IDisposable
 		try
 		{
 			var array = new byte[packet.maxSize];
-			_ = _stream.Read(array, 0, packet.maxSize);
+			if (!SdcpFrameReader.TryReadV3(_stream, array.AsSpan(0, packet.maxSize), packet.maxSize))
+			{
+				return false;
+			}
+
 			packet.packet = array;
 		}
 		catch
@@ -66,7 +72,11 @@ public sealed class StreamSdcpTransport : ISdcpTransport, IDisposable
 		try
 		{
 			var array = new byte[packet.maxSize];
-			_ = _stream.Read(array, 0, packet.maxSize);
+			if (!SdcpFrameReader.TryReadV4(_stream, array.AsSpan(0, packet.maxSize), packet.maxSize))
+			{
+				return false;
+			}
+
 			packet.packetV4 = array;
 		}
 		catch
