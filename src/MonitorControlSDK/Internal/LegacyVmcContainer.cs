@@ -36,7 +36,7 @@ public sealed class LegacyVmcContainer : ILegacySdcpContainer
 
 	private string dataToString()
 	{
-		return Encoding.ASCII.GetString(data);
+		return length == 0 ? string.Empty : Encoding.ASCII.GetString(data.AsSpan(0, length));
 	}
 
 	/// <summary>Builds ASCII payload: <c>category</c> plus optional space-separated segments (e.g. <c>STATget MODEL</c>, <c>STATset BRIGHTNESS 512</c>).</summary>

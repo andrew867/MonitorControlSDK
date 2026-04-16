@@ -50,6 +50,20 @@ public sealed class SdapAdvertisementPacket
 	public string ConnectionIp =>
 		$"{Raw[50]}.{Raw[51]}.{Raw[52]}.{Raw[53]}";
 
+	/// <summary>IPv4 string to use for SDCP TCP when <see cref="ConnectionIp"/> is unset (<c>0.0.0.0</c> per manual); otherwise <see cref="ConnectionIp"/>.</summary>
+	public string? RecommendedControlIPv4
+	{
+		get
+		{
+			if (ConnectionIp != "0.0.0.0")
+			{
+				return ConnectionIp;
+			}
+
+			return SourceIp?.ToString();
+		}
+	}
+
 	public byte GroupId => Raw[120];
 
 	public byte UnitId => Raw[121];

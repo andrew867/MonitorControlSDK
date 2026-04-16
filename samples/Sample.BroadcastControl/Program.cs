@@ -3,7 +3,7 @@ using MonitorControl.Internal;
 using MonitorControl.Repl;
 using MonitorControl.Transport;
 
-if (!TryParseHost(args, out string? host, out string? usageError))
+if (!TryParseHost(args, out string? host, out byte? sdcpUnitId, out string? usageError))
 {
 	Console.Error.WriteLine(usageError);
 	return 1;
@@ -21,6 +21,12 @@ catch (Exception ex)
 }
 
 var vmc = new VmcClient(tcp);
+if (sdcpUnitId is { } u)
+{
+	vmc.TcpSingleUnitId = u;
+	Console.WriteLine("SDCP TCP single-connection unit id: {0}", u);
+}
+
 Console.WriteLine("Connected to {0}:{1}. Commands: get, set, help, quit.", host, SdcpConnection.DefaultPort);
 Console.WriteLine("Example: get MODEL   |   set BRIGHTNESS 512");
 
@@ -85,15 +91,26 @@ static void PrintVmcResponse(LegacyVmcContainer? c)
 	}
 }
 
-static bool TryParseHost(string[] args, out string? host, out string? error)
+static bool TryParseHost(string[] args, out string? host, out byte? sdcpUnitId, out string? error)
 {
 	host = null;
+	sdcpUnitId = null;
 	error = null;
 	for (int i = 0; i < args.Length; i++)
 	{
 		if (args[i] == "--host" && i + 1 < args.Length)
 		{
 			host = args[++i];
+		}
+		else if (string.Equals(args[i], "--sdcp-unit", StringComparison.OrdinalIgnoreCase) && i + 1 < args.Length)
+		{
+			if (!byte.TryParse(args[++i], out byte uid))
+			{
+				error = "Invalid --sdcp-unit (expected 0–255).";
+				return false;
+			}
+
+			sdcpUnitId = uid;
 		}
 		else if (!args[i].StartsWith("-", StringComparison.Ordinal) && host is null)
 		{
@@ -103,7 +120,8 @@ static bool TryParseHost(string[] args, out string? host, out string? error)
 
 	if (string.IsNullOrWhiteSpace(host))
 	{
-		error = "Usage: Sample.BroadcastControl --host <ip>   or   Sample.BroadcastControl <ip>";
+		error =
+			"Usage: Sample.BroadcastControl [--sdcp-unit <0-255>] --host <ip>   or   Sample.BroadcastControl [--sdcp-unit <n>] <ip>";
 		return false;
 	}
 

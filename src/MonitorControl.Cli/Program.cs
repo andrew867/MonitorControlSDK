@@ -116,13 +116,14 @@ static void RunDiscover(string? bind, string? filter)
 			continue;
 		}
 
-		Console.WriteLine("{0}  product={1}  serial={2}  group={3} unit={4}  ip={5}",
+		Console.WriteLine("{0}  product={1}  serial={2}  group={3} unit={4}  ip={5}  tcpHost={6}",
 			pack.SourceIp,
 			pack.ProductName,
 			pack.SerialNumber,
 			pack.GroupId,
 			pack.UnitId,
-			pack.ConnectionIp);
+			pack.ConnectionIp,
+			pack.RecommendedControlIPv4 ?? "?");
 		if (matched != null)
 		{
 			Console.WriteLine("  matched filter: {0}", matched);

@@ -121,6 +121,8 @@ Layout described in the excerpt:
 | **Group ID** | 1 byte | `0` = Single / P2P; **`FFh`** = All; **1–99** = Group (manual cites BKM-15R 7-seg range). UDP broadcast: **no TCP response**. |
 | **Unit ID** | 1 byte | `0` = P2P or Group; **`FFh`** = All; otherwise must **match** the monitor when using **TCP**. |
 
+When SDAP shows a non-zero **Unit ID** (for example group/unit `1`/`1`) and TCP commands stall after a few exchanges, set **single-connection** addressing (`group` = `0`, `unit` = advertised unit) via `VmcClient.TcpSingleUnitId` / REST `sdcpUnitId` / CLI `--sdcp-unit`.
+
 Then the manual’s **Command** block continues with **Request/response**, **Item number**, **Data length**, **Data** — matching this repo’s **13-byte** prefix before payload:
 
 | Offset | Field | Manual / repo |

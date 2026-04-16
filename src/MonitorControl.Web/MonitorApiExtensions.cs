@@ -10,6 +10,14 @@ namespace MonitorControl.Web;
 
 internal static class MonitorApiExtensions
 {
+	private static void ApplySdcpUnit(VmcClient vmc, int? sdcpUnitId)
+	{
+		if (sdcpUnitId is >= 0 and <= 255)
+		{
+			vmc.TcpSingleUnitId = (byte)sdcpUnitId.Value;
+		}
+	}
+
 	internal static void MapMonitorControlApi(this WebApplication app)
 	{
 		var api = app.MapGroup("/api").WithTags("monitor");
@@ -67,7 +75,7 @@ internal static class MonitorApiExtensions
 					}
 
 					SdapAdvertisementPacket p = read.Value.packet;
-					string key = $"{p.ConnectionIp}|{p.SerialNumber}";
+					string key = $"{p.SourceIp}|{p.SerialNumber}";
 					if (seen.Add(key))
 					{
 						items.Add(new DiscoverItem(
@@ -75,6 +83,7 @@ internal static class MonitorApiExtensions
 							p.ProductName,
 							p.SerialNumber,
 							p.ConnectionIp,
+							p.RecommendedControlIPv4,
 							p.GroupId,
 							p.UnitId,
 							p.Version,
@@ -108,6 +117,7 @@ internal static class MonitorApiExtensions
 				};
 				tcp.Open();
 				var vmc = new VmcClient(tcp);
+				ApplySdcpUnit(vmc, body.SdcpUnitId);
 				string? value = vmc.GetStatString(body.Field.Trim());
 				return Results.Ok(new VmcGetResponse(value));
 			}
@@ -135,6 +145,7 @@ internal static class MonitorApiExtensions
 				};
 				tcp.Open();
 				var vmc = new VmcClient(tcp);
+				ApplySdcpUnit(vmc, body.SdcpUnitId);
 				LegacyVmcContainer? r = vmc.Send("STATset", body.Args.ToArray());
 				if (r is null)
 				{
@@ -357,6 +368,7 @@ internal sealed record DiscoverItem(
 	string ProductName,
 	string SerialNumber,
 	string ConnectionIp,
+	string? RecommendedControlIPv4,
 	byte GroupId,
 	byte UnitId,
 	byte Version,
@@ -364,13 +376,13 @@ internal sealed record DiscoverItem(
 
 internal sealed record DiscoverResponse(int ListenDurationMs, IReadOnlyList<DiscoverItem> Items);
 
-internal record HostBody(string Host, int? TimeoutMs);
+internal record HostBody(string Host, int? TimeoutMs, int? SdcpUnitId);
 
-internal sealed record VmcGetBody(string Host, string Field, int? TimeoutMs);
+internal sealed record VmcGetBody(string Host, string Field, int? TimeoutMs, int? SdcpUnitId);
 
 internal sealed record VmcGetResponse(string? Value);
 
-internal sealed record VmcSetBody(string Host, List<string> Args, int? TimeoutMs);
+internal sealed record VmcSetBody(string Host, List<string> Args, int? TimeoutMs, int? SdcpUnitId);
 
 internal sealed record VmcSetResponse(string[]? ResponseTokens, string? Error);
 
@@ -382,6 +394,8 @@ internal sealed record VmsProductInfoResponse(bool Ok, int ProtocolCode, int Dat
 
 internal sealed record VmaReadResponse(bool Ok, int ProtocolCode, int DataLength, string PayloadHex);
 
-internal sealed record FirmwareSizeBody(string Host, int SizeBytes, int? TimeoutMs) : HostBody(Host, TimeoutMs);
+internal sealed record FirmwareSizeBody(string Host, int SizeBytes, int? TimeoutMs)
+	: HostBody(Host, TimeoutMs, null);
 
-internal sealed record FirmwareChunkBody(string Host, int ChunkIndex, int? TimeoutMs) : HostBody(Host, TimeoutMs);
+internal sealed record FirmwareChunkBody(string Host, int ChunkIndex, int? TimeoutMs)
+	: HostBody(Host, TimeoutMs, null);
